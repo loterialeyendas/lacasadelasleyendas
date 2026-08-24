@@ -4,7 +4,16 @@ Este documento define la arquitectura, normas de calidad, diseño y protocolos d
 
 ---
 
-## 1. Arquitectura y Organización del Código
+## 1. Repositorio y Entornos
+
+* **GitHub:** `https://github.com/loterialeyendas/lacasadelasleyendas` (Rama: `main`)
+* **Dominio Oficial:** [https://lacasadelasleyendas.com](https://lacasadelasleyendas.com)
+* **Firebase Hosting:** [https://casa-de-las-leyendas-gt.web.app](https://casa-de-las-leyendas-gt.web.app)
+* **Proyecto Firebase:** `casa-de-las-leyendas-gt`
+
+---
+
+## 2. Arquitectura y Organización del Código
 
 El proyecto sigue una arquitectura modular en capas:
 
@@ -13,14 +22,15 @@ El proyecto sigue una arquitectura modular en capas:
   * `legendService.ts`: Catálogo de leyendas, trivias, acertijos y resolución de códigos QR.
   * `passportService.ts`: Persistencia de sellos, progreso y puntuación (enfoque Offline-First con sincronización en Firestore).
   * `roomService.ts`: Lógica de salas multijugador en tiempo real.
-* `src/views/`: Pantallas principales de la aplicación (`WelcomeView`, `ExplorerView`, `ScannerView`, `LobbyView`, `GameRoomView`).
+* `src/views/`: Pantallas principales de la aplicación (`LandingPageView`, `WelcomeView`, `ExplorerView`, `ScannerView`, `LobbyView`, `GameRoomView`).
 * `src/views/modules/`: Dinámicas educativas interactivas (`TriviaModule`, `CharacterGuessModule`, `MimeChallengeModule`, `StoryApparitionModule`).
 * `src/components/`: Componentes atómicos y reutilizables (`Theme.tsx`, `Navbar.tsx`, `Scanner.tsx`, `SoundToggle.tsx`).
+* `src/components/svgs/`: Componentes vectoriales SVG nativos optimizados (`MysticLock`, `MysticKey`, `MysticSun`, `PassportStampSvg`).
 * `src/lib/`: Configuración externa y utilitarios (`firebase.ts`, `audio.ts`, `utils.ts`).
 
 ---
 
-## 2. Sistema de Diseño e Identidad Visual (Mística Guatemalteca)
+## 3. Sistema de Diseño e Identidad Visual (Mística Guatemalteca)
 
 * **Paleta de Colores Obligatoria**:
   * **Obsidian**: `#000000` (Fondo y contraste principal).
@@ -34,14 +44,13 @@ El proyecto sigue una arquitectura modular en capas:
   * Interfaz y botones: `font-sans` (`Inter`).
 * **Enfoque Mobile-First**:
   * La aplicación está diseñada para ser utilizada principalmente en smartphones mientras el visitante recorre el museo o juega en mesa.
-  * Mantener zonas táctiles amplias (mínimo 44px de altura) y textos con contraste accesible.
 
 ---
 
-## 3. Dinámicas y Manejo de Códigos QR
+## 4. Dinámicas y Manejo de Códigos QR
 
 * **Compatibilidad de Códigos**:
-  * Formato URL completa: `https://.../?legend=sombreron`
+  * Formato URL completa: `https://lacasadelasleyendas.com/?legend=sombreron`
   * Formato ID directo: `sombreron`, `cadejo`, etc.
   * Formato Código Corto de 4 letras: `SOMB`, `CADE`, `LLOR`, `SIGU`, `TATU`, `CARR`, `CIPI`.
 * **Fallback Manual Obligatorio**:
@@ -51,19 +60,9 @@ El proyecto sigue una arquitectura modular en capas:
 
 ---
 
-## 4. Audio y Rendimiento Offline
+## 5. Control de Calidad y Flujo de Despliegue
 
-* **Efectos de Audio**:
-  * Utilizar `src/lib/audio.ts` (Web Audio API sintetizado) para retroalimentación instantánea sin requerir descargas de archivos `.mp3` pesados.
-  * Respetar siempre el estado de silencio (`sound.getIsMuted()`) guardado en `localStorage`.
-* **Modo Offline**:
-  * El modo explorador y pasaporte debe funcionar sin conexión a internet activa una vez cargada la PWA. Los sellos se guardan en `localStorage` primero y se sincronizan con Firebase cuando haya red.
-
----
-
-## 5. Control de Calidad y Despliegue a Producción
-
-Antes de dar por completado cualquier cambio o despliegue:
-1. Validar tipos de TypeScript: `npm run lint` (debe compilar sin errores).
-2. Construir el paquete de producción: `npm run build`.
-3. Verificar que las variables de entorno de Firebase en `.env` estén configuradas adecuadamente y que las reglas de `firestore.rules` mantengan la seguridad de las salas y usuarios.
+Antes de dar por completado cualquier cambio:
+1. Validar tipos de TypeScript: `npm run lint`.
+2. Construir y desplegar a Firebase Hosting: `npm run build && npx firebase deploy --project casa-de-las-leyendas-gt`.
+3. Hacer push al repositorio GitHub: `git add . && git commit -m "..." && git push origin main`.
