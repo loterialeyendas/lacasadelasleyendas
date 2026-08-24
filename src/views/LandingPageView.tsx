@@ -18,7 +18,7 @@ import { sound } from '../lib/audio';
 
 // Elementos Gráficos PNG y SVG del proyecto
 import portadaPng from '../images/png/Portada.png';
-import solPng from '../images/png/sol.png';
+import solPng from '../images/png/Sol.png';
 import nubeIzqPng from '../images/png/Nube izquierda.png';
 import nubeDerPng from '../images/png/Nube derecha.png';
 
