@@ -2,7 +2,7 @@
 // Estrategia offline-first: shell de la app disponible tras la primera visita.
 // Las peticiones a dominios externos (Firebase, Google Fonts) NO se interceptan.
 
-const CACHE_NAME = 'leyendas-v1';
+const CACHE_NAME = 'leyendas-v2';
 const PRECACHE_URLS = ['/', '/manifest.webmanifest', '/icon.svg'];
 
 self.addEventListener('install', (event) => {

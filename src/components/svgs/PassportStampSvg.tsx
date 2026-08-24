@@ -43,7 +43,7 @@ export const PassportStampSvg: React.FC<PassportStampSvgProps> = ({
           cx="40"
           cy="40"
           r="36"
-          stroke={isUnlocked ? "url(#stampUnlockedGrad)" : "rgba(255,238,170,0.2)"}
+          stroke={isUnlocked ? "url(#stampUnlockedGrad)" : "rgba(51,33,10,0.35)"}
           strokeWidth="2.5"
           strokeDasharray="4 3"
         />
@@ -53,9 +53,9 @@ export const PassportStampSvg: React.FC<PassportStampSvgProps> = ({
           cx="40"
           cy="40"
           r="30"
-          stroke={isUnlocked ? "#fccf65" : "rgba(255,238,170,0.15)"}
+          stroke={isUnlocked ? "#fccf65" : "rgba(51,33,10,0.25)"}
           strokeWidth="1.5"
-          fill={isUnlocked ? "rgba(190,141,44,0.15)" : "rgba(0,0,0,0.4)"}
+          fill={isUnlocked ? "rgba(190,141,44,0.15)" : "rgba(143,101,18,0.12)"}
         />
 
         {/* Texto del Código de la Leyenda */}
@@ -63,7 +63,7 @@ export const PassportStampSvg: React.FC<PassportStampSvgProps> = ({
           x="40"
           y="44"
           textAnchor="middle"
-          fill={isUnlocked ? "#ffeeaa" : "rgba(255,238,170,0.3)"}
+          fill={isUnlocked ? "#ffeeaa" : "rgba(51,33,10,0.5)"}
           fontFamily="'Cinzel', serif"
           fontSize="14"
           fontWeight="bold"
@@ -77,7 +77,7 @@ export const PassportStampSvg: React.FC<PassportStampSvgProps> = ({
           x="40"
           y="22"
           textAnchor="middle"
-          fill={isUnlocked ? "#be8d2c" : "rgba(255,238,170,0.25)"}
+          fill={isUnlocked ? "#be8d2c" : "rgba(143,101,18,0.6)"}
           fontFamily="'Cinzel', serif"
           fontSize="6"
           letterSpacing="1.5"
@@ -89,7 +89,7 @@ export const PassportStampSvg: React.FC<PassportStampSvgProps> = ({
           x="40"
           y="62"
           textAnchor="middle"
-          fill={isUnlocked ? "#be8d2c" : "rgba(255,238,170,0.25)"}
+          fill={isUnlocked ? "#be8d2c" : "rgba(143,101,18,0.6)"}
           fontFamily="'Cinzel', serif"
           fontSize="5.5"
           letterSpacing="1"

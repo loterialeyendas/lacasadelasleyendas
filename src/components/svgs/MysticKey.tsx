@@ -27,7 +27,7 @@ export const MysticKey: React.FC<MysticKeyProps> = ({
       >
         <defs>
           <linearGradient id="goldKeyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#ffeeaa" />
+            <stop offset="0%" stopColor="#fccf65" />
             <stop offset="50%" stopColor="#fccf65" />
             <stop offset="100%" stopColor="#be8d2c" />
           </linearGradient>

@@ -23,7 +23,7 @@ export const MysticSun: React.FC<MysticSunProps> = ({
       >
         <defs>
           <radialGradient id="sunGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#ffeeaa" />
+            <stop offset="0%" stopColor="#fccf65" />
             <stop offset="60%" stopColor="#fccf65" />
             <stop offset="100%" stopColor="#be8d2c" />
           </radialGradient>
@@ -39,7 +39,7 @@ export const MysticSun: React.FC<MysticSunProps> = ({
               d="M32 4L35 14H29L32 4Z"
               fill="url(#sunGrad)"
             />
-            <circle cx="32" cy="16" r="1.5" fill="#ffeeaa" />
+            <circle cx="32" cy="16" r="1.5" fill="#8f6512" />
           </g>
         ))}
       </motion.svg>

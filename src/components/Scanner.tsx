@@ -71,27 +71,27 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onCancel }) => {
   }, [onScan]);
 
   return (
-    <div className="w-full flex flex-col items-center bg-black/80 rounded-2xl overflow-hidden border border-gold/30">
+    <div className="w-full flex flex-col items-center bg-[#141210] rounded-2xl overflow-hidden border border-gold/30">
       {/* Contenedor del video */}
-      <div className="relative w-full min-h-[300px] flex items-center justify-center bg-black">
+      <div className="relative w-full min-h-[300px] flex items-center justify-center bg-[#0d0b07]">
         <div id={containerId} className="w-full max-w-[320px]" />
 
         {isInitializing && !cameraError && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 text-cream gap-2 z-10">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0d0b07]/95 text-candle gap-2 z-10">
             <Camera size={32} className="text-gold animate-bounce" />
             <span className="text-xs font-display">Invocando el lente místico...</span>
           </div>
         )}
 
         {cameraError && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-black/95 text-cream gap-3 z-10">
-            <AlertCircle size={36} className="text-maya-red" />
-            <p className="text-xs text-cream/90 font-serif italic">{cameraError}</p>
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-[#0d0b07]/95 text-candle gap-3 z-10">
+            <AlertCircle size={36} className="text-red-400" />
+            <p className="text-xs text-candle/90 font-serif italic">{cameraError}</p>
           </div>
         )}
       </div>
 
-      <div className="p-4 w-full flex justify-center bg-black/90 border-t border-gold/10">
+      <div className="p-4 w-full flex justify-center bg-[#0d0b07] border-t border-gold/10">
         <Button variant="outline" size="sm" onClick={onCancel} className="text-xs">
           Cerrar Cámara
         </Button>

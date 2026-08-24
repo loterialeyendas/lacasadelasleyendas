@@ -81,7 +81,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
             className="p-4 bg-white rounded-xl inline-block shadow-xl border-4 border-gold mx-auto"
           >
             <QRCodeSVG value={inviteUrl} size={160} />
-            <span className="text-[10px] text-black font-display font-bold block mt-2">
+            <span className="text-[10px] text-neutral-800 font-display font-bold block mt-2">
               Escanea para unirte a la sala
             </span>
           </motion.div>

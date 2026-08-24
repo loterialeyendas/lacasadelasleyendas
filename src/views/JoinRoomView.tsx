@@ -64,7 +64,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
           />
 
           {error && (
-            <div className="p-3 bg-maya-red/20 border border-maya-red/40 rounded-lg flex items-center gap-2 text-xs text-red-200">
+            <div className="p-3 bg-maya-red/20 border border-maya-red/40 rounded-lg flex items-center gap-2 text-xs text-red-900">
               <AlertCircle size={16} className="text-maya-red shrink-0" />
               <span>{error}</span>
             </div>

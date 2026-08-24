@@ -194,7 +194,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           src={fondoSvg} 
           alt="" 
           aria-hidden="true"
-          className="w-full h-full object-cover mix-blend-screen scale-105"
+          className="w-full h-full object-cover mix-blend-multiply opacity-90 scale-105"
         />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-gold/15 via-maya-red/10 to-transparent blur-3xl rounded-full" />
       </div>
@@ -286,7 +286,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             <span>El primer juego actualizable de Guatemala</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display text-gold tracking-tight leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display text-gold tracking-tight leading-tight drop-shadow-[0_2px_10px_rgba(51,33,10,0.25)]">
             LAS LEYENDAS NO MUEREN.
             <span className="text-cream italic font-serif text-2xl sm:text-4xl block mt-2">
               Se juegan en familia.
@@ -305,7 +305,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 onEnterGame();
               }}
               size="lg"
-              className="w-full sm:w-auto px-8 py-4 text-sm flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(190,141,44,0.6)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105"
+              className="w-full sm:w-auto px-8 py-4 text-sm flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(190,141,44,0.6)] text-[#241505] bg-gradient-to-r from-[#b8860b] via-[#eec96a] to-[#b8860b] font-bold hover:scale-105"
             >
               <Play size={18} className="fill-obsidian" />
               <span>ENTRAR A LA CASA</span>
@@ -403,7 +403,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               text: 'Todo vive en el navegador de tu teléfono. Sin descargas ni registros complicados: entra, escoge tu Tzipitio y a jugar.'
             },
             {
-              accent: 'bg-amber-500/20 border-amber-500/40 text-amber-300',
+              accent: 'bg-amber-500/20 border-amber-500/40 text-amber-700',
               icon: <QrCode size={26} />,
               title: 'QR como varita mágica',
               text: 'Las cartas físicas se abren en retos digitales en tiempo real: trivia contra el reloj, mímica, detective de personajes y desafíos virales.'
@@ -548,7 +548,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               transition={{ duration: 0.5, delay: idx * 0.08 }}
               className="flex items-start gap-4 p-4 rounded-xl bg-black/60 border border-gold/25 hover:border-gold/50 transition-all"
             >
-              <div className="w-9 h-9 rounded-full bg-gold text-obsidian font-display font-bold flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(190,141,44,0.4)]">
+              <div className="w-9 h-9 rounded-full bg-gold text-[#fffdf4] font-display font-bold flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(143,101,18,0.4)]">
                 {idx + 1}
               </div>
               <div className="text-left space-y-1">
@@ -656,7 +656,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       {/* ==================== CTA FINAL ==================== */}
       <section className="relative z-10 py-16 px-4 max-w-4xl mx-auto text-center">
         <motion.div {...reveal}>
-          <Card className="p-8 sm:p-12 space-y-6 border-gold/50 bg-gradient-to-b from-black/80 to-earth-brown/30 relative overflow-hidden shadow-[0_0_50px_rgba(122,49,8,0.4)]">
+          <Card className="p-8 sm:p-12 space-y-6 border-gold/50 bg-gradient-to-b from-white/70 to-earth-brown/10 relative overflow-hidden shadow-[0_0_50px_rgba(122,49,8,0.18)]">
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 blur-3xl rounded-full pointer-events-none" />
             
             <span className="text-xs font-display text-gold uppercase tracking-widest block">
@@ -679,7 +679,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                   onEnterGame();
                 }}
                 size="lg"
-                className="px-10 py-5 text-sm sm:text-base inline-flex items-center gap-3 shadow-[0_0_30px_rgba(190,141,44,0.7)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105"
+                className="px-10 py-5 text-sm sm:text-base inline-flex items-center gap-3 shadow-[0_0_30px_rgba(190,141,44,0.7)] text-[#241505] bg-gradient-to-r from-[#b8860b] via-[#eec96a] to-[#b8860b] font-bold hover:scale-105"
               >
                 <Play size={20} className="fill-obsidian" />
                 <span>ENTRAR A LA CASA</span>

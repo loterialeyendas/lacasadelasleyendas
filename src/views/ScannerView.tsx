@@ -169,7 +169,7 @@ export const ScannerView: React.FC<ScannerViewProps> = ({ onLegendFound, onBack 
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="p-3 bg-maya-red/20 border border-maya-red/50 rounded-xl flex items-center gap-2 text-xs text-red-200"
+          className="p-3 bg-maya-red/20 border border-maya-red/50 rounded-xl flex items-center gap-2 text-xs text-red-900"
         >
           <AlertCircle size={16} className="shrink-0 text-maya-red" />
           <span>{error}</span>

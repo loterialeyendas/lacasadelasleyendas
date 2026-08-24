@@ -16,8 +16,8 @@ export const Button: React.FC<ButtonProps> = ({
   ...props 
 }) => {
   const variants = {
-    primary: 'bg-earth-brown hover:bg-gold text-cream border-gold/50 shadow-[0_0_15px_rgba(122,49,8,0.4)]',
-    secondary: 'bg-maya-red hover:bg-maya-red/80 text-cream border-maya-red/50 shadow-[0_0_15px_rgba(200,55,55,0.3)]',
+    primary: 'bg-earth-brown hover:bg-gold text-candle border-gold/50 shadow-[0_0_15px_rgba(122,49,8,0.25)]',
+    secondary: 'bg-maya-red hover:bg-maya-red/85 text-candle border-maya-red/50 shadow-[0_0_15px_rgba(168,39,39,0.2)]',
     outline: 'bg-transparent border-gold text-gold hover:bg-gold/10',
   };
 
@@ -64,7 +64,7 @@ export const Card: React.FC<CardProps> = ({ className, children, onClick }) => (
 );
 
 export const MysticalTitle: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
-  <h1 className={cn('text-3xl font-display text-center mb-6 text-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]', className)}>
+  <h1 className={cn('text-3xl font-display text-center mb-6 text-gold drop-shadow-[0_2px_4px_rgba(51,33,10,0.25)]', className)}>
     {children}
   </h1>
 );

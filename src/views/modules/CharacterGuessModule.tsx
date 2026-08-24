@@ -143,7 +143,7 @@ export const CharacterGuessModule: React.FC<CharacterGuessProps> = ({ legend, on
                 if (opt.toLowerCase() === riddle.correctAnswer.toLowerCase()) {
                   btnClass += "bg-emerald-950/80 border-emerald-500 text-emerald-200 font-bold shadow-[0_0_15px_rgba(16,185,129,0.4)]";
                 } else if (opt === selectedGuess) {
-                  btnClass += "bg-maya-red/40 border-maya-red text-red-200";
+                  btnClass += "bg-maya-red/40 border-maya-red text-red-900";
                 } else {
                   btnClass += "bg-black/20 border-white/5 text-cream/30 opacity-40";
                 }

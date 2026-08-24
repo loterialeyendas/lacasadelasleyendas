@@ -73,7 +73,7 @@ export const GameRoomView: React.FC<GameRoomViewProps> = ({
                 >
                   <div className="flex items-center gap-3">
                     <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-display font-bold ${
-                      isLeader ? 'bg-gold text-obsidian' : 'bg-black/50 text-cream/70'
+                      isLeader ? 'bg-gold text-[#fffdf4]' : 'bg-white/50 text-cream/70'
                     }`}>
                       {index + 1}
                     </span>
@@ -197,7 +197,7 @@ export const GameRoomView: React.FC<GameRoomViewProps> = ({
               >
                 <div className="flex items-center gap-3">
                   <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-display font-bold ${
-                    isLeader ? 'bg-gold text-obsidian' : 'bg-black/50 text-cream/70'
+                    isLeader ? 'bg-gold text-[#fffdf4]' : 'bg-white/50 text-cream/70'
                   }`}>
                     {index + 1}
                   </span>

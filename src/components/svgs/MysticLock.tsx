@@ -56,7 +56,7 @@ export const MysticLock: React.FC<MysticLockProps> = ({
           height="22"
           rx="5"
           fill="url(#goldLockGrad)"
-          stroke="#ffeeaa"
+          stroke="#7a4d0a"
           strokeWidth="1"
           className="drop-shadow-md"
         />
