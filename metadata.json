@@ -1,0 +1,12 @@
+{
+  "name": "Leyendas de Guatemala: El Juego",
+  "description": "Una aplicación complementaria para el juego de mesa físico 'Leyendas de Guatemala', permitiendo escaneo de QR, gestión de salas en tiempo real y mecánicas digitales de trivia, mímica y apariciones.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "Real-time multiplayer",
+    "QR Code scanning",
+    "Firebase Authentication"
+  ]
+}
