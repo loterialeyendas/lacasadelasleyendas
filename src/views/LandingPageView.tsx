@@ -1,173 +1,113 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Play, 
+  Compass, 
   QrCode, 
+  Trophy, 
   Sparkles, 
   KeyRound, 
-  ChevronDown,
-  Map as MapIcon,
-  Users,
-  Dices,
-  Ghost,
-  HelpCircle,
-  Drama,
-  Brain,
-  Share2,
-  HeartHandshake,
-  TrendingUp,
-  MapPin,
-  Zap,
-  ScrollText,
-  Smartphone
+  ChevronDown, 
+  BookOpen,
+  CheckCircle2,
+  Lightbulb,
+  Shield,
+  Heart,
+  Gem,
+  Crown
 } from 'lucide-react';
-import { Button, Card } from '../components/Theme';
+import { Button, Card, MysticalTitle } from '../components/Theme';
 import { LEYENDAS_DATA } from '../services/legendService';
 import { sound } from '../lib/audio';
 
-import { MysticSun } from '../components/svgs/MysticSun';
-import { MysticKey } from '../components/svgs/MysticKey';
-import { PassportStampSvg } from '../components/svgs/PassportStampSvg';
+// Elementos Gráficos PNG y SVG del proyecto
+import portadaPng from '../images/png/Portada.png';
+import solPng from '../images/png/sol.png';
+import nubeIzqPng from '../images/png/Nube izquierda.png';
+import nubeDerPng from '../images/png/Nube derecha.png';
 
-import logoCasa from '../images/optimized/Logo Casa.svg';
+import candadoOroPng from '../images/png/Candado oro.png';
+import candadoPlataPng from '../images/png/Candado plata.png';
+import candadoJadePng from '../images/png/Candado jade.png';
+import candadoVidaPng from '../images/png/Candado vida.png';
+
 import logoPng from '../images/logo.png';
 import fondoSvg from '../images/optimized/Fondo.svg';
-import solYNube from '../images/optimized/Sol y nube.svg';
 
-const RULES_URL = 'https://mc.lluviadeideaseditorial.com/reglascasaleyendas/';
+import { MysticKey } from '../components/svgs/MysticKey';
+import { PassportStampSvg } from '../components/svgs/PassportStampSvg';
 
 interface LandingPageViewProps {
   onEnterGame: () => void;
   onEnterExplorer: () => void;
 }
 
-// Animación de entrada al hacer scroll
-const reveal = {
-  initial: { opacity: 0, y: 30 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.6 }
-} as const;
+interface ElementalLock {
+  id: string;
+  name: string;
+  type: 'oro' | 'plata' | 'jade' | 'vida';
+  image: string;
+  accentColor: string;
+  badgeBg: string;
+  subtitle: string;
+  question: string;
+  answer: string;
+  culturalInsight: string;
+  associatedLegends: string[];
+}
 
-const BOX_ITEMS = [
+const ELEMENTAL_LOCKS: ElementalLock[] = [
   {
-    icon: <MapIcon size={26} />,
-    title: 'Tablero mapa de Guatemala',
-    text: 'Del Teatro Municipal de Xela a las selvas de Petén: cada edificio del país es una casilla con secretos.'
+    id: 'lock-oro',
+    name: 'Candado de Oro',
+    type: 'oro',
+    image: candadoOroPng,
+    accentColor: 'text-gold border-gold/50',
+    badgeBg: 'bg-gold/20 text-gold border-gold/40',
+    subtitle: 'El Misterio del Arte y la Libertad',
+    question: '¿Qué poder ocultaban los objetos dorados y las serenatas en las noches coloniales?',
+    answer: 'La música del Sombrerón y el barco de carbón de La Tatuana eran símbolos de encanto y escape ante las normas del Santo Oficio.',
+    culturalInsight: 'En la tradición guatemalteca, el oro representa el resplandor de la astucia y la resistencia espiritual de los pueblos mestizos.',
+    associatedLegends: ['El Sombrerón', 'La Tatuana']
   },
   {
-    icon: <Users size={26} />,
-    title: '6 Tzipitios para armar',
-    text: 'Pequeños guardianes de la memoria ancestral, cada uno con su carácter y sus pies veloces.'
+    id: 'lock-plata',
+    name: 'Candado de Plata',
+    type: 'plata',
+    image: candadoPlataPng,
+    accentColor: 'text-slate-200 border-slate-400/50',
+    badgeBg: 'bg-slate-400/20 text-slate-200 border-slate-400/40',
+    subtitle: 'El Guardián de la Noche y la Protección',
+    question: '¿Por qué la plata y la luna acompañan al Cadejo Blanco?',
+    answer: 'El Cadejo Blanco es el protector espiritual de los caminantes desvalidos, combatiendo la oscuridad y las acechanzas del Cadejo Negro.',
+    culturalInsight: 'Los arrieros y viajeros de la época colonial invocaban la luz de la luna y la protección de los guardianes espectrales en los caminos solitarios.',
+    associatedLegends: ['El Cadejo']
   },
   {
-    icon: <Dices size={26} />,
-    title: 'El dado de la noche',
-    text: 'El destino decide quién enfrenta a cada leyenda. El recorrido va contrario a las agujas del reloj.'
+    id: 'lock-jade',
+    name: 'Candado de Jade',
+    type: 'jade',
+    image: candadoJadePng,
+    accentColor: 'text-emerald-400 border-emerald-500/50',
+    badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+    subtitle: 'La Sabiduría Ancestral y las Aguas',
+    question: '¿Qué secreto esconden las aguas de los arroyos y las huellas invertidas?',
+    answer: 'La Siguanaba y su hijo el Cipitío representan el castigo por olvidar los valores ancestrales y la conexión mística con la naturaleza.',
+    culturalInsight: 'El jade, piedra sagrada maya, simboliza la eternidad del alma, la fertilidad de la tierra y los espíritus que custodian los ríos de Guatemala.',
+    associatedLegends: ['La Siguanaba', 'El Cipitío']
   },
   {
-    icon: <QrCode size={26} />,
-    title: 'Tarjetas de retos QR',
-    text: 'El puente entre la mesa y la magia digital: cada carta escaneada despierta un reto en tu teléfono.'
-  },
-  {
-    icon: <KeyRound size={26} />,
-    title: 'Las Cuatro Llaves',
-    text: 'Una por cada pilar de la cultura guatemalteca. Quien las reúna todas podrá abrir los candados de la Casa.'
-  },
-  {
-    icon: <Ghost size={26} />,
-    title: 'Cartas de Aparición',
-    text: 'Hechizos para ponerle chispa a la partida... o para hacerle la vida cuadritos al que va ganando.'
-  }
-];
-
-const CHALLENGES = [
-  {
-    id: 'trivia',
-    icon: <HelpCircle size={22} />,
-    name: 'Trivia',
-    tagline: '¿Cuánto sabes de Guate?',
-    rules: [
-      'Escanea la tarjeta y responde antes de que el tiempo se agote.',
-      'Solo tienes una oportunidad: nadie puede dar pistas.',
-      'Si aciertas, te llevas la llave.'
-    ]
-  },
-  {
-    id: 'mime',
-    icon: <Drama size={22} />,
-    name: 'Mímica',
-    tagline: 'Describe sin hacer ruido',
-    rules: [
-      'Actúa lo que dice la tarjeta usando solo señas.',
-      'Prohibido hablar, hacer sonidos o señalar objetos de la sala.',
-      'Los demás adivinan antes de que termine el tiempo.'
-    ]
-  },
-  {
-    id: 'character',
-    icon: <Brain size={22} />,
-    name: 'Adivina el personaje',
-    tagline: 'Detective de leyendas',
-    rules: [
-      'La app muestra un personaje misterioso.',
-      'Haz preguntas que solo se respondan con SÍ o NO.',
-      'Límite: 15 preguntas. Los demás llevan la cuenta.'
-    ]
-  },
-  {
-    id: 'social',
-    icon: <Share2 size={22} />,
-    name: 'Reto viral',
-    tagline: 'Comparte para ganar',
-    rules: [
-      'Crea contenido sobre un tema guatemalteco en tus redes.',
-      'Publica con #LaCasadelasLeyendas y participas por premios.',
-      'Logra las interacciones pedidas antes de que acabe la ronda.'
-    ]
-  }
-];
-
-const PLAY_STEPS = [
-  {
-    title: 'El Maestro de Leyendas convoca',
-    text: 'El anfitrión crea la sala desde su teléfono y lleva el control de las llaves ganadas por el grupo.'
-  },
-  {
-    title: 'Reúne a la mancha',
-    text: 'Cada jugador entra desde su navegador con el código de sala o escaneando el QR. Nada que instalar.'
-  },
-  {
-    title: 'Escanea y supera retos',
-    text: 'En tu turno: tira el dado, cae en una casilla con ícono y escanea la tarjeta indicada para invocar el reto.'
-  },
-  {
-    title: 'Reúne 4 llaves y entra a la Casa',
-    text: 'Con cuatro llaves y una vuelta más al tablero, abre los candados y corónate tata o nana del juego.'
-  }
-];
-
-const UNIQUE_POINTS = [
-  {
-    icon: <TrendingUp size={24} />,
-    title: 'Primer juego actualizable de Guatemala',
-    text: 'El contenido evoluciona: nuevas leyendas, retos y sorpresas llegan solas a tu partida, sin comprar otra caja.'
-  },
-  {
-    icon: <HeartHandshake size={24} />,
-    title: 'Evoluciona con su comunidad',
-    text: 'Los jugadores reportan, proponen y moldean el juego. Es un legado colectivo que crece con cada partida.'
-  },
-  {
-    icon: <MapPin size={24} />,
-    title: 'Cultura viva, hecha en casa',
-    text: 'Historias contadas por generaciones de abuelos, ilustradas y programadas por talento guatemalteco.'
-  },
-  {
-    icon: <Zap size={24} />,
-    title: 'A jugar en minutos',
-    text: 'Sin tiendas de aplicaciones ni registros eternos: un teléfono con cámara y listo, a recorrer Guatemala.'
+    id: 'lock-vida',
+    name: 'Candado de Vida y Trascendencia',
+    type: 'vida',
+    image: candadoVidaPng,
+    accentColor: 'text-maya-red border-maya-red/50',
+    badgeBg: 'bg-maya-red/20 text-red-200 border-maya-red/40',
+    subtitle: 'El Trascender de las Almas y la Memoria',
+    question: '¿Por qué el Carretón y La Llorona siguen recorriendo las calles empedradas?',
+    answer: 'Recuerdan el valor de la vida terrenal y la penitencia eterna de las almas que buscan redención y paz en la noche.',
+    culturalInsight: 'Estas leyendas cumplían una función de memoria colectiva, respeto a los difuntos y reflexión en la sociedad colonial guatemalteca.',
+    associatedLegends: ['La Llorona', 'El Carretón de la Muerte']
   }
 ];
 
@@ -176,403 +116,340 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
   onEnterExplorer
 }) => {
   const [selectedTeaser, setSelectedTeaser] = useState<string | null>(null);
-  const [activeChallenge, setActiveChallenge] = useState<string>('trivia');
+  const [unlockedLocks, setUnlockedLocks] = useState<Record<string, boolean>>({});
 
-  const scrollTo = (id: string) => {
-    sound.playClick();
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const handleUnlockLock = (lockId: string) => {
+    sound.playMysticChime();
+    setUnlockedLocks((prev) => ({
+      ...prev,
+      [lockId]: !prev[lockId]
+    }));
   };
-
-  const activeChallengeData = CHALLENGES.find((c) => c.id === activeChallenge) || CHALLENGES[0];
 
   return (
     <div className="w-full min-h-screen bg-obsidian text-cream font-sans overflow-x-hidden relative selection:bg-gold selection:text-obsidian">
-
-      {/* Fondo Gráfico y Efectos de Iluminación */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-35">
+      
+      {/* Fondo Gráfico SVG Optimizado y Efectos de Iluminación */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-30">
         <img 
           src={fondoSvg} 
-          alt="" 
-          aria-hidden="true"
-          className="w-full h-full object-cover mix-blend-multiply opacity-90 scale-105"
+          alt="Fondo Místico" 
+          className="w-full h-full object-cover mix-blend-screen scale-105"
         />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-gold/15 via-maya-red/10 to-transparent blur-3xl rounded-full" />
       </div>
 
-      {/* Barra de Navegación */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-obsidian/80 border-b border-gold/20 px-4 py-3">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center gap-3 cursor-pointer"
-            aria-label="Volver arriba"
-          >
+      {/* Barra de Navegación de la Landing */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-obsidian/85 border-b border-gold/20 px-4 py-3">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <img 
               src={logoPng} 
               alt="Casa de las Leyendas" 
-              width={40}
-              height={40}
               className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(190,141,44,0.5)]"
             />
             <div className="flex flex-col text-left">
-              <span className="font-display text-sm tracking-widest text-gold font-bold">
+              <span className="font-display text-xs sm:text-sm tracking-widest text-gold font-bold">
                 LA CASA DE LAS LEYENDAS
               </span>
               <span className="text-[9px] uppercase tracking-wider text-cream/60">
-                Guatemala • El juego actualizable
+                Guatemala • Experiencia Interactiva
               </span>
             </div>
-          </button>
+          </div>
 
-          <Button 
-            onClick={() => {
-              sound.playMysticChime();
-              onEnterGame();
-            }}
-            size="sm"
-            className="py-2 px-4 text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(190,141,44,0.4)]"
-          >
-            <Play size={14} className="fill-current" />
-            <span>JUGAR AHORA</span>
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button 
+              onClick={() => {
+                sound.playMysticChime();
+                onEnterGame();
+              }}
+              size="sm"
+              className="py-2 px-4 text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(190,141,44,0.4)]"
+            >
+              <Play size={14} className="fill-current" />
+              <span>JUGAR AHORA</span>
+            </Button>
+          </div>
         </div>
       </header>
 
-      {/* ==================== HERO ==================== */}
-      <section className="relative z-10 pt-10 pb-16 px-4 max-w-5xl mx-auto text-center flex flex-col items-center">
-        {/* Sol y nube flotantes */}
-        <motion.img
-          src={solYNube}
-          alt=""
-          aria-hidden="true"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.45, x: [0, 12, 0], y: [0, -8, 0] }}
-          transition={{
-            opacity: { duration: 1.5 },
-            x: { repeat: Infinity, duration: 9, ease: 'easeInOut' },
-            y: { repeat: Infinity, duration: 7, ease: 'easeInOut' }
-          }}
-          className="absolute top-16 left-2 sm:left-6 w-28 sm:w-40 pointer-events-none hidden md:block"
-        />
+      {/* HERO SECTION CON PORTADA, SOL Y NUBES CELESTIALES */}
+      <section className="relative z-10 pt-6 pb-16 px-4 max-w-5xl mx-auto text-center flex flex-col items-center">
+        
+        {/* Composición Celestial: Sol flotante y Nubes */}
+        <div className="relative w-full max-w-lg mx-auto mb-4 flex items-center justify-center">
+          {/* Nube izquierda flotante */}
+          <motion.img
+            src={nubeIzqPng}
+            alt="Nube Mística Izquierda"
+            animate={{ x: [-8, 8, -8], y: [-3, 3, -3] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -left-4 sm:-left-12 top-2 w-20 sm:w-28 opacity-75 pointer-events-none drop-shadow-md z-20"
+          />
 
-        <div className="relative mb-6 max-w-sm mx-auto">
-          <div className="absolute -top-6 -right-6 z-20 pointer-events-none">
-            <MysticSun size={48} />
-          </div>
-          <div className="absolute inset-0 bg-gold/20 blur-3xl rounded-full -z-10 animate-pulse" />
-          <motion.img 
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            src={logoCasa} 
-            alt="Logo La Casa de las Leyendas" 
-            width={288}
-            height={288}
-            className="w-56 sm:w-72 mx-auto drop-shadow-[0_0_25px_rgba(190,141,44,0.5)] object-contain"
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src = logoPng;
-            }}
+          {/* Sol central resplandeciente */}
+          <motion.div
+            animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
+            transition={{ rotate: { duration: 40, repeat: Infinity, ease: "linear" }, scale: { duration: 5, repeat: Infinity, ease: "easeInOut" } }}
+            className="relative z-10"
+          >
+            <div className="absolute inset-0 bg-gold/30 blur-2xl rounded-full pointer-events-none" />
+            <img 
+              src={solPng} 
+              alt="Sol Místico de Guatemala" 
+              className="w-20 sm:w-28 mx-auto drop-shadow-[0_0_20px_rgba(252,207,101,0.6)] object-contain"
+            />
+          </motion.div>
+
+          {/* Nube derecha flotante */}
+          <motion.img
+            src={nubeDerPng}
+            alt="Nube Mística Derecha"
+            animate={{ x: [8, -8, 8], y: [3, -3, 3] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -right-4 sm:-right-12 top-4 w-20 sm:w-28 opacity-75 pointer-events-none drop-shadow-md z-20"
           />
         </div>
 
+        {/* Imagen Oficial de Portada de la Casa de las Leyendas */}
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="relative max-w-md sm:max-w-lg mx-auto mb-6 group"
+        >
+          <div className="absolute -inset-1 bg-gradient-to-r from-gold via-maya-red to-gold rounded-2xl blur-lg opacity-40 group-hover:opacity-75 transition duration-700 pointer-events-none" />
+          <div className="relative rounded-2xl overflow-hidden border-2 border-gold/40 shadow-[0_0_35px_rgba(190,141,44,0.3)] bg-black/60">
+            <img 
+              src={portadaPng} 
+              alt="Portada La Casa de las Leyendas" 
+              className="w-full h-auto object-contain max-h-[380px] sm:max-h-[460px] mx-auto hover:scale-[1.02] transition-transform duration-500"
+            />
+          </div>
+        </motion.div>
+
+        {/* Textos del Hero */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="space-y-5 max-w-3xl"
+          className="space-y-4 max-w-3xl"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-maya-red/20 border border-maya-red/50 text-cream text-[11px] font-display tracking-widest uppercase shadow-[0_0_15px_rgba(200,55,55,0.25)]">
-            <Sparkles size={13} className="text-gold" /> 
-            <span>El primer juego actualizable de Guatemala</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs font-display tracking-widest uppercase">
+            <Sparkles size={14} /> El Portal Místico de Guatemala
           </div>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display text-gold tracking-tight leading-tight drop-shadow-[0_2px_10px_rgba(51,33,10,0.25)]">
-            LAS LEYENDAS NO MUEREN.
-            <span className="text-cream italic font-serif text-2xl sm:text-4xl block mt-2">
-              Se juegan en familia.
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display text-gold tracking-tight leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+            DESCUBRE EL MISTERIO. <br />
+            <span className="text-cream italic font-serif text-2xl sm:text-4xl block mt-1">
+              Vive las Leyendas de Nuestros Ancestros.
             </span>
           </h1>
 
           <p className="text-cream/80 text-sm sm:text-lg font-serif italic max-w-2xl mx-auto leading-relaxed">
-            Un juego de mesa que despierta en tu teléfono: recorre Guatemala, invoca a La Llorona, 
-            El Cadejo y El Sombrerón, y gana las Cuatro Llaves antes de que el olvido te alcance.
+            Una experiencia cultural e interactiva que combina el juego de mesa físico, 
+            el recorrido presencial con códigos QR y desafíos digitales en tiempo real.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          {/* Botones de Acción Primaria */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Button 
               onClick={() => {
                 sound.playMysticChime();
                 onEnterGame();
               }}
               size="lg"
-              className="w-full sm:w-auto px-8 py-4 text-sm flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(190,141,44,0.6)] text-[#241505] bg-gradient-to-r from-[#b8860b] via-[#eec96a] to-[#b8860b] font-bold hover:scale-105"
+              className="w-full sm:w-auto px-8 py-4 text-sm flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(190,141,44,0.6)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105"
             >
               <Play size={18} className="fill-obsidian" />
-              <span>ENTRAR A LA CASA</span>
+              <span>ENTRAR AL JUEGO</span>
             </Button>
 
             <Button 
               variant="outline"
-              onClick={() => scrollTo('historia')}
+              onClick={() => {
+                sound.playClick();
+                onEnterExplorer();
+              }}
               size="lg"
               className="w-full sm:w-auto px-8 py-4 text-sm flex items-center justify-center gap-2 border-gold text-gold hover:bg-gold/15"
             >
-              <ScrollText size={18} />
-              <span>CONOCER LA HISTORIA</span>
+              <Compass size={18} />
+              <span>PASAPORTE DE SELLOS</span>
             </Button>
           </div>
         </motion.div>
-
-        <motion.button
-          onClick={() => scrollTo('historia')}
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="mt-12 text-gold/70 hover:text-gold transition-colors cursor-pointer"
-          aria-label="Desplazarse hacia abajo"
-        >
-          <ChevronDown size={28} />
-        </motion.button>
       </section>
 
-      {/* ==================== LA HISTORIA: LOS TZIPITIOS ==================== */}
-      <section id="historia" className="relative z-10 py-16 px-4 max-w-4xl mx-auto border-t border-gold/20 scroll-mt-16">
-        <motion.div {...reveal} className="text-center space-y-6">
-          <span className="text-xs font-display text-maya-red tracking-widest uppercase block">
-            La leyenda detrás del juego
+      {/* SECCIÓN EDUCATIVA: LOS 4 CANDADOS MÍSTICOS (ORO, PLATA, JADE, VIDA) */}
+      <section className="relative z-10 py-12 px-4 max-w-6xl mx-auto border-t border-gold/20">
+        <div className="text-center space-y-2 mb-10">
+          <span className="text-xs font-display text-gold tracking-widest uppercase flex items-center justify-center gap-1.5">
+            <KeyRound size={14} /> Dinámica Educativa de Secretos
           </span>
           <h2 className="text-2xl sm:text-4xl font-display text-cream">
-            UNA CARRERA CONTRA EL OLVIDO
-          </h2>
-
-          <div className="space-y-5 text-left sm:text-center text-cream/85 font-serif text-sm sm:text-base leading-relaxed max-w-3xl mx-auto">
-            <p>
-              Bajo la luz plateada de la luna viven los{' '}
-              <strong className="text-gold not-italic">Tzipitios</strong>: criaturas pequeñas, tímidas y 
-              valientes, guardianas olvidadas de la sabiduría ancestral. Cuando un pueblo deja de contar 
-              sus historias, un Tzipitio empieza a desvanecerse...
-            </p>
-            <p>
-              Para sobrevivir deben llegar a{' '}
-              <em className="text-gold">La Casa de las Leyendas</em>, el santuario donde habitan los seres 
-              más famosos del misterio guatemalteco: La Llorona, El Cadejo, El Sombrerón y muchos más. 
-              Solo allí, reclamando las{' '}
-              <strong className="text-gold not-italic">Cuatro Llaves de la cultura</strong>, podrán volver a ser recordados.
-            </p>
-            <p className="text-maya-red/90 italic">
-              Pero cuidado: las leyendas no quieren compartir su casa, y harán todo por detenerlos. 
-              Solo en equipo —y con astucia— llegarás hasta la puerta.
-            </p>
-          </div>
-
-          <div className="pt-2 flex justify-center">
-            <MysticKey isTurned size={44} />
-          </div>
-
-          <blockquote className="text-xl sm:text-2xl font-display text-gold italic pt-2">
-            "¿Estás listo para escribir tu nombre en la historia?"
-          </blockquote>
-        </motion.div>
-      </section>
-
-      {/* ==================== QUÉ ES ==================== */}
-      <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
-        <motion.div {...reveal} className="text-center space-y-2 mb-10">
-          <span className="text-xs font-display text-gold tracking-widest uppercase block">
-            ¿Qué es La Casa de las Leyendas?
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-display text-gold">
-            MESA, TELÉFONO Y MAGIA, TODO EN UNO
+            LOS 4 CANDADOS ELEMENTALES
           </h2>
           <p className="text-xs sm:text-sm text-cream/70 font-serif italic max-w-2xl mx-auto leading-relaxed">
-            Un juego de mesa tradicional fusionado con tecnología para que ninguna partida sea igual a la anterior:
+            Abre los candados sagrados de Oro, Plata, Jade y Vida para revelar la sabiduría y el trasfondo histórico de nuestras tradiciones:
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            {
-              accent: 'bg-gold/15 border-gold/40 text-gold',
-              icon: <MapIcon size={26} />,
-              title: 'Un tablero que cobra vida',
-              text: 'El mapa de Guatemala es el campo de juego: mercados de colores, ciudades coloniales encantadas y volcanes nublados. Cada edificio es una casilla especial con su propia aparición.'
-            },
-            {
-              accent: 'bg-maya-red/20 border-maya-red/40 text-maya-red',
-              icon: <Smartphone size={26} />,
-              title: 'Una app sin instalación',
-              text: 'Todo vive en el navegador de tu teléfono. Sin descargas ni registros complicados: entra, escoge tu Tzipitio y a jugar.'
-            },
-            {
-              accent: 'bg-amber-500/20 border-amber-500/40 text-amber-700',
-              icon: <QrCode size={26} />,
-              title: 'QR como varita mágica',
-              text: 'Las cartas físicas se abren en retos digitales en tiempo real: trivia contra el reloj, mímica, detective de personajes y desafíos virales.'
-            }
-          ].map((pillar) => (
-            <Card key={pillar.title} className="p-6 space-y-4 border-gold/30 hover:border-gold/60 transition-all hover:scale-[1.02]">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${pillar.accent}`}>
-                {pillar.icon}
-              </div>
-              <h3 className="text-lg font-display text-gold">{pillar.title}</h3>
-              <p className="text-xs text-cream/80 font-serif italic leading-relaxed">{pillar.text}</p>
-            </Card>
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {ELEMENTAL_LOCKS.map((lock) => {
+            const isUnlocked = !!unlockedLocks[lock.id];
+
+            return (
+              <Card 
+                key={lock.id}
+                className={`p-5 space-y-4 border transition-all duration-500 relative overflow-hidden flex flex-col justify-between ${
+                  isUnlocked 
+                    ? `border-gold bg-black/85 shadow-[0_0_25px_rgba(190,141,44,0.3)]` 
+                    : `border-gold/30 bg-black/50 hover:border-gold/60`
+                }`}
+              >
+                <div className="space-y-3">
+                  {/* Ilustración del Candado PNG */}
+                  <div className="flex items-center justify-between">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gold/10 blur-md rounded-full" />
+                      <img 
+                        src={lock.image} 
+                        alt={lock.name} 
+                        className={`w-14 h-14 object-contain transition-transform duration-500 ${
+                          isUnlocked ? 'scale-110 drop-shadow-[0_0_12px_rgba(252,207,101,0.7)]' : 'opacity-85'
+                        }`}
+                      />
+                    </div>
+
+                    <span className={`text-[9px] font-display uppercase tracking-wider px-2 py-0.5 rounded border ${lock.badgeBg}`}>
+                      {lock.name}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="font-display text-sm text-cream font-bold leading-tight">
+                      {lock.subtitle}
+                    </h3>
+                    <span className="text-[10px] text-gold/80 font-serif italic block mt-0.5">
+                      Leyendas: {lock.associatedLegends.join(', ')}
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-earth-brown/15 rounded-lg border border-gold/15 text-xs text-cream/90 font-serif italic">
+                    "{lock.question}"
+                  </div>
+
+                  {/* Contenido Revelado al Abrir el Candado */}
+                  <AnimatePresence>
+                    {isUnlocked && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="space-y-2.5 pt-2 border-t border-gold/20 text-xs font-serif"
+                      >
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-display uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                            <CheckCircle2 size={11} /> Revelación:
+                          </span>
+                          <p className="text-cream italic text-[11px] leading-relaxed">
+                            {lock.answer}
+                          </p>
+                        </div>
+
+                        <div className="p-2 bg-black/60 rounded border border-gold/20 space-y-1">
+                          <span className="text-[9px] font-display uppercase tracking-widest text-gold flex items-center gap-1">
+                            <Lightbulb size={10} /> Contexto Histórico:
+                          </span>
+                          <p className="text-cream/80 text-[10px] leading-relaxed">
+                            {lock.culturalInsight}
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Botón de Giro de Llave */}
+                <button
+                  onClick={() => handleUnlockLock(lock.id)}
+                  className={`w-full py-2.5 px-3 rounded-lg text-xs font-display flex items-center justify-center gap-2 border transition-all cursor-pointer mt-3 ${
+                    isUnlocked
+                      ? 'bg-gold/15 text-gold border-gold/40 hover:bg-gold/25'
+                      : 'bg-earth-brown hover:bg-gold text-cream hover:text-obsidian border-gold/50 shadow-md'
+                  }`}
+                >
+                  <MysticKey isTurned={isUnlocked} size={16} />
+                  <span>{isUnlocked ? 'Cerrar Secreto' : 'Girar Llave'}</span>
+                </button>
+              </Card>
+            );
+          })}
         </div>
       </section>
 
-      {/* ==================== QUÉ INCLUYE ==================== */}
-      <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
-        <motion.div {...reveal} className="text-center space-y-2 mb-10">
-          <span className="text-xs font-display text-gold tracking-widest uppercase block">
-            Qué incluye
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-display text-cream">
-            ASÍ ES LA CAJA
-          </h2>
-          <p className="text-xs sm:text-sm text-cream/70 font-serif italic max-w-xl mx-auto">
-            Todo lo que necesitas para convocar a las leyendas a tu mesa:
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {BOX_ITEMS.map((item, idx) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: (idx % 3) * 0.08 }}
-              className="p-5 rounded-xl bg-black/60 border border-gold/25 hover:border-gold/60 transition-all space-y-3"
-            >
-              <div className="w-11 h-11 rounded-lg bg-gold/15 border border-gold/35 flex items-center justify-center text-gold">
-                {item.icon}
-              </div>
-              <h3 className="font-display text-base text-gold font-bold">{item.title}</h3>
-              <p className="text-xs text-cream/75 font-serif italic leading-relaxed">{item.text}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ==================== QUÉ ESPERAR: LOS RETOS ==================== */}
-      <section className="relative z-10 py-14 px-4 max-w-5xl mx-auto border-t border-gold/20">
-        <motion.div {...reveal} className="text-center space-y-2 mb-8">
-          <span className="text-xs font-display text-maya-red tracking-widest uppercase block">
-            Qué esperar
+      {/* PILARES DE LA EXPERIENCIA */}
+      <section className="relative z-10 py-12 px-4 max-w-6xl mx-auto">
+        <div className="text-center space-y-2 mb-10">
+          <span className="text-xs font-display text-maya-red tracking-widest uppercase">
+            Dinámicas y Mecánicas
           </span>
           <h2 className="text-2xl sm:text-4xl font-display text-gold">
-            CUATRO RETOS, UNA SOLA REGLA: DIVIÉRTETE
+            ¿CÓMO FUNCIONA LA EXPERIENCIA?
           </h2>
           <p className="text-xs sm:text-sm text-cream/70 font-serif italic max-w-xl mx-auto">
-            Cada casilla con ícono invoca un tipo de reto distinto. ¿Cuál te tocará?
+            Combina el mundo físico con la magia digital a través de 3 pilares únicos:
           </p>
-        </motion.div>
+        </div>
 
-        {/* Selector de retos */}
-        <motion.div {...reveal} className="flex flex-wrap justify-center gap-2 mb-6">
-          {CHALLENGES.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => {
-                sound.playClick();
-                setActiveChallenge(c.id);
-              }}
-              className={`px-4 py-2 rounded-xl text-xs font-display flex items-center gap-2 border transition-all cursor-pointer ${
-                activeChallenge === c.id
-                  ? 'bg-gold/20 text-gold border-gold/50 shadow-[0_0_15px_rgba(190,141,44,0.25)]'
-                  : 'bg-black/40 text-cream/60 border-gold/20 hover:text-cream hover:border-gold/40'
-              }`}
-            >
-              {c.icon}
-              <span>{c.name}</span>
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Detalle del reto activo */}
-        <motion.div 
-          key={activeChallengeData.id}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="max-w-2xl mx-auto"
-        >
-          <Card className="p-6 sm:p-8 space-y-5 border-gold/40">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gold/15 border border-gold/40 flex items-center justify-center text-gold shrink-0">
-                {activeChallengeData.icon}
-              </div>
-              <div className="text-left">
-                <h3 className="text-xl font-display text-gold">{activeChallengeData.name}</h3>
-                <p className="text-xs text-cream/60 font-serif italic">{activeChallengeData.tagline}</p>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="p-6 space-y-4 border-gold/30 hover:border-gold/60 transition-all hover:scale-[1.02]">
+            <div className="w-12 h-12 rounded-xl bg-gold/15 border border-gold/40 flex items-center justify-center text-gold">
+              <QrCode size={26} />
             </div>
-            <ul className="space-y-2.5 text-left">
-              {activeChallengeData.rules.map((rule) => (
-                <li key={rule} className="flex items-start gap-2.5 text-xs sm:text-sm text-cream/85 font-serif">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 shrink-0" />
-                  <span>{rule}</span>
-                </li>
-              ))}
-            </ul>
+            <h3 className="text-lg font-display text-gold">1. Escanea las Estaciones</h3>
+            <p className="text-xs text-cream/80 font-serif italic leading-relaxed">
+              Apunta con la cámara de tu móvil a las cartas físicas o a las placas en la Casa de las Leyendas para invocar el reto de cada espectro.
+            </p>
           </Card>
-        </motion.div>
 
-        {/* Nota de apariciones */}
-        <motion.p {...reveal} className="mt-6 text-[11px] text-cream/50 font-serif italic text-center max-w-lg mx-auto flex items-center justify-center gap-2">
-          <Ghost size={14} className="text-maya-red shrink-0" />
-          <span>
-            Y si caes en un edificio especial... se activa una Carta de Aparición y la noche se pone interesante.
-          </span>
-        </motion.p>
-      </section>
+          <Card className="p-6 space-y-4 border-gold/30 hover:border-gold/60 transition-all hover:scale-[1.02]">
+            <div className="w-12 h-12 rounded-xl bg-maya-red/20 border border-maya-red/40 flex items-center justify-center text-maya-red">
+              <Sparkles size={26} />
+            </div>
+            <h3 className="text-lg font-display text-gold">2. Supera las Pruebas</h3>
+            <p className="text-xs text-cream/80 font-serif italic leading-relaxed">
+              Responde preguntas con tiempo límite, descubre personajes con pistas misteriosas y actúa retos de mímica ante tus compañeros.
+            </p>
+          </Card>
 
-      {/* ==================== CÓMO SE JUEGA ==================== */}
-      <section id="como-jugar" className="relative z-10 py-14 px-4 max-w-4xl mx-auto border-t border-gold/20 scroll-mt-16">
-        <motion.div {...reveal} className="text-center space-y-2 mb-10">
-          <span className="text-xs font-display text-gold tracking-widest uppercase block">
-            Cómo se juega con la app
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-display text-cream">
-            DE LA SALA A LA CASA EN 4 PASOS
-          </h2>
-        </motion.div>
-
-        <div className="space-y-4">
-          {PLAY_STEPS.map((step, idx) => (
-            <motion.div
-              key={step.title}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="flex items-start gap-4 p-4 rounded-xl bg-black/60 border border-gold/25 hover:border-gold/50 transition-all"
-            >
-              <div className="w-9 h-9 rounded-full bg-gold text-[#fffdf4] font-display font-bold flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(143,101,18,0.4)]">
-                {idx + 1}
-              </div>
-              <div className="text-left space-y-1">
-                <h3 className="font-display text-sm text-gold font-bold">{step.title}</h3>
-                <p className="text-xs text-cream/75 font-serif italic leading-relaxed">{step.text}</p>
-              </div>
-            </motion.div>
-          ))}
+          <Card className="p-6 space-y-4 border-gold/30 hover:border-gold/60 transition-all hover:scale-[1.02]">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
+              <Trophy size={26} />
+            </div>
+            <h3 className="text-lg font-display text-gold">3. Colecciona los Sellos</h3>
+            <p className="text-xs text-cream/80 font-serif italic leading-relaxed">
+              Completa tu Pasaporte Digital con los 7 sellos ancestrales y desbloquea el título de Maestro de Leyendas de Guatemala.
+            </p>
+          </Card>
         </div>
       </section>
 
-      {/* ==================== LAS LEYENDAS ==================== */}
-      <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
-        <motion.div {...reveal} className="text-center space-y-2 mb-8">
-          <span className="text-xs font-display text-gold tracking-widest uppercase block">
-            Los habitantes de la Casa
+      {/* RECORRIDO DE LEYENDAS CON SELLOS */}
+      <section className="relative z-10 py-12 px-4 max-w-6xl mx-auto border-t border-gold/20">
+        <div className="text-center space-y-2 mb-8">
+          <span className="text-xs font-display text-gold tracking-widest uppercase">
+            Catálogo Místico
           </span>
           <h2 className="text-2xl sm:text-4xl font-display text-cream">
             LAS 7 LEYENDAS ANCESTRALES
           </h2>
           <p className="text-xs text-cream/60 font-serif italic">
-            Toca cualquiera para asomarte a su historia:
+            Toca cualquiera de las estaciones para descubrir su historia:
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {LEYENDAS_DATA.map((legend) => (
@@ -612,7 +489,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                   className="pt-3 border-t border-gold/20 space-y-2 text-xs font-serif"
                 >
                   <p className="text-cream/90 italic">"{legend.fullStory}"</p>
-                  <p className="text-[11px] text-gold font-display">{legend.culturalOrigin}</p>
+                  <p className="text-[11px] text-gold font-display">📍 {legend.culturalOrigin}</p>
                 </motion.div>
               )}
             </motion.div>
@@ -620,96 +497,35 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
         </div>
       </section>
 
-      {/* ==================== POR QUÉ ES ÚNICO ==================== */}
-      <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
-        <motion.div {...reveal} className="text-center space-y-2 mb-10">
-          <span className="text-xs font-display text-maya-red tracking-widest uppercase block">
-            Producto original
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-display text-gold">
-            NO HAY OTRO JUEGO COMO ESTE
-          </h2>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {UNIQUE_POINTS.map((point, idx) => (
-            <motion.div
-              key={point.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: (idx % 2) * 0.08 }}
-              className="flex items-start gap-4 p-5 rounded-xl bg-gradient-to-br from-black/70 to-earth-brown/20 border border-gold/30 hover:border-gold/60 transition-all"
-            >
-              <div className="w-11 h-11 rounded-lg bg-gold/15 border border-gold/35 flex items-center justify-center text-gold shrink-0">
-                {point.icon}
-              </div>
-              <div className="space-y-1.5 text-left">
-                <h3 className="font-display text-sm text-gold font-bold leading-snug">{point.title}</h3>
-                <p className="text-xs text-cream/75 font-serif italic leading-relaxed">{point.text}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ==================== CTA FINAL ==================== */}
+      {/* BANNER FINAL DE LLAMADO A LA ACCIÓN */}
       <section className="relative z-10 py-16 px-4 max-w-4xl mx-auto text-center">
-        <motion.div {...reveal}>
-          <Card className="p-8 sm:p-12 space-y-6 border-gold/50 bg-gradient-to-b from-white/70 to-earth-brown/10 relative overflow-hidden shadow-[0_0_50px_rgba(122,49,8,0.18)]">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 blur-3xl rounded-full pointer-events-none" />
-            
-            <span className="text-xs font-display text-gold uppercase tracking-widest block">
-              El tablero está listo y las velas encendidas
-            </span>
+        <Card className="p-8 sm:p-12 space-y-6 border-gold/50 bg-gradient-to-b from-black/80 to-earth-brown/30 relative overflow-hidden shadow-[0_0_50px_rgba(122,49,8,0.4)]">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 blur-3xl rounded-full pointer-events-none" />
+          
+          <span className="text-xs font-display text-gold uppercase tracking-widest block">
+            ¿Estás listo para el ritual?
+          </span>
 
-            <h2 className="text-3xl sm:text-4xl font-display text-cream">
-              HAY UN TZIPITIO ESPERÁNDOTE
-            </h2>
+          <h2 className="text-3xl sm:text-4xl font-display text-cream">
+            COMIENZA TU AVENTURA EN LA CASA DE LAS LEYENDAS
+          </h2>
 
-            <p className="text-xs sm:text-base text-cream/80 font-serif italic max-w-xl mx-auto">
-              Reúne a tu familia o a tus compas, saca las tarjetas y deja que las leyendas 
-              entren a la mesa. El viento sopla entre los cerros... y la Casa aguarda.
-            </p>
+          <p className="text-xs sm:text-base text-cream/80 font-serif italic max-w-xl mx-auto">
+            Ingresa desde tu teléfono para jugar en mesa con tus amigos o para realizar el recorrido interactivo por nuestras instalaciones.
+          </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-              <Button 
-                onClick={() => {
-                  sound.playMysticChime();
-                  onEnterGame();
-                }}
-                size="lg"
-                className="px-10 py-5 text-sm sm:text-base inline-flex items-center gap-3 shadow-[0_0_30px_rgba(190,141,44,0.7)] text-[#241505] bg-gradient-to-r from-[#b8860b] via-[#eec96a] to-[#b8860b] font-bold hover:scale-105"
-              >
-                <Play size={20} className="fill-obsidian" />
-                <span>ENTRAR A LA CASA</span>
-              </Button>
-
-              <Button 
-                variant="outline"
-                onClick={() => {
-                  sound.playClick();
-                  onEnterExplorer();
-                }}
-                size="lg"
-                className="px-8 py-5 text-xs sm:text-sm inline-flex items-center gap-2 border-gold text-gold hover:bg-gold/15"
-              >
-                <MapPin size={16} />
-                <span>EXPLORAR LEYENDAS GRATIS</span>
-              </Button>
-            </div>
-
-            <a 
-              href={RULES_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[11px] text-gold/70 hover:text-gold underline underline-offset-4 transition-colors font-serif italic"
-            >
-              <ScrollText size={13} />
-              Lee las instrucciones completas del juego de mesa
-            </a>
-          </Card>
-        </motion.div>
+          <Button 
+            onClick={() => {
+              sound.playMysticChime();
+              onEnterGame();
+            }}
+            size="lg"
+            className="px-10 py-5 text-sm sm:text-base inline-flex items-center gap-3 shadow-[0_0_30px_rgba(190,141,44,0.7)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105"
+          >
+            <Play size={20} className="fill-obsidian" />
+            <span>INICIAR EXPERIENCIA DIGITAL</span>
+          </Button>
+        </Card>
       </section>
 
       {/* FOOTER */}
@@ -721,11 +537,9 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           Preservando el patrimonio oral, la magia y las tradiciones populares de Guatemala.
         </p>
         <p className="text-[10px] text-cream/30 pt-2">
-          © {new Date().getFullYear()} lluviadeidea editorial. Todos los derechos reservados.
+          © {new Date().getFullYear()} lacasadelasleyendas.com. Todos los derechos reservados.
         </p>
       </footer>
     </div>
   );
 };
-
-
