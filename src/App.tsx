@@ -85,7 +85,7 @@ export default function App() {
   useEffect(() => { roomIdRef.current = roomId; }, [roomId]);
   useEffect(() => { userRef.current = user; }, [user]);
 
-  // Navegación integrada con el historial del navegador (botón/gesto "atrás" funcional)
+  // Navegación integrada con el historial del navegador y URLs limpias (/rutadeleyendas, /mayordomo, /)
   const navigate = (to: Screen, legend?: Legend) => {
     setActiveLegend(to === 'module' && legend ? legend : null);
     setScreen(to);
@@ -93,38 +93,64 @@ export default function App() {
       screen: to,
       legendId: to === 'module' ? legend?.id : undefined
     };
-    window.history.pushState(state, '');
+
+    let targetUrl = '/';
+    if (to === 'theater') {
+      targetUrl = '/rutadeleyendas';
+    } else if (to === 'mayordomo') {
+      targetUrl = '/mayordomo';
+    } else if (to === 'landing') {
+      targetUrl = '/';
+    } else {
+      // Si navegamos dentro del juego desde una ruta especial, mantener raíz limpia
+      targetUrl = window.location.pathname === '/rutadeleyendas' || window.location.pathname === '/mayordomo'
+        ? '/'
+        : (window.location.pathname || '/');
+    }
+
+    window.history.pushState(state, '', targetUrl);
   };
 
-  // Deep linking por QR o URL directa: /mayordomo, ?envivo=true, ?legend=sombreron, ?room=ABC123
+  // Deep linking por URL directa (/rutadeleyendas, /mayordomo, ?legend=sombreron, ?room=ABC123)
   useEffect(() => {
-    const path = window.location.pathname.toLowerCase();
+    const rawPath = window.location.pathname.toLowerCase();
+    const path = rawPath.replace(/\/+$/, ''); // eliminar trailing slash
     const params = new URLSearchParams(window.location.search);
-    const isMayordomoPath = path.includes('/mayordomo') || params.has('mayordomo');
+
+    const isMayordomoPath = path === '/mayordomo' || path.includes('/mayordomo') || params.has('mayordomo');
+    const isRutaDeLeyendas = 
+      path === '/rutadeleyendas' || 
+      path.includes('/rutadeleyendas') || 
+      path === '/envivo' || 
+      path.includes('/envivo') || 
+      params.has('rutadeleyendas') || 
+      params.has('envivo') || 
+      params.has('teatro') || 
+      params.has('live');
     const legendParam = params.get('legend') || params.get('id') || params.get('code');
     const roomParam = params.get('room');
-    const theaterParam = params.get('envivo') || params.get('teatro') || params.get('live') || path.includes('/envivo');
 
     if (isMayordomoPath) {
       setScreen('mayordomo');
-      window.history.replaceState({ screen: 'mayordomo' } satisfies HistoryState, '');
-    } else if (theaterParam) {
+      window.history.replaceState({ screen: 'mayordomo' } satisfies HistoryState, '', '/mayordomo');
+    } else if (isRutaDeLeyendas) {
       setScreen('theater');
-      window.history.replaceState({ screen: 'theater' } satisfies HistoryState, '');
+      window.history.replaceState({ screen: 'theater' } satisfies HistoryState, '', '/rutadeleyendas');
     } else if (legendParam) {
       const found = parseQRData(legendParam);
       if (found) {
         setActiveLegend(found);
         setScreen('module');
-        window.history.replaceState({ screen: 'module', legendId: found.id } satisfies HistoryState, '');
+        window.history.replaceState({ screen: 'module', legendId: found.id } satisfies HistoryState, '', '/');
       }
     } else if (roomParam) {
       setPendingRoomCode(roomParam.toUpperCase());
     }
 
-    // Limpiar los parámetros de la URL de ser necesario
-    if ((legendParam || roomParam || theaterParam) && window.location.search) {
-      window.history.replaceState(window.history.state, '', window.location.pathname);
+    // Limpiar parámetros residuales de consulta manteniendo la ruta limpia
+    if ((legendParam || roomParam || params.has('envivo') || params.has('rutadeleyendas')) && window.location.search) {
+      const cleanPath = isRutaDeLeyendas ? '/rutadeleyendas' : (isMayordomoPath ? '/mayordomo' : '/');
+      window.history.replaceState(window.history.state, '', cleanPath);
     }
   }, []);
 
@@ -146,7 +172,16 @@ export default function App() {
   useEffect(() => {
     const onPopState = (e: PopStateEvent) => {
       const st = (e.state || {}) as HistoryState;
-      const target: Screen = st.screen ?? 'landing';
+      const rawPath = window.location.pathname.toLowerCase().replace(/\/+$/, '');
+      let target: Screen = st.screen ?? 'landing';
+
+      if (!st.screen) {
+        if (rawPath === '/rutadeleyendas' || rawPath.includes('/rutadeleyendas')) {
+          target = 'theater';
+        } else if (rawPath === '/mayordomo' || rawPath.includes('/mayordomo')) {
+          target = 'mayordomo';
+        }
+      }
 
       // Si estaba dentro de una sala y retrocede a una pantalla externa, abandonarla en limpio
       const wasInRoom = screenRef.current === 'lobby' || screenRef.current === 'game';
