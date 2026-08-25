@@ -59,6 +59,47 @@ export interface TheaterStationContent {
   imageUrl?: string; // Imagen personalizada para el círculo/ficha de la estación
 }
 
+export interface TicketPlanContent {
+  id: string; // 'jade' | 'vida' | 'oro' | 'plata'
+  name: string;
+  keyType: 'jade' | 'vida' | 'oro' | 'plata';
+  badge: string;
+  badgeBg: string;
+  price: string;
+  priceNote: string;
+  capacityText: string;
+  description: string;
+  includes: string[];
+  imageUrl?: string; // Imagen personalizada de la llave/candado
+}
+
+export interface TicketingPhaseContent {
+  id: string;
+  dates: string;
+  title: string;
+  discountBadge?: string;
+  description: string;
+  highlights: string[];
+}
+
+export interface TheaterTicketingContent {
+  sectionBadge: string;
+  sectionTitle: string;
+  sectionDescription: string;
+  selfServiceTitle: string;
+  selfServiceDescription: string;
+  selfServiceFootnote: string;
+  phasesSectionTitle: string;
+  phases: TicketingPhaseContent[];
+  plansSectionTitle: string;
+  plansSectionDescription: string;
+  plans: TicketPlanContent[];
+  specialEditionBadge: string;
+  specialEditionTitle: string;
+  specialEditionDescription: string;
+  supportNote: string;
+}
+
 export interface LiveTheaterContent {
   badge: string;
   title: string;
@@ -84,10 +125,7 @@ export interface LiveTheaterContent {
   stationsSectionBadge: string;
   stationsSectionTitle: string;
   stations: TheaterStationContent[];
-  ctaBadge: string;
-  ctaTitle: string;
-  ctaDescription: string;
-  ctaButtonText: string;
+  ticketing: TheaterTicketingContent; // Sistema de boletería en línea y planes
   footerTitle: string;
   footerDescription: string;
 }
@@ -177,6 +215,112 @@ export const DEFAULT_LANDING_CONTENT: LandingContent = {
   footerDescription: 'Preservando el patrimonio oral, la magia y las tradiciones populares de Guatemala.'
 };
 
+export const DEFAULT_TICKETING_CONTENT: TheaterTicketingContent = {
+  sectionBadge: 'Propuesta Operativa y Acceso Digital',
+  sectionTitle: 'SISTEMA DE BOLETERÍA EN LÍNEA',
+  sectionDescription: 'Para optimizar la logística de ingreso, evitar filas prolongadas y dinamizar la promoción durante todo el mes de octubre, implementaremos un sistema digital accesible y ordenado.',
+  selfServiceTitle: 'Plataforma de Autogestión y Reservación',
+  selfServiceDescription: 'Permite hacer la reservación y pago directo en la web oficial, generando un código QR de acceso rápido e infalsificable para presentar desde cualquier dispositivo móvil.',
+  selfServiceFootnote: 'Acceso exprés con escáner QR en el vestíbulo del Teatro',
+  phasesSectionTitle: 'FASES DE PREVENTA (OCTUBRE 2026)',
+  phases: [
+    {
+      id: 'preventa-cultural',
+      dates: '1 al 10 de Octubre',
+      title: 'Preventa Cultural (20% OFF)',
+      discountBadge: '20% DESCUENTO PREFERENCIAL',
+      description: 'Tarifa preferencial con un 20% de descuento para incentivar la planificación anticipada del público local, estudiantes y visitantes nacionales.',
+      highlights: ['Tarifa preferencial con 20% de descuento', 'Selección prioritaria de horarios', 'Garantía de cupo en grupos íntimos']
+    },
+    {
+      id: 'venta-general',
+      dates: '11 al 30 de Octubre',
+      title: 'Venta General por Horarios',
+      discountBadge: 'BLOQUES DE HORARIO CONTROLADO',
+      description: 'Disponibilidad por horarios específicos (bloques desde las 18:00 hasta las 23:00 horas cada 12 minutos) para asegurar el aforo permitido y la máxima calidad escénica.',
+      highlights: ['Bloques de 18:00 a 23:00 horas', 'Salidas escalonadas cada 12 minutos', 'Aforo máximo de 15 personas por grupo']
+    }
+  ],
+  plansSectionTitle: 'PLANES Y LLAVES SAGRADAS DE ACCESO',
+  plansSectionDescription: 'Selecciona la llave de acceso que mejor se adapte a tu grupo o experiencia. Tarifa base individual desde Q50 por persona:',
+  plans: [
+    {
+      id: 'jade',
+      name: 'Plan Jade: Pase Supremo & Juego de Mesa',
+      keyType: 'jade',
+      badge: 'EDICIÓN ESPECIAL • MÁS COMPLETO',
+      badgeBg: 'bg-emerald-950/90 text-emerald-300 border-emerald-500/60 font-bold',
+      price: 'Q350',
+      priceNote: 'Incluye Pase para 5 personas + Juego Físico Oficial',
+      capacityText: '5 Personas + Juego de Mesa de Lujo',
+      description: 'Boleto Edición Especial que incluye el juego de mesa oficial "La Casa de las Leyendas" (optimizado para 4 a 6 jugadores) más el pase completo para 5 personas.',
+      includes: [
+        'Pase de acceso completo para 5 personas al recorrido teatral',
+        'Caja Oficial del Juego de Mesa "La Casa de las Leyendas" (4-6 jugadores)',
+        'Acceso preferencial en el vestíbulo sin tiempos de espera',
+        'Farol ceremonial místico durante el trayecto'
+      ],
+      imageUrl: ''
+    },
+    {
+      id: 'vida',
+      name: 'Plan Vida: Experiencia Inmersiva Grupal',
+      keyType: 'vida',
+      badge: 'EXPERIENCIA FAMILIAR & AMIGOS',
+      badgeBg: 'bg-black/90 text-amber-200 border-gold/70 font-bold',
+      price: 'Q250',
+      priceNote: 'Q50 por persona (Grupo de 5)',
+      capacityText: 'Pase Grupal para 5 personas',
+      description: 'Pase grupal diseñado para familias o grupos de amigos que desean recorrer las 4 estaciones escénicas de manera conjunta con acompañamiento del Guía.',
+      includes: [
+        'Pase para 5 personas en el mismo bloque horario',
+        'Farol de luz ambiental para el grupo',
+        'Sellado digital automático en el Pasaporte de Leyendas',
+        'Guía de la Tradición asignado'
+      ],
+      imageUrl: ''
+    },
+    {
+      id: 'oro',
+      name: 'Plan Oro: Pase Grupal Selecto',
+      keyType: 'oro',
+      badge: 'TRADICIÓN & ARTE',
+      badgeBg: 'bg-black/90 text-gold border-gold/70 font-bold',
+      price: 'Q150',
+      priceNote: 'Q50 por persona (Grupo de 3)',
+      capacityText: 'Pase para 3 personas',
+      description: 'Ideal para grupos pequeños de 3 personas que buscan sumergirse en la narrativa colonial y la serenata del Sombrerón.',
+      includes: [
+        'Pase para 3 personas en bloque horario seleccionado',
+        'Acceso completo a las 4 estaciones escénicas',
+        'Desafíos digitales interactivos en tiempo real'
+      ],
+      imageUrl: ''
+    },
+    {
+      id: 'plata',
+      name: 'Plan Plata: Entrada Individual',
+      keyType: 'plata',
+      badge: 'ACCESO INDIVIDUAL',
+      badgeBg: 'bg-slate-900/90 text-slate-200 border-slate-400/60 font-bold',
+      price: 'Q50',
+      priceNote: 'Q40 en Preventa Cultural (20% OFF)',
+      capacityText: '1 Persona',
+      description: 'Boleto individual con reservación de horario para disfrutar de la experiencia teatral inmersiva en el Teatro Municipal.',
+      includes: [
+        'Pase individual para el recorrido guiado de 45 minutos',
+        'Código QR de acceso móvil al instante',
+        'Acceso al Pasaporte Digital de Sellos'
+      ],
+      imageUrl: ''
+    }
+  ],
+  specialEditionBadge: 'Colección de Lujo',
+  specialEditionTitle: 'Boleto Edición Especial con Juego de Mesa',
+  specialEditionDescription: 'El Plan Jade te permite llevarte a casa la caja física del juego "La Casa de las Leyendas", diseñado con cartas ilustradas, tableros de reto y mecánicas interactivas de 4 a 6 jugadores.',
+  supportNote: 'Los pagos en línea contarán con confirmación inmediata por WhatsApp y correo electrónico con el boleto digital QR adjunto.'
+};
+
 export const DEFAULT_THEATER_CONTENT: LiveTheaterContent = {
   badge: 'Producción Escénica Inmersiva',
   title: 'LA CASA DE LAS LEYENDAS',
@@ -247,15 +391,12 @@ export const DEFAULT_THEATER_CONTENT: LiveTheaterContent = {
       imageUrl: ''
     }
   ],
-  ctaBadge: 'Vive la Experiencia Completa',
-  ctaTitle: 'LLEVA LA MAGIA EN TU TELÉFONO',
-  ctaDescription: 'Complementa la noche de teatro con la aplicación web oficial: escanea las cartas místicas, desbloquea los 7 sellos del pasaporte y desafía a tus amigos.',
-  ctaButtonText: 'ENTRAR AL JUEGO DIGITAL',
+  ticketing: DEFAULT_TICKETING_CONTENT,
   footerTitle: 'LA CASA DE LAS LEYENDAS • TEATRO MUNICIPAL DE QUETZALTENANGO',
   footerDescription: '31 de Octubre de 2026 • Turismo Cultural, Arte Dramático y Patrimonio Intangible de Guatemala.'
 };
 
-const LOCAL_STORAGE_KEY = 'lacasadelasleyendas_site_content_v2';
+const LOCAL_STORAGE_KEY = 'lacasadelasleyendas_site_content_v3';
 const FIRESTORE_DOC_ID = 'main_content';
 
 /**
@@ -263,7 +404,9 @@ const FIRESTORE_DOC_ID = 'main_content';
  */
 export function getLocalContent(): SiteContent {
   try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem('lacasadelasleyendas_site_content_v1');
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || 
+                localStorage.getItem('lacasadelasleyendas_site_content_v2') || 
+                localStorage.getItem('lacasadelasleyendas_site_content_v1');
     if (raw) {
       const parsed = JSON.parse(raw);
       
@@ -285,13 +428,25 @@ export function getLocalContent(): SiteContent {
         return st;
       });
 
+      const mergedTheater: LiveTheaterContent = {
+        ...DEFAULT_THEATER_CONTENT,
+        ...parsed.theater,
+        stations: theaterStations,
+        ticketing: {
+          ...DEFAULT_TICKETING_CONTENT,
+          ...(parsed.theater?.ticketing || {}),
+          plans: (parsed.theater?.ticketing?.plans && parsed.theater.ticketing.plans.length > 0) 
+            ? parsed.theater.ticketing.plans 
+            : DEFAULT_TICKETING_CONTENT.plans,
+          phases: (parsed.theater?.ticketing?.phases && parsed.theater.ticketing.phases.length > 0)
+            ? parsed.theater.ticketing.phases
+            : DEFAULT_TICKETING_CONTENT.phases
+        }
+      };
+
       return {
         landing: { ...DEFAULT_LANDING_CONTENT, ...parsed.landing },
-        theater: { 
-          ...DEFAULT_THEATER_CONTENT, 
-          ...parsed.theater,
-          stations: theaterStations
-        },
+        theater: mergedTheater,
         lastUpdated: parsed.lastUpdated
       };
     }
@@ -329,13 +484,25 @@ export async function fetchSiteContent(): Promise<SiteContent> {
         return st;
       });
 
+      const mergedTheater: LiveTheaterContent = {
+        ...DEFAULT_THEATER_CONTENT,
+        ...remote.theater,
+        stations: theaterStations,
+        ticketing: {
+          ...DEFAULT_TICKETING_CONTENT,
+          ...(remote.theater?.ticketing || {}),
+          plans: (remote.theater?.ticketing?.plans && remote.theater.ticketing.plans.length > 0)
+            ? remote.theater.ticketing.plans
+            : DEFAULT_TICKETING_CONTENT.plans,
+          phases: (remote.theater?.ticketing?.phases && remote.theater.ticketing.phases.length > 0)
+            ? remote.theater.ticketing.phases
+            : DEFAULT_TICKETING_CONTENT.phases
+        }
+      };
+
       const merged: SiteContent = {
         landing: { ...DEFAULT_LANDING_CONTENT, ...remote.landing },
-        theater: { 
-          ...DEFAULT_THEATER_CONTENT, 
-          ...remote.theater,
-          stations: theaterStations
-        },
+        theater: mergedTheater,
         lastUpdated: remote.lastUpdated || Date.now()
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(merged));

@@ -90,37 +90,40 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-gold/15 via-maya-red/10 to-transparent blur-3xl rounded-full" />
       </div>
 
-      {/* Barra de Navegación de la Landing */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-obsidian/90 border-b border-gold/30 px-4 py-3.5">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      {/* Barra de Navegación de la Landing (Optimizada para Móviles) */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-obsidian/95 border-b border-gold/30 px-3 sm:px-4 py-2.5 sm:py-3.5">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
+          
+          {/* Logo y Título Responsive */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <img 
               src={logoPng} 
               alt="Casa de las Leyendas" 
-              className="w-11 h-11 object-contain drop-shadow-[0_0_10px_rgba(190,141,44,0.5)]"
+              className="w-8 h-8 sm:w-11 sm:h-11 object-contain drop-shadow-[0_0_10px_rgba(190,141,44,0.5)] shrink-0"
             />
-            <div className="flex flex-col text-left">
-              <span className="font-display text-sm sm:text-base tracking-widest text-gold font-bold leading-tight">
+            <div className="flex flex-col text-left min-w-0">
+              <span className="font-display text-xs xs:text-sm sm:text-base tracking-wider sm:tracking-widest text-gold font-bold leading-tight truncate">
                 {content.brandTitle}
               </span>
-              <span className="text-xs uppercase tracking-wider text-cream/70">
+              <span className="text-[10px] sm:text-xs uppercase tracking-wider text-cream/70 hidden xs:inline leading-none mt-0.5">
                 {content.brandSubtitle}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Botones de Acción */}
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             <a 
               href="/rutadeleyendas"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sound.playClick()}
-              className="py-2 px-3 sm:px-4 text-xs sm:text-sm font-display font-bold flex items-center gap-1.5 text-gold hover:text-cream border border-gold/40 hover:border-gold rounded-xl bg-gold/10 hover:bg-gold/20 transition-all cursor-pointer shadow-[0_0_10px_rgba(190,141,44,0.2)]"
+              className="py-1.5 px-2.5 sm:py-2 sm:px-4 text-[11px] sm:text-sm font-display font-bold flex items-center gap-1 sm:gap-1.5 text-gold hover:text-cream border border-gold/40 hover:border-gold rounded-xl bg-gold/10 hover:bg-gold/20 transition-all cursor-pointer shadow-[0_0_10px_rgba(190,141,44,0.2)] active:scale-95"
             >
-              <Drama size={15} className="text-maya-red" />
-              <span className="hidden xs:inline">EN VIVO</span>
+              <Drama size={14} className="text-maya-red" />
               <span className="xs:hidden">TEATRO</span>
-              <span className="hidden sm:inline">(TEATRO)</span>
+              <span className="hidden xs:inline sm:hidden">EN VIVO</span>
+              <span className="hidden sm:inline">EN VIVO (TEATRO)</span>
             </a>
 
             <Button 
@@ -129,9 +132,9 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 onEnterGame();
               }}
               size="sm"
-              className="py-2.5 px-3.5 sm:px-5 text-xs sm:text-sm font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(190,141,44,0.4)]"
+              className="py-1.5 px-2.5 sm:py-2.5 sm:px-5 text-[11px] sm:text-sm font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(190,141,44,0.4)] active:scale-95"
             >
-              <Play size={15} className="fill-current" />
+              <Play size={13} className="fill-current" />
               <span>{content.playButtonText || 'JUGAR'}</span>
             </Button>
           </div>

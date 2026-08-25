@@ -27,7 +27,11 @@ import {
   Image as ImageIcon,
   Trash2,
   ExternalLink,
-  Plus
+  Plus,
+  Ticket,
+  QrCode,
+  Tag,
+  Check
 } from 'lucide-react';
 import { Button, Card } from '../components/Theme';
 import { sound } from '../lib/audio';
@@ -36,11 +40,14 @@ import {
   LandingContent, 
   LiveTheaterContent, 
   TheaterStationContent,
+  TicketPlanContent,
+  TheaterTicketingContent,
   fetchSiteContent, 
   saveSiteContent, 
   resetSiteContentToDefaults, 
   DEFAULT_LANDING_CONTENT, 
-  DEFAULT_THEATER_CONTENT 
+  DEFAULT_THEATER_CONTENT,
+  DEFAULT_TICKETING_CONTENT
 } from '../services/contentService';
 import { LEYENDAS_DATA } from '../services/legendService';
 import { optimizeImageFile } from '../lib/imageUtils';
@@ -50,103 +57,119 @@ import logoPng from '../images/logo.png';
 import portadaPng from '../images/png/Portada.png';
 import fondoSvg from '../images/optimized/Fondo.svg';
 
+import candadoJadePng from '../images/png/Candado jade.png';
+import candadoVidaPng from '../images/png/Candado vida.png';
+import candadoOroPng from '../images/png/Candado oro.png';
+import candadoPlataPng from '../images/png/Candado plata.png';
+
 interface MayordomoViewProps {
   onGoToLanding: () => void;
   onGoToTheater: () => void;
 }
 
-const MAYORDOMO_STORAGE_AUTH_KEY = 'lacasadelasleyendas_mayordomo_auth';
-const DEFAULT_ACCESS_PIN = 'leyendas2026';
+const MAYORDOMO_PIN = '1776'; // PIN oficial de acceso al panel
+const SESSION_STORAGE_KEY = 'lacasadelasleyendas_mayordomo_auth';
 
 export const MayordomoView: React.FC<MayordomoViewProps> = ({
   onGoToLanding,
   onGoToTheater
 }) => {
-  // Estado de Autenticación del Mayordomo
+  // Estado de Autenticación
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return sessionStorage.getItem(MAYORDOMO_STORAGE_AUTH_KEY) === 'true';
+    return sessionStorage.getItem(SESSION_STORAGE_KEY) === 'true';
   });
-  const [pinInput, setPinInput] = useState('');
-  const [pinError, setPinError] = useState('');
+  const [pinInput, setPinInput] = useState<string>('');
+  const [loginError, setLoginError] = useState<string>('');
 
-  // Pestaña Activa
-  const [activeTab, setActiveTab] = useState<'images' | 'theater' | 'landing' | 'system'>('images');
-
-  // Estado del Contenido
-  const [content, setContent] = useState<SiteContent>({
+  // Contenido Global del Sitio
+  const [content, setContent] = useState<SiteContent>(() => ({
     landing: DEFAULT_LANDING_CONTENT,
     theater: DEFAULT_THEATER_CONTENT
-  });
+  }));
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [uploadingTarget, setUploadingTarget] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'images' | 'theater' | 'landing' | 'system'>('images');
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [saveStatus, setSaveStatus] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
-  // Cargar contenido al iniciar
+  // Estados de Carga de Archivos
+  const [uploadingTarget, setUploadingTarget] = useState<string | null>(null);
+
+  // Cargar contenido al montar
   useEffect(() => {
-    const load = async () => {
-      setIsLoading(true);
-      try {
-        const loaded = await fetchSiteContent();
-        setContent(loaded);
-      } catch (err) {
-        console.error('Error cargando contenido en Mayordomo:', err);
-      } finally {
+    let isMounted = true;
+    fetchSiteContent().then((res) => {
+      if (isMounted && res) {
+        setContent(res);
         setIsLoading(false);
       }
+    }).catch(() => {
+      if (isMounted) setIsLoading(false);
+    });
+    return () => {
+      isMounted = false;
     };
-    load();
   }, []);
 
-  // Manejo de Login del Mayordomo
+  // Manejo de Login
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pinInput.trim() === DEFAULT_ACCESS_PIN || pinInput.trim() === 'antigravity') {
+    if (pinInput.trim() === MAYORDOMO_PIN) {
       sound.playMysticChime();
       setIsAuthenticated(true);
-      sessionStorage.setItem(MAYORDOMO_STORAGE_AUTH_KEY, 'true');
-      setPinError('');
+      sessionStorage.setItem(SESSION_STORAGE_KEY, 'true');
+      setLoginError('');
     } else {
       sound.playError();
-      setPinError('Clave de acceso incorrecta. Intenta de nuevo.');
+      setLoginError('Clave de Mayordomo incorrecta.');
+      setPinInput('');
     }
   };
 
+  // Logout
   const handleLogout = () => {
     sound.playClick();
     setIsAuthenticated(false);
-    sessionStorage.removeItem(MAYORDOMO_STORAGE_AUTH_KEY);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
   };
 
-  // Guardar Cambios
+  // Guardar Cambios en Firestore y LocalStorage
   const handleSave = async () => {
-    sound.playMysticChime();
     setIsSaving(true);
-    setSaveStatus(null);
+    sound.playClick();
 
-    const res = await saveSiteContent(content);
-    setIsSaving(false);
-
-    if (res.success) {
+    try {
+      const res = await saveSiteContent(content);
+      if (res.success) {
+        sound.playMysticChime();
+        setSaveStatus({
+          message: res.error || '¡Cambios guardados y publicados con éxito!',
+          type: 'success'
+        });
+      } else {
+        sound.playError();
+        setSaveStatus({
+          message: 'Error al guardar los cambios en la nube.',
+          type: 'error'
+        });
+      }
+    } catch (err: any) {
+      sound.playError();
       setSaveStatus({
-        message: res.error || '¡Cambios guardados y publicados exitosamente en vivo!',
-        type: res.error ? 'error' : 'success'
-      });
-      setTimeout(() => setSaveStatus(null), 5000);
-    } else {
-      setSaveStatus({
-        message: 'No se pudieron guardar los cambios. Intenta de nuevo.',
+        message: err.message || 'Error inesperado al guardar.',
         type: 'error'
       });
+    } finally {
+      setIsSaving(false);
+      setTimeout(() => setSaveStatus(null), 5000);
     }
   };
 
-  // Restaurar Valores por Defecto
+  // Restablecer valores de fábrica
   const handleResetDefaults = async () => {
-    if (window.confirm('¿Estás seguro de que deseas restablecer todos los textos e imágenes a los valores originales de fábrica? Se perderán las modificaciones no respaldadas.')) {
-      sound.playMysticChime();
+    if (window.confirm('¿Estás seguro de restablecer todos los textos e imágenes a los valores de fábrica? Esta acción no se puede deshacer.')) {
       setIsLoading(true);
+      sound.playClick();
       const reset = await resetSiteContentToDefaults();
       setContent(reset);
       setIsLoading(false);
@@ -223,6 +246,22 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
     }));
   };
 
+  const updateTicketing = <K extends keyof TheaterTicketingContent>(key: K, value: TheaterTicketingContent[K]) => {
+    setContent((prev) => {
+      const currentTicketing = prev.theater.ticketing || DEFAULT_TICKETING_CONTENT;
+      return {
+        ...prev,
+        theater: {
+          ...prev.theater,
+          ticketing: {
+            ...currentTicketing,
+            [key]: value
+          }
+        }
+      };
+    });
+  };
+
   // Manejo de Carga de Imagen para Portadas
   const handleCoverFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, target: 'landingCover' | 'theaterCover') => {
     const file = e.target.files?.[0];
@@ -263,7 +302,6 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
     sound.playClick();
 
     try {
-      // Redimensionar avatar/ficha circular a máximo 400px con compresión WebP
       const optimizedBase64 = await optimizeImageFile(file, {
         maxWidth: 400,
         maxHeight: 400,
@@ -313,6 +351,56 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
     }
   };
 
+  // Manejo de Carga de Imagen para Planes de Boletería (Jade, Vida, Oro, Plata)
+  const handleTicketPlanImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, planIndex: number) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingTarget(`plan-${planIndex}`);
+    sound.playClick();
+
+    try {
+      const optimizedBase64 = await optimizeImageFile(file, {
+        maxWidth: 400,
+        maxHeight: 400,
+        quality: 0.88,
+        format: 'image/webp'
+      });
+
+      const currentTicketing = content.theater.ticketing || DEFAULT_TICKETING_CONTENT;
+      const currentPlans = [...(currentTicketing.plans || DEFAULT_TICKETING_CONTENT.plans)];
+      currentPlans[planIndex] = {
+        ...currentPlans[planIndex],
+        imageUrl: optimizedBase64
+      };
+
+      updateTheater('ticketing', {
+        ...currentTicketing,
+        plans: currentPlans
+      });
+      sound.playMysticChime();
+    } catch (err) {
+      console.error('Error optimizando imagen de plan:', err);
+      alert('Hubo un problema al procesar la imagen de la llave.');
+    } finally {
+      setUploadingTarget(null);
+    }
+  };
+
+  const getKeyDefaultImage = (keyType: string) => {
+    switch (keyType) {
+      case 'jade': return candadoJadePng;
+      case 'vida': return candadoVidaPng;
+      case 'oro': return candadoOroPng;
+      case 'plata': return candadoPlataPng;
+      default: return candadoJadePng;
+    }
+  };
+
+  const currentTicketing = content.theater.ticketing || DEFAULT_TICKETING_CONTENT;
+  const currentPlans = currentTicketing.plans || DEFAULT_TICKETING_CONTENT.plans;
+  const currentPhases = currentTicketing.phases || DEFAULT_TICKETING_CONTENT.phases;
+
   // PANTALLA DE ACCESO (LOGIN CON PIN)
   if (!isAuthenticated) {
     return (
@@ -331,7 +419,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               PANEL MAYORDOMO
             </h1>
             <p className="text-xs text-cream/70 font-serif italic">
-              Gestor de Contenidos, Estaciones Escénicas y Personalización Gráfica
+              Gestor de Contenidos, Estaciones Escénicas, Boletería y Personalización Gráfica
             </p>
           </div>
 
@@ -345,15 +433,14 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                   type="password"
                   value={pinInput}
                   onChange={(e) => setPinInput(e.target.value)}
-                  placeholder="••••••••••••"
-                  className="w-full bg-black/80 border border-gold/40 focus:border-gold rounded-xl px-4 py-3 text-cream text-center tracking-widest text-lg font-mono outline-none shadow-inner transition-colors"
+                  placeholder="••••"
                   autoFocus
+                  className="w-full bg-black/80 border border-gold/40 focus:border-gold rounded-xl px-4 py-3 text-center text-xl tracking-widest text-gold font-mono outline-none shadow-inner"
                 />
-                <KeyRound size={18} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gold/60 pointer-events-none" />
               </div>
-              {pinError && (
-                <p className="text-xs text-maya-red mt-2 font-display flex items-center justify-center gap-1">
-                  <AlertCircle size={14} /> {pinError}
+              {loginError && (
+                <p className="text-xs text-red-400 mt-2 flex items-center gap-1 justify-center">
+                  <AlertCircle size={14} /> {loginError}
                 </p>
               )}
             </div>
@@ -377,7 +464,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             >
               <ArrowLeft size={14} /> Volver a la Landing
             </a>
-            <span className="text-[11px] text-gold/60 font-mono">v2.1 • CMS Oficial</span>
+            <span className="text-[11px] text-gold/60 font-mono">v3.0 • CMS Oficial</span>
           </div>
         </Card>
       </div>
@@ -409,7 +496,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                 </span>
               </div>
               <span className="text-[11px] text-cream/70 font-serif italic hidden sm:inline">
-                Estaciones Escénicas, Fichas Circulares y Portadas
+                Estaciones Escénicas, Boletería, Fichas Circulares y Portadas
               </span>
             </div>
           </div>
@@ -479,20 +566,18 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             {saveStatus.type === 'success' ? (
               <CheckCircle2 size={20} className="text-emerald-400 shrink-0" />
             ) : (
-              <AlertCircle size={20} className="text-maya-red shrink-0" />
+              <AlertCircle size={20} className="text-red-400 shrink-0" />
             )}
-            <p className="text-xs sm:text-sm font-display font-medium leading-snug">
-              {saveStatus.message}
-            </p>
+            <p className="text-xs font-medium leading-tight">{saveStatus.message}</p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* CONTENIDO PRINCIPAL */}
-      <main className="max-w-7xl mx-auto px-4 pt-6 space-y-6 relative z-10">
+      {/* CUERPO PRINCIPAL CON PESTAÑAS */}
+      <main className="max-w-7xl mx-auto px-4 py-8 relative z-10 space-y-8">
         
-        {/* NAVEGACIÓN POR PESTAÑAS */}
-        <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-black/70 border border-gold/30 overflow-x-auto">
+        {/* SELECTOR DE PESTAÑAS */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-gold/30">
           <button
             onClick={() => {
               sound.playClick();
@@ -520,7 +605,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             }`}
           >
             <Drama size={16} />
-            <span>🎭 Teatro en Vivo (Estaciones)</span>
+            <span>🎭 Teatro & Boletería</span>
           </button>
 
           <button
@@ -554,7 +639,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
           </button>
         </div>
 
-        {/* CONTENIDO TAB 1: IMÁGENES, PORTADAS Y FICHAS CIRCULARES */}
+        {/* CONTENIDO TAB 1: IMÁGENES, PORTADAS, FICHAS Y LLAVES */}
         {activeTab === 'images' && (
           <div className="space-y-8">
             
@@ -594,70 +679,57 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                       alt="Portada Hero"
                       className="w-full h-full object-contain p-2"
                     />
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
-                      <p className="text-xs text-cream font-display">
-                        {content.landing.heroCoverImageUrl ? 'Imagen Personalizada Activa' : 'Imagen por Defecto del Sistema'}
-                      </p>
-                    </div>
                   </div>
 
                   {/* Controles de Carga */}
-                  <div className="space-y-2.5">
-                    <div className="flex items-center gap-2">
-                      <label className="flex-1">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleCoverFileUpload(e, 'landingCover')}
-                          className="hidden"
-                        />
-                        <span className="w-full py-2.5 px-3 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/40 text-gold text-xs font-display font-bold flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm">
-                          {uploadingTarget === 'landingCover' ? (
-                            <RefreshCw size={14} className="animate-spin" />
-                          ) : (
-                            <Upload size={14} />
-                          )}
-                          <span>Subir Portada desde PC/Móvil</span>
-                        </span>
-                      </label>
-
-                      {content.landing.heroCoverImageUrl && (
-                        <button
-                          onClick={() => {
-                            sound.playClick();
-                            updateLanding('heroCoverImageUrl', '');
-                          }}
-                          className="py-2.5 px-3 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-maya-red/40 text-red-300 text-xs font-display font-semibold flex items-center gap-1.5 cursor-pointer transition-all"
-                          title="Restablecer a portada original"
-                        >
-                          <RotateCcw size={14} />
-                          <span className="hidden sm:inline">Restablecer</span>
-                        </button>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="text-[10px] text-cream/70 uppercase block mb-1">O ingresa URL externa de imagen:</label>
+                  <div className="space-y-2">
+                    <label className="block">
                       <input
-                        type="url"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleCoverFileUpload(e, 'landingCover')}
+                        className="hidden"
+                      />
+                      <span className="w-full py-2.5 px-4 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/40 text-gold text-xs font-display font-bold flex items-center justify-center gap-2 cursor-pointer transition-all">
+                        {uploadingTarget === 'landingCover' ? (
+                          <RefreshCw size={14} className="animate-spin" />
+                        ) : (
+                          <Upload size={14} />
+                        )}
+                        <span>Subir Imagen de Portada Hero (Archivo)</span>
+                      </span>
+                    </label>
+
+                    <div className="flex items-center gap-2 pt-1">
+                      <input
+                        type="text"
+                        placeholder="O ingresa URL directa..."
                         value={content.landing.heroCoverImageUrl || ''}
                         onChange={(e) => updateLanding('heroCoverImageUrl', e.target.value)}
-                        placeholder="https://ejemplo.com/mi-portada.webp"
-                        className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                        className="flex-1 bg-black/60 border border-gold/30 rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-mono"
                       />
+                      {content.landing.heroCoverImageUrl && (
+                        <button
+                          onClick={() => updateLanding('heroCoverImageUrl', '')}
+                          className="p-1.5 text-red-300 hover:text-red-100 hover:bg-red-950 rounded-lg transition-colors cursor-pointer"
+                          title="Restablecer a imagen por defecto"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
 
-                {/* Portada / Cartel de Teatro en Vivo */}
+                {/* Cartel Producción en Vivo */}
                 <div className="p-5 rounded-2xl bg-black/80 border border-gold/30 space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-display uppercase tracking-wider text-maya-red font-bold flex items-center gap-1.5">
-                      <Drama size={14} /> Cartel de Producción en Vivo (Teatro)
+                    <span className="text-xs font-display uppercase tracking-wider text-gold font-bold flex items-center gap-1.5">
+                      <Drama size={14} /> Cartel del Evento (Teatro en Vivo)
                     </span>
                     {content.theater.coverImageUrl && (
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-maya-red/20 text-red-200 border border-maya-red/40 font-bold font-mono">
-                        ACTIVO
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-gold/20 text-gold border border-gold/40 font-bold font-mono">
+                        PERSONALIZADO
                       </span>
                     )}
                   </div>
@@ -671,59 +743,49 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                         className="w-full h-full object-contain p-2"
                       />
                     ) : (
-                      <div className="text-center p-4 space-y-2 text-cream/50">
+                      <div className="text-center p-6 text-cream/50 space-y-2">
                         <Drama size={36} className="mx-auto text-gold/40" />
-                        <p className="text-xs font-serif italic">
-                          No se ha configurado un cartel destacado. Se mostrará el encabezado tipográfico estándar.
-                        </p>
+                        <p className="text-xs font-serif italic">Sin cartel personalizado. Sube uno para que aparezca en el Hero de la Ruta.</p>
                       </div>
                     )}
                   </div>
 
                   {/* Controles de Carga */}
-                  <div className="space-y-2.5">
-                    <div className="flex items-center gap-2">
-                      <label className="flex-1">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleCoverFileUpload(e, 'theaterCover')}
-                          className="hidden"
-                        />
-                        <span className="w-full py-2.5 px-3 rounded-xl bg-maya-red/20 hover:bg-maya-red/30 border border-maya-red/50 text-red-100 text-xs font-display font-bold flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm">
-                          {uploadingTarget === 'theaterCover' ? (
-                            <RefreshCw size={14} className="animate-spin" />
-                          ) : (
-                            <Upload size={14} />
-                          )}
-                          <span>Subir Cartel de Teatro</span>
-                        </span>
-                      </label>
-
-                      {content.theater.coverImageUrl && (
-                        <button
-                          onClick={() => {
-                            sound.playClick();
-                            updateTheater('coverImageUrl', '');
-                          }}
-                          className="py-2.5 px-3 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-maya-red/40 text-red-300 text-xs font-display font-semibold flex items-center gap-1.5 cursor-pointer transition-all"
-                          title="Quitar Cartel"
-                        >
-                          <Trash2 size={14} />
-                          <span className="hidden sm:inline">Quitar</span>
-                        </button>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="text-[10px] text-cream/70 uppercase block mb-1">O ingresa URL externa de cartel:</label>
+                  <div className="space-y-2">
+                    <label className="block">
                       <input
-                        type="url"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleCoverFileUpload(e, 'theaterCover')}
+                        className="hidden"
+                      />
+                      <span className="w-full py-2.5 px-4 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/40 text-gold text-xs font-display font-bold flex items-center justify-center gap-2 cursor-pointer transition-all">
+                        {uploadingTarget === 'theaterCover' ? (
+                          <RefreshCw size={14} className="animate-spin" />
+                        ) : (
+                          <Upload size={14} />
+                        )}
+                        <span>Subir Cartel del Evento Teatral (Archivo)</span>
+                      </span>
+                    </label>
+
+                    <div className="flex items-center gap-2 pt-1">
+                      <input
+                        type="text"
+                        placeholder="O ingresa URL directa..."
                         value={content.theater.coverImageUrl || ''}
                         onChange={(e) => updateTheater('coverImageUrl', e.target.value)}
-                        placeholder="https://ejemplo.com/cartel-teatro.webp"
-                        className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                        className="flex-1 bg-black/60 border border-gold/30 rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-mono"
                       />
+                      {content.theater.coverImageUrl && (
+                        <button
+                          onClick={() => updateTheater('coverImageUrl', '')}
+                          className="p-1.5 text-red-300 hover:text-red-100 hover:bg-red-950 rounded-lg transition-colors cursor-pointer"
+                          title="Quitar cartel personalizado"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -731,21 +793,103 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               </div>
             </Card>
 
-            {/* SECCIÓN 2: FICHAS CIRCULARES DE LAS ESTACIONES ESCÉNICAS */}
+            {/* SECCIÓN 2: LLAVES SAGRADAS DE BOLETERÍA (JADE, VIDA, ORO, PLATA) */}
             <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
               <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2.5 text-gold">
-                  <Drama size={22} className="text-maya-red" />
+                  <Key size={22} />
                   <div>
-                    <h2 className="font-display text-lg sm:text-xl font-bold">2. Fichas Circulares de las Estaciones Escénicas</h2>
+                    <h2 className="font-display text-lg sm:text-xl font-bold">2. Llaves y Candados de Boletería (Jade, Vida, Oro, Plata)</h2>
                     <p className="text-xs text-cream/70 font-serif italic">
-                      Sube una foto o ilustración para el círculo de cada estación (incluyendo La Vanushka).
+                      Personaliza las imágenes de las 4 llaves de acceso para los planes de boletería del Teatro Municipal.
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {currentPlans.map((plan, idx) => {
+                  const keyImg = plan.imageUrl || getKeyDefaultImage(plan.keyType);
+
+                  return (
+                    <div key={plan.id} className="p-5 rounded-2xl bg-black/80 border border-gold/30 flex flex-col justify-between space-y-4 text-center">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-display uppercase tracking-widest text-gold font-bold block">
+                          {plan.keyType.toUpperCase()}
+                        </span>
+                        <h3 className="font-display text-sm text-cream font-bold leading-tight">
+                          {plan.name}
+                        </h3>
+                        <span className="text-xs text-gold font-bold font-display block">
+                          {plan.price}
+                        </span>
+                      </div>
+
+                      {/* Previsualización de la Llave */}
+                      <div className="py-2 flex items-center justify-center">
+                        <div className="w-24 h-24 rounded-2xl bg-black/90 border-2 border-gold/60 p-2 flex items-center justify-center shadow-lg overflow-hidden">
+                          <img
+                            src={keyImg}
+                            alt={plan.name}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Botón de Carga */}
+                      <div className="space-y-2">
+                        <label className="block">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleTicketPlanImageUpload(e, idx)}
+                            className="hidden"
+                          />
+                          <span className="w-full py-2 px-2.5 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/40 text-gold text-xs font-display font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all">
+                            {uploadingTarget === `plan-${idx}` ? (
+                              <RefreshCw size={13} className="animate-spin" />
+                            ) : (
+                              <Upload size={13} />
+                            )}
+                            <span>{plan.imageUrl ? 'Cambiar Llave' : 'Subir Llave'}</span>
+                          </span>
+                        </label>
+
+                        {plan.imageUrl && (
+                          <button
+                            onClick={() => {
+                              sound.playClick();
+                              const updated = [...currentPlans];
+                              updated[idx].imageUrl = '';
+                              updateTicketing('plans', updated);
+                            }}
+                            className="text-[11px] text-red-300/80 hover:text-red-300 flex items-center justify-center gap-1 mx-auto cursor-pointer"
+                          >
+                            <Trash2 size={12} /> Quitar Personalizada
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+
+            {/* SECCIÓN 3: FICHAS CIRCULARES DE ESTACIONES TEATRALES (INCLUYE LA VANUSHKA) */}
+            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+              <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
+                <div className="flex items-center gap-2.5 text-gold">
+                  <Drama size={22} />
+                  <div>
+                    <h2 className="font-display text-lg sm:text-xl font-bold">3. Fichas Circulares de Estaciones Teatrales</h2>
+                    <p className="text-xs text-cream/70 font-serif italic">
+                      Sube fotos o avatares para cada una de las 4 estaciones escénicas (incluyendo La Vanushka).
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {content.theater.stations.map((st, idx) => (
                   <div key={st.number} className="p-5 rounded-2xl bg-black/80 border border-gold/30 flex flex-col justify-between space-y-4 text-center">
                     
@@ -810,13 +954,13 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               </div>
             </Card>
 
-            {/* SECCIÓN 3: FICHAS CIRCULARES DE LAS 7 LEYENDAS (CATÁLOGO Y PASAPORTE) */}
+            {/* SECCIÓN 4: FICHAS CIRCULARES DE LAS 7 LEYENDAS (CATÁLOGO Y PASAPORTE) */}
             <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
               <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2.5 text-gold">
                   <Sparkles size={22} />
                   <div>
-                    <h2 className="font-display text-lg sm:text-xl font-bold">3. Fichas Circulares de las 7 Leyendas (Catálogo & Pasaporte)</h2>
+                    <h2 className="font-display text-lg sm:text-xl font-bold">4. Fichas Circulares de las 7 Leyendas (Catálogo & Pasaporte)</h2>
                     <p className="text-xs text-cream/70 font-serif italic">
                       Personaliza las imágenes de los sellos del catálogo para un acabado visual de nivel museo.
                     </p>
@@ -887,9 +1031,9 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
           </div>
         )}
 
-        {/* CONTENIDO TAB 2: TEATRO EN VIVO Y ESTACIONES */}
+        {/* CONTENIDO TAB 2: TEATRO EN VIVO, ESTACIONES Y BOLETERÍA */}
         {activeTab === 'theater' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             
             {/* DATOS GENERALES DEL EVENTO */}
             <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
@@ -1083,6 +1227,298 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               </div>
             </Card>
 
+            {/* SECCIÓN 3: SISTEMA DE BOLETERÍA EN LÍNEA & PLANES (JADE, VIDA, ORO, PLATA) */}
+            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+              <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
+                <div className="flex items-center gap-2.5 text-gold">
+                  <Ticket size={22} />
+                  <div>
+                    <h2 className="font-display text-lg sm:text-xl font-bold">3. Sistema de Boletería en Línea y Planes de Acceso</h2>
+                    <p className="text-xs text-cream/70 font-serif italic">
+                      Administra la propuesta operativa, fases de preventa y los 4 planes de llaves sagradas (Jade, Vida, Oro, Plata).
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Textos Generales de Boletería */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Badge de Sección
+                  </label>
+                  <input
+                    type="text"
+                    value={currentTicketing.sectionBadge}
+                    onChange={(e) => updateTicketing('sectionBadge', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Título de Sección
+                  </label>
+                  <input
+                    type="text"
+                    value={currentTicketing.sectionTitle}
+                    onChange={(e) => updateTicketing('sectionTitle', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Descripción General de Boletería
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={currentTicketing.sectionDescription}
+                    onChange={(e) => updateTicketing('sectionDescription', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Título Autogestión Digital
+                  </label>
+                  <input
+                    type="text"
+                    value={currentTicketing.selfServiceTitle}
+                    onChange={(e) => updateTicketing('selfServiceTitle', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Nota al Pie (QR / Escáner)
+                  </label>
+                  <input
+                    type="text"
+                    value={currentTicketing.selfServiceFootnote}
+                    onChange={(e) => updateTicketing('selfServiceFootnote', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Descripción de Autogestión
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={currentTicketing.selfServiceDescription}
+                    onChange={(e) => updateTicketing('selfServiceDescription', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Fases de Preventa */}
+              <div className="space-y-4 pt-4 border-t border-gold/20">
+                <div className="flex items-center gap-2">
+                  <Calendar size={18} className="text-gold" />
+                  <h3 className="font-display text-base font-bold text-gold">Fases de Preventa (Octubre)</h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {currentPhases.map((phase, pIdx) => (
+                    <div key={phase.id} className="p-4 rounded-2xl bg-black/80 border border-gold/30 space-y-3">
+                      <div>
+                        <label className="text-[11px] text-gold uppercase font-bold block mb-1">Título de Fase</label>
+                        <input
+                          type="text"
+                          value={phase.title}
+                          onChange={(e) => {
+                            const updated = [...currentPhases];
+                            updated[pIdx].title = e.target.value;
+                            updateTicketing('phases', updated);
+                          }}
+                          className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-bold"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Fechas</label>
+                          <input
+                            type="text"
+                            value={phase.dates}
+                            onChange={(e) => {
+                              const updated = [...currentPhases];
+                              updated[pIdx].dates = e.target.value;
+                              updateTicketing('phases', updated);
+                            }}
+                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Badge de Descuento</label>
+                          <input
+                            type="text"
+                            value={phase.discountBadge || ''}
+                            onChange={(e) => {
+                              const updated = [...currentPhases];
+                              updated[pIdx].discountBadge = e.target.value;
+                              updateTicketing('phases', updated);
+                            }}
+                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] text-cream/70 uppercase block mb-1">Descripción</label>
+                        <textarea
+                          rows={2}
+                          value={phase.description}
+                          onChange={(e) => {
+                            const updated = [...currentPhases];
+                            updated[pIdx].description = e.target.value;
+                            updateTicketing('phases', updated);
+                          }}
+                          className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Editor de los 4 Planes (Jade, Vida, Oro, Plata) */}
+              <div className="space-y-4 pt-4 border-t border-gold/20">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <Key size={18} className="text-gold" />
+                    <h3 className="font-display text-base font-bold text-gold">Planes de Llaves Sagradas (4 Planes)</h3>
+                  </div>
+                  <span className="text-xs font-mono text-gold/80">Orden: Jade → Vida → Oro → Plata</span>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {currentPlans.map((plan, plIdx) => (
+                    <div key={plan.id} className="p-5 rounded-2xl bg-black/85 border border-gold/40 space-y-4 shadow-md">
+                      
+                      <div className="flex items-center justify-between border-b border-gold/20 pb-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-display font-bold uppercase tracking-wider text-gold bg-gold/15 px-2.5 py-0.5 rounded border border-gold/30">
+                            {plan.keyType.toUpperCase()}
+                          </span>
+                          <span className="font-display text-sm text-cream font-bold">{plan.name}</span>
+                        </div>
+                        <span className="text-sm font-display text-gold font-bold">{plan.price}</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Nombre del Plan</label>
+                          <input
+                            type="text"
+                            value={plan.name}
+                            onChange={(e) => {
+                              const updated = [...currentPlans];
+                              updated[plIdx].name = e.target.value;
+                              updateTicketing('plans', updated);
+                            }}
+                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-bold"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Badge de Etiqueta</label>
+                          <input
+                            type="text"
+                            value={plan.badge}
+                            onChange={(e) => {
+                              const updated = [...currentPlans];
+                              updated[plIdx].badge = e.target.value;
+                              updateTicketing('plans', updated);
+                            }}
+                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Precio (ej: Q350 / Q50)</label>
+                          <input
+                            type="text"
+                            value={plan.price}
+                            onChange={(e) => {
+                              const updated = [...currentPlans];
+                              updated[plIdx].price = e.target.value;
+                              updateTicketing('plans', updated);
+                            }}
+                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-gold font-bold outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Nota de Precio / Desglose</label>
+                          <input
+                            type="text"
+                            value={plan.priceNote}
+                            onChange={(e) => {
+                              const updated = [...currentPlans];
+                              updated[plIdx].priceNote = e.target.value;
+                              updateTicketing('plans', updated);
+                            }}
+                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Capacidad / Personas</label>
+                          <input
+                            type="text"
+                            value={plan.capacityText}
+                            onChange={(e) => {
+                              const updated = [...currentPlans];
+                              updated[plIdx].capacityText = e.target.value;
+                              updateTicketing('plans', updated);
+                            }}
+                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Descripción del Plan</label>
+                          <textarea
+                            rows={2}
+                            value={plan.description}
+                            onChange={(e) => {
+                              const updated = [...currentPlans];
+                              updated[plIdx].description = e.target.value;
+                              updateTicketing('plans', updated);
+                            }}
+                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className="text-[11px] text-cream/70 uppercase block mb-1">
+                            Elementos Incluidos (1 por línea)
+                          </label>
+                          <textarea
+                            rows={3}
+                            value={plan.includes.join('\n')}
+                            onChange={(e) => {
+                              const updated = [...currentPlans];
+                              updated[plIdx].includes = e.target.value.split('\n').filter(Boolean);
+                              updateTicketing('plans', updated);
+                            }}
+                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-mono"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Card>
+
           </div>
         )}
 
@@ -1267,7 +1703,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                     <RotateCcw size={28} className="mx-auto text-maya-red" />
                     <h3 className="font-display text-sm font-bold text-cream">Valores de Fábrica</h3>
                     <p className="text-xs text-cream/70 font-serif italic">
-                      Restablece todos los textos y las 4 estaciones escénicas (con La Vanushka) a la configuración oficial inicial.
+                      Restablece todos los textos, boletería y las 4 estaciones escénicas (con La Vanushka) a la configuración oficial inicial.
                     </p>
                   </div>
                   <button
