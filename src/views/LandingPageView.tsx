@@ -10,7 +10,16 @@ import {
   ChevronDown, 
   CheckCircle2,
   Lightbulb,
-  Drama
+  Drama,
+  Menu,
+  X,
+  MessageCircle,
+  Ticket,
+  BookOpen,
+  ExternalLink,
+  Shield,
+  Layers,
+  Phone
 } from 'lucide-react';
 import { Button, Card } from '../components/Theme';
 import { LEYENDAS_DATA } from '../services/legendService';
@@ -52,6 +61,9 @@ const LOCK_IMAGES: Record<string, string> = {
   vida: candadoVidaPng
 };
 
+const WHATSAPP_NUMBER = '50246741239';
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=Hola%20Casa%20de%20las%20Leyendas,%20deseo%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20evento%20y%20el%20juego%20de%20mesa.`;
+
 export const LandingPageView: React.FC<LandingPageViewProps> = ({
   onEnterGame,
   onEnterExplorer,
@@ -60,6 +72,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
   const [content, setContent] = useState<LandingContent>(() => getLocalContent().landing);
   const [selectedTeaser, setSelectedTeaser] = useState<string | null>(null);
   const [unlockedLocks, setUnlockedLocks] = useState<Record<string, boolean>>({});
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
     fetchSiteContent().then((res) => {
@@ -77,6 +90,15 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
     }));
   };
 
+  const scrollToSection = (id: string) => {
+    sound.playClick();
+    setIsMobileMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-obsidian text-cream font-sans overflow-x-hidden relative selection:bg-gold selection:text-obsidian">
       
@@ -90,8 +112,8 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-gold/15 via-maya-red/10 to-transparent blur-3xl rounded-full" />
       </div>
 
-      {/* Barra de Navegación de la Landing (Optimizada para Móviles) */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-obsidian/95 border-b border-gold/30 px-3 sm:px-4 py-2.5 sm:py-3.5">
+      {/* Barra de Navegación de la Landing (Optimizada para Móviles con Menú Desplegable) */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-obsidian/95 border-b border-gold/30 px-3 sm:px-4 py-2.5 sm:py-3.5 shadow-xl">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
           
           {/* Logo y Título Responsive */}
@@ -111,7 +133,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             </div>
           </div>
 
-          {/* Botones de Acción */}
+          {/* Botones de Acción y Toggle del Menú */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             <a 
               href="/rutadeleyendas"
@@ -137,9 +159,252 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               <Play size={13} className="fill-current" />
               <span>{content.playButtonText || 'JUGAR'}</span>
             </Button>
+
+            {/* BOTÓN HAMBURGUESA / MENÚ DESPLEGABLE */}
+            <button
+              onClick={() => {
+                sound.playClick();
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
+              aria-label="Abrir Menú de Navegación"
+              className="p-2 sm:p-2.5 rounded-xl border border-gold/40 hover:border-gold bg-gold/15 hover:bg-gold/25 text-gold transition-all cursor-pointer shadow-sm active:scale-95 flex items-center justify-center"
+            >
+              {isMobileMenuOpen ? <X size={19} /> : <Menu size={19} />}
+            </button>
           </div>
         </div>
       </header>
+
+      {/* MENÚ DESPLEGABLE MÓVIL / DRAWER DE NAVEGACIÓN Y ATAJOS */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 flex justify-end">
+            
+            {/* Backdrop con Blur */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                sound.playClick();
+                setIsMobileMenuOpen(false);
+              }}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
+            />
+
+            {/* Drawer Lateral Desplegable */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="relative w-full max-w-sm sm:max-w-md h-full bg-gradient-to-b from-black via-obsidian to-black border-l border-gold/50 shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10"
+            >
+              <div className="space-y-6">
+                
+                {/* Encabezado del Menú */}
+                <div className="flex items-center justify-between border-b border-gold/30 pb-4">
+                  <div className="flex items-center gap-3">
+                    <img src={logoPng} alt="Logo" className="w-9 h-9 object-contain drop-shadow-md" />
+                    <div>
+                      <span className="font-display text-sm font-bold text-gold tracking-wider block">
+                        LA CASA DE LAS LEYENDAS
+                      </span>
+                      <span className="text-[10px] text-cream/70 font-mono uppercase">
+                        Menú de Navegación & Atajos
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      sound.playClick();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-cream transition"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* BOTÓN OFICIAL DE WHATSAPP (DESTACADO) */}
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => sound.playClick()}
+                  className="w-full p-4 rounded-2xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 border-2 border-emerald-500/80 text-emerald-200 flex items-center gap-3.5 shadow-[0_0_25px_rgba(16,185,129,0.35)] hover:scale-[1.02] active:scale-95 transition-all group"
+                >
+                  <div className="w-11 h-11 rounded-xl bg-emerald-500 text-obsidian flex items-center justify-center shrink-0 shadow-md group-hover:rotate-12 transition-transform">
+                    <MessageCircle size={24} className="fill-obsidian" />
+                  </div>
+                  <div className="flex-1 text-left min-w-0">
+                    <span className="text-[10px] uppercase font-display font-bold tracking-widest text-emerald-400 block">
+                      ATENCIÓN DIRECTA & PREGUNTAS
+                    </span>
+                    <span className="text-sm font-display font-bold text-white block">
+                      WhatsApp: +502 4674-1239
+                    </span>
+                    <span className="text-[11px] text-emerald-300/80 font-sans italic block">
+                      Toca para chatear con nosotros al instante →
+                    </span>
+                  </div>
+                </a>
+
+                {/* GRUPO 1: EXPERIENCIA DIGITAL & JUEGO */}
+                <div className="space-y-2">
+                  <span className="text-[11px] uppercase font-display font-bold tracking-widest text-gold/80 block px-1">
+                    🎮 Juego de Mesa & App en Línea
+                  </span>
+
+                  <button
+                    onClick={() => {
+                      sound.playMysticChime();
+                      setIsMobileMenuOpen(false);
+                      onEnterGame();
+                    }}
+                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 hover:border-gold flex items-center gap-3 text-left transition text-cream cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center text-gold shrink-0">
+                      <Play size={16} className="fill-gold" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-display font-bold text-gold block">Entrar al Juego / Sala</span>
+                      <span className="text-[11px] text-cream/70 font-sans">Multijugador en mesa y salas en vivo</span>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      sound.playClick();
+                      setIsMobileMenuOpen(false);
+                      onEnterExplorer();
+                    }}
+                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 hover:border-gold flex items-center gap-3 text-left transition text-cream cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center text-gold shrink-0">
+                      <Compass size={16} />
+                    </div>
+                    <div>
+                      <span className="text-xs font-display font-bold text-gold block">Pasaporte Digital de Sellos</span>
+                      <span className="text-[11px] text-cream/70 font-sans">Colecciona los 7 sellos ancestrales</span>
+                    </div>
+                  </button>
+                </div>
+
+                {/* GRUPO 2: PRODUCCIÓN EN VIVO (TEATRO MUNICIPAL) */}
+                <div className="space-y-2">
+                  <span className="text-[11px] uppercase font-display font-bold tracking-widest text-maya-red/90 block px-1">
+                    🎭 Producción Teatral en Vivo
+                  </span>
+
+                  <a
+                    href="/rutadeleyendas"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      sound.playClick();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-maya-red/15 border border-maya-red/40 hover:border-maya-red flex items-center justify-between text-left transition text-cream cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-maya-red/20 flex items-center justify-center text-maya-red shrink-0">
+                        <Drama size={16} />
+                      </div>
+                      <div>
+                        <span className="text-xs font-display font-bold text-cream block">Ruta de Leyendas (Teatro)</span>
+                        <span className="text-[11px] text-cream/70 font-sans">31 de Octubre • Quetzaltenango</span>
+                      </div>
+                    </div>
+                    <ExternalLink size={14} className="text-maya-red" />
+                  </a>
+
+                  <a
+                    href="/rutadeleyendas#boleteria"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      sound.playClick();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/40 hover:border-gold flex items-center justify-between text-left transition text-cream cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center text-gold shrink-0">
+                        <Ticket size={16} />
+                      </div>
+                      <div>
+                        <span className="text-xs font-display font-bold text-gold block">Sistema de Boletería & Planes</span>
+                        <span className="text-[11px] text-cream/70 font-sans">Planes Jade, Vida, Oro y Plata</span>
+                      </div>
+                    </div>
+                    <ExternalLink size={14} className="text-gold" />
+                  </a>
+                </div>
+
+                {/* GRUPO 3: EXPLORAR SECCIONES DE LA LANDING */}
+                <div className="space-y-2">
+                  <span className="text-[11px] uppercase font-display font-bold tracking-widest text-gold/80 block px-1">
+                    📜 Explorar el Portal
+                  </span>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => scrollToSection('candados')}
+                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
+                    >
+                      <KeyRound size={14} className="text-gold mb-1" />
+                      <span className="text-xs font-display font-bold text-cream block">4 Candados</span>
+                      <span className="text-[10px] text-cream/60">Secretos</span>
+                    </button>
+
+                    <button
+                      onClick={() => scrollToSection('pilares')}
+                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
+                    >
+                      <Sparkles size={14} className="text-gold mb-1" />
+                      <span className="text-xs font-display font-bold text-cream block">Mecánicas</span>
+                      <span className="text-[10px] text-cream/60">3 Pilares</span>
+                    </button>
+
+                    <button
+                      onClick={() => scrollToSection('catalogo')}
+                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
+                    >
+                      <BookOpen size={14} className="text-gold mb-1" />
+                      <span className="text-xs font-display font-bold text-cream block">7 Leyendas</span>
+                      <span className="text-[10px] text-cream/60">Catálogo</span>
+                    </button>
+
+                    <a
+                      href="/mayordomo"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => {
+                        sound.playClick();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
+                    >
+                      <Shield size={14} className="text-gold mb-1" />
+                      <span className="text-xs font-display font-bold text-cream block">Mayordomo</span>
+                      <span className="text-[10px] text-cream/60">Panel CMS</span>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Pie del Menú */}
+              <div className="pt-6 border-t border-gold/20 text-center space-y-1 text-xs text-cream/50 font-serif italic">
+                <p>La Casa de las Leyendas • Guatemala</p>
+                <p className="text-[10px] text-cream/40 font-mono">lacasadelasleyendas.com</p>
+              </div>
+
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* HERO SECTION CON PORTADA, SOL Y NUBES CELESTIALES */}
       <section className="relative z-10 pt-6 pb-16 px-4 max-w-6xl mx-auto text-center flex flex-col items-center">
@@ -179,19 +444,14 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             className="absolute -left-3 sm:-left-10 md:-left-16 lg:-left-24 top-2 w-24 sm:w-32 md:w-40 lg:w-48 opacity-85 pointer-events-none drop-shadow-md z-20"
           />
 
-          {/* Sol central resplandeciente */}
-          <motion.div
-            animate={{ rotate: [0, 360], scale: [1, 1.06, 1] }}
-            transition={{ rotate: { duration: 40, repeat: Infinity, ease: "linear" }, scale: { duration: 5, repeat: Infinity, ease: "easeInOut" } }}
-            className="relative z-10"
-          >
-            <div className="absolute inset-0 bg-gold/35 blur-3xl rounded-full pointer-events-none" />
-            <img 
-              src={solPng} 
-              alt="Sol Místico de Guatemala" 
-              className="w-24 sm:w-32 md:w-40 lg:w-48 mx-auto drop-shadow-[0_0_35px_rgba(252,207,101,0.8)] object-contain"
-            />
-          </motion.div>
+          {/* Sol resplandeciente central */}
+          <motion.img
+            src={solPng}
+            alt="Sol Ancestral Maya"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+            className="w-32 h-32 sm:w-44 sm:h-44 md:w-52 md:h-52 object-contain drop-shadow-[0_0_35px_rgba(252,207,101,0.6)] z-10 select-none"
+          />
 
           {/* Nube derecha flotante */}
           <motion.img
@@ -203,77 +463,94 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           />
         </div>
 
-        {/* Imagen Oficial de Portada Ampliada para Web */}
+        {/* Badge del Hero */}
         <motion.div
-          initial={{ scale: 0.92, opacity: 0 }}
+          initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="relative max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto mb-8 group w-full px-2 sm:px-0"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs sm:text-sm font-display tracking-widest uppercase mb-4 shadow-[0_0_20px_rgba(190,141,44,0.3)]"
         >
-          <div className="absolute -inset-1.5 bg-gradient-to-r from-gold via-maya-red to-gold rounded-2xl md:rounded-3xl blur-xl opacity-45 group-hover:opacity-80 transition duration-700 pointer-events-none" />
-          <div className="relative rounded-2xl md:rounded-3xl overflow-hidden border-2 border-gold/60 shadow-[0_0_45px_rgba(190,141,44,0.4)] bg-black/80">
-            <img 
-              src={content.heroCoverImageUrl || portadaPng} 
-              alt="Portada La Casa de las Leyendas" 
-              className="w-full h-auto object-contain max-h-[380px] sm:max-h-[480px] md:max-h-[560px] lg:max-h-[640px] mx-auto hover:scale-[1.015] transition-transform duration-500"
-            />
-          </div>
+          <Sparkles size={16} />
+          <span>{content.heroBadge}</span>
         </motion.div>
 
-        {/* Textos del Hero */}
+        {/* Título Principal */}
+        <motion.h1
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="text-4xl sm:text-6xl md:text-7xl font-display text-gold tracking-tight leading-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)] max-w-4xl"
+        >
+          {content.heroTitle} <br />
+          <span className="text-cream italic font-serif text-3xl sm:text-5xl md:text-6xl block mt-2 font-normal">
+            {content.heroTitleItalic}
+          </span>
+        </motion.h1>
+
+        {/* Portada Personalizable (si existe) */}
+        {content.heroCoverImageUrl && (
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.7 }}
+            className="relative max-w-2xl mx-auto mt-6 mb-2 group w-full px-2"
+          >
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-gold via-maya-red to-gold rounded-2xl md:rounded-3xl blur-xl opacity-45 group-hover:opacity-80 transition duration-700 pointer-events-none" />
+            <div className="relative rounded-2xl overflow-hidden border-2 border-gold/60 shadow-[0_0_40px_rgba(190,141,44,0.4)] bg-black/80">
+              <img
+                src={content.heroCoverImageUrl}
+                alt="Portada La Casa de las Leyendas"
+                className="w-full h-auto object-contain max-h-[380px] sm:max-h-[460px] mx-auto hover:scale-[1.01] transition-transform duration-500"
+              />
+            </div>
+          </motion.div>
+        )}
+
+        {/* Descripción Editorial */}
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="mt-6 text-base sm:text-xl text-cream/90 font-serif italic max-w-2xl leading-relaxed"
+        >
+          "{content.heroDescription}"
+        </motion.p>
+
+        {/* Botones de Acción */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="space-y-4 max-w-3xl"
+          transition={{ delay: 0.3 }}
+          className="mt-8 flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-4"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs sm:text-sm font-display tracking-widest uppercase">
-            <Sparkles size={15} /> {content.heroBadge}
-          </div>
+          <Button
+            onClick={() => {
+              sound.playMysticChime();
+              onEnterGame();
+            }}
+            size="lg"
+            className="w-full sm:w-auto px-8 py-4 text-base sm:text-lg flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(190,141,44,0.6)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105 rounded-xl transition-all"
+          >
+            <Play size={20} className="fill-obsidian" />
+            <span>{content.playButtonText || 'ENTRAR AL JUEGO'}</span>
+          </Button>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display text-gold tracking-tight leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-            {content.heroTitle} <br />
-            <span className="text-cream italic font-serif text-2xl sm:text-4xl block mt-1">
-              {content.heroTitleItalic}
-            </span>
-          </h1>
-
-          <p className="text-cream/90 text-base sm:text-lg font-serif italic max-w-2xl mx-auto leading-relaxed px-2">
-            {content.heroDescription}
-          </p>
-
-          {/* Botones de Acción Primaria */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 w-full sm:w-auto">
-            <Button 
-              onClick={() => {
-                sound.playMysticChime();
-                onEnterGame();
-              }}
-              size="lg"
-              className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(190,141,44,0.6)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105"
-            >
-              <Play size={18} className="fill-obsidian" />
-              <span>{content.playButtonText}</span>
-            </Button>
-
-            <Button 
-              variant="outline"
-              onClick={() => {
-                sound.playClick();
-                onEnterExplorer();
-              }}
-              size="lg"
-              className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base flex items-center justify-center gap-2 border-gold text-gold hover:bg-gold/15"
-            >
-              <Compass size={18} />
-              <span>{content.passportButtonText}</span>
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            onClick={() => {
+              sound.playClick();
+              onEnterExplorer();
+            }}
+            size="lg"
+            className="w-full sm:w-auto px-8 py-4 text-base sm:text-lg flex items-center justify-center gap-3 border-gold text-gold hover:bg-gold/15 rounded-xl transition-all"
+          >
+            <Compass size={20} />
+            <span>{content.passportButtonText || 'PASAPORTE DE SELLOS'}</span>
+          </Button>
         </motion.div>
       </section>
 
       {/* SECCIÓN EDUCATIVA: DESCUBRE QUÉ HAY DETRÁS DE CADA CANDADO */}
-      <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
+      <section id="candados" className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
         <div className="text-center space-y-2 mb-10">
           <span className="text-xs sm:text-sm font-display text-gold tracking-widest uppercase flex items-center justify-center gap-1.5 font-bold">
             <KeyRound size={16} /> {content.locksSectionBadge}
@@ -382,7 +659,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       </section>
 
       {/* PILARES DE LA EXPERIENCIA */}
-      <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
+      <section id="pilares" className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
         <div className="text-center space-y-2 mb-10">
           <span className="text-xs sm:text-sm font-display text-gold tracking-widest uppercase font-bold">
             {content.pillarsSectionBadge}
@@ -429,7 +706,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       </section>
 
       {/* RECORRIDO DE LEYENDAS CON SELLOS */}
-      <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
+      <section id="catalogo" className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
         <div className="text-center space-y-2 mb-8">
           <span className="text-xs sm:text-sm font-display text-gold tracking-widest uppercase font-bold">
             Catálogo Místico
@@ -451,59 +728,73 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 sound.playClick();
                 setSelectedTeaser(selectedTeaser === legend.id ? null : legend.id);
               }}
-              className="p-5 rounded-2xl bg-black/60 border border-gold/30 hover:border-gold/60 transition-all cursor-pointer text-left space-y-3 relative overflow-hidden"
+              className={`p-5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
+                selectedTeaser === legend.id
+                  ? 'border-gold bg-black/80 shadow-[0_0_20px_rgba(190,141,44,0.3)]'
+                  : 'border-gold/25 bg-black/40 hover:border-gold/50'
+              }`}
             >
-              <div className="flex items-center justify-between">
-                <PassportStampSvg 
-                  code={legend.code} 
-                  name={legend.name} 
-                  isUnlocked={true} 
-                  size={48} 
-                  imageUrl={content.legendFichasImages?.[legend.id]} 
+              <div className="flex items-start gap-4">
+                <PassportStampSvg
+                  code={legend.code}
+                  name={legend.name}
+                  isUnlocked={true}
+                  size={58}
+                  imageUrl={content.legendFichasImages?.[legend.id]}
                 />
-                <span className="text-xs uppercase font-display text-cream/60 font-semibold px-2 py-0.5 rounded bg-black/40 border border-white/10">
-                  {legend.category}
-                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-xs font-mono text-gold/80 font-bold">{legend.code}</span>
+                    <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-gold/10 text-gold border border-gold/30">
+                      {legend.difficulty}
+                    </span>
+                  </div>
+                  <h4 className="font-display text-base font-bold text-cream truncate mt-1">
+                    {legend.name}
+                  </h4>
+                  <p className="text-xs text-gold font-serif italic line-clamp-1">
+                    {legend.title}
+                  </p>
+                </div>
               </div>
 
-              <h4 className="font-display text-lg text-gold font-bold">{legend.name}</h4>
-              <p className="text-sm text-cream/80 font-serif italic line-clamp-2 leading-relaxed">
+              <p className="text-xs text-cream/75 font-serif italic mt-3 line-clamp-2">
                 "{legend.shortDescription}"
               </p>
 
-              <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs sm:text-sm text-gold font-display font-semibold">
-                <span>{selectedTeaser === legend.id ? 'Ocultar historia' : 'Ver secreto ancestral'}</span>
-                <ChevronDown 
-                  size={16} 
-                  className={`transition-transform duration-300 ${selectedTeaser === legend.id ? 'rotate-180' : ''}`} 
-                />
-              </div>
-
-              {selectedTeaser === legend.id && (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="pt-3 border-t border-gold/20 space-y-2 text-sm font-serif"
-                >
-                  <p className="text-cream/95 italic leading-relaxed">"{legend.fullStory}"</p>
-                  <p className="text-xs text-gold font-display font-bold">📍 {legend.culturalOrigin}</p>
-                </motion.div>
-              )}
+              {/* Detalle Expandible al Tocar */}
+              <AnimatePresence>
+                {selectedTeaser === legend.id && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-3 pt-3 border-t border-gold/20 text-xs space-y-2"
+                  >
+                    <p className="text-cream/90 font-serif leading-relaxed">
+                      {legend.fullStory}
+                    </p>
+                    <div className="p-2 rounded-lg bg-gold/10 border border-gold/20 text-[11px] text-gold">
+                      ✨ <strong>Dato Curioso:</strong> {legend.didYouKnow}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* BANNER FINAL DE LLAMADO A LA ACCIÓN */}
+      {/* BANNER CTA INFERIOR */}
       <section className="relative z-10 py-16 px-4 max-w-4xl mx-auto text-center">
-        <Card className="p-8 sm:p-12 space-y-6 border-gold/50 bg-gradient-to-b from-black/80 to-earth-brown/30 relative overflow-hidden shadow-[0_0_50px_rgba(122,49,8,0.4)] rounded-3xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 blur-3xl rounded-full pointer-events-none" />
-          
+        <Card className="p-8 sm:p-12 space-y-6 border-gold/50 bg-gradient-to-b from-black/90 to-earth-brown/40 relative overflow-hidden shadow-[0_0_50px_rgba(122,49,8,0.5)] rounded-3xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/15 blur-3xl rounded-full pointer-events-none" />
+
           <span className="text-xs sm:text-sm font-display text-gold uppercase tracking-widest block font-bold">
             {content.ctaBadge}
           </span>
 
-          <h2 className="text-3xl sm:text-4xl font-display text-cream">
+          <h2 className="text-2xl sm:text-4xl font-display text-cream">
             {content.ctaTitle}
           </h2>
 
@@ -511,21 +802,34 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             {content.ctaDescription}
           </p>
 
-          <Button 
-            onClick={() => {
-              sound.playMysticChime();
-              onEnterGame();
-            }}
-            size="lg"
-            className="px-10 py-5 text-sm sm:text-base inline-flex items-center gap-3 shadow-[0_0_30px_rgba(190,141,44,0.7)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105 rounded-xl"
-          >
-            <Play size={20} className="fill-obsidian" />
-            <span>{content.ctaButtonText}</span>
-          </Button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+            <Button 
+              onClick={() => {
+                sound.playMysticChime();
+                onEnterGame();
+              }}
+              size="lg"
+              className="w-full sm:w-auto px-9 py-4 text-sm sm:text-base inline-flex items-center justify-center gap-2.5 shadow-[0_0_25px_rgba(190,141,44,0.6)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105 rounded-xl transition-transform"
+            >
+              <Play size={18} className="fill-obsidian" />
+              <span>{content.ctaButtonText}</span>
+            </Button>
+
+            <a 
+              href={WHATSAPP_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sound.playClick()}
+              className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base inline-flex items-center justify-center gap-2 border-2 border-emerald-500 bg-emerald-950/80 text-emerald-200 hover:bg-emerald-900/80 rounded-xl font-display font-bold transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+            >
+              <MessageCircle size={18} className="text-emerald-400" />
+              <span>CONSULTAR POR WHATSAPP</span>
+            </a>
+          </div>
         </Card>
       </section>
 
-      {/* FOOTER */}
+      {/* Footer */}
       <footer className="relative z-10 border-t border-gold/20 py-8 px-4 text-center text-xs sm:text-sm text-cream/60 space-y-2">
         <p className="font-display text-gold tracking-widest text-sm sm:text-base font-bold">
           {content.footerTitle}
