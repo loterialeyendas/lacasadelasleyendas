@@ -21,5 +21,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+
+    // Contenido Editorial y CMS del Sitio (Landing, Estaciones, Portadas e Imágenes)
+    match /site_content/{contentId} {
+      allow read: if true;
+      allow write: if true;
+    }
   }
 }

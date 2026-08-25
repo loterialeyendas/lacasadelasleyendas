@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Play, 
@@ -8,13 +8,19 @@ import {
   Sparkles, 
   KeyRound, 
   ChevronDown, 
-  BookOpen,
   CheckCircle2,
-  Lightbulb
+  Lightbulb,
+  Drama
 } from 'lucide-react';
-import { Button, Card, MysticalTitle } from '../components/Theme';
+import { Button, Card } from '../components/Theme';
 import { LEYENDAS_DATA } from '../services/legendService';
 import { sound } from '../lib/audio';
+import { 
+  LandingContent, 
+  DEFAULT_LANDING_CONTENT, 
+  fetchSiteContent, 
+  getLocalContent 
+} from '../services/contentService';
 
 // Elementos Gráficos PNG y SVG del proyecto
 import portadaPng from '../images/png/Portada.png';
@@ -36,78 +42,32 @@ import { PassportStampSvg } from '../components/svgs/PassportStampSvg';
 interface LandingPageViewProps {
   onEnterGame: () => void;
   onEnterExplorer: () => void;
+  onEnterLiveTheater?: () => void;
 }
 
-interface ElementalLock {
-  id: string;
-  name: string;
-  type: 'oro' | 'plata' | 'jade' | 'vida';
-  image: string;
-  badgeBg: string;
-  subtitle: string;
-  question: string;
-  answer: string;
-  culturalInsight: string;
-  associatedLegends: string[];
-}
-
-const ELEMENTAL_LOCKS: ElementalLock[] = [
-  {
-    id: 'lock-oro',
-    name: 'Candado de Oro',
-    type: 'oro',
-    image: candadoOroPng,
-    badgeBg: 'bg-gold/25 text-gold border-gold/50 font-bold',
-    subtitle: 'El Misterio del Arte y la Libertad',
-    question: '¿Qué poder ocultaban los objetos dorados y las serenatas en las noches coloniales?',
-    answer: 'La música del Sombrerón y el barco de carbón de La Tatuana eran símbolos de encanto y escape ante las normas del Santo Oficio.',
-    culturalInsight: 'En la tradición guatemalteca, el oro representa el resplandor de la astucia y la resistencia espiritual de los pueblos mestizos.',
-    associatedLegends: ['El Sombrerón', 'La Tatuana']
-  },
-  {
-    id: 'lock-plata',
-    name: 'Candado de Plata',
-    type: 'plata',
-    image: candadoPlataPng,
-    badgeBg: 'bg-slate-400/25 text-slate-100 border-slate-400/50 font-bold',
-    subtitle: 'El Guardián de la Noche y la Protección',
-    question: '¿Por qué la plata y la luna acompañan al Cadejo Blanco?',
-    answer: 'El Cadejo Blanco es el protector espiritual de los caminantes desvalidos, combatiendo la oscuridad y las acechanzas del Cadejo Negro.',
-    culturalInsight: 'Los arrieros y viajeros de la época colonial invocaban la luz de la luna y la protección de los guardianes espectrales en los caminos solitarios.',
-    associatedLegends: ['El Cadejo']
-  },
-  {
-    id: 'lock-jade',
-    name: 'Candado de Jade',
-    type: 'jade',
-    image: candadoJadePng,
-    badgeBg: 'bg-emerald-500/25 text-emerald-200 border-emerald-500/50 font-bold',
-    subtitle: 'La Sabiduría Ancestral y las Aguas',
-    question: '¿Qué secreto esconden las aguas de los arroyos y las huellas invertidas?',
-    answer: 'La Siguanaba y su hijo el Cipitío representan el castigo por olvidar los valores ancestrales y la conexión mística con la naturaleza.',
-    culturalInsight: 'El jade, piedra sagrada maya, simboliza la eternidad del alma, la fertilidad de la tierra y los espíritus que custodian los ríos de Guatemala.',
-    associatedLegends: ['La Siguanaba', 'El Cipitío']
-  },
-  {
-    id: 'lock-vida',
-    name: 'Candado de Vida y Trascendencia',
-    type: 'vida',
-    image: candadoVidaPng,
-    badgeBg: 'bg-maya-red/25 text-red-100 border-maya-red/50 font-bold',
-    subtitle: 'El Trascender de las Almas y la Memoria',
-    question: '¿Por qué el Carretón y La Llorona siguen recorriendo las calles empedradas?',
-    answer: 'Recuerdan el valor de la vida terrenal y la penitencia eterna de las almas que buscan redención y paz en la noche.',
-    culturalInsight: 'Estas leyendas cumplían una función de memoria colectiva, respeto a los difuntos y reflexión en la sociedad colonial guatemalteca.',
-    associatedLegends: ['La Llorona', 'El Carretón de la Muerte']
-  }
-];
+const LOCK_IMAGES: Record<string, string> = {
+  oro: candadoOroPng,
+  plata: candadoPlataPng,
+  jade: candadoJadePng,
+  vida: candadoVidaPng
+};
 
 export const LandingPageView: React.FC<LandingPageViewProps> = ({
   onEnterGame,
-  onEnterExplorer
+  onEnterExplorer,
+  onEnterLiveTheater
 }) => {
+  const [content, setContent] = useState<LandingContent>(() => getLocalContent().landing);
   const [selectedTeaser, setSelectedTeaser] = useState<string | null>(null);
   const [unlockedLocks, setUnlockedLocks] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    fetchSiteContent().then((res) => {
+      if (res?.landing) {
+        setContent(res.landing);
+      }
+    });
+  }, []);
 
   const handleUnlockLock = (lockId: string) => {
     sound.playMysticChime();
@@ -141,55 +101,96 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             />
             <div className="flex flex-col text-left">
               <span className="font-display text-sm sm:text-base tracking-widest text-gold font-bold leading-tight">
-                LA CASA DE LAS LEYENDAS
+                {content.brandTitle}
               </span>
               <span className="text-xs uppercase tracking-wider text-cream/70">
-                Guatemala • Experiencia Interactiva
+                {content.brandSubtitle}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {onEnterLiveTheater && (
+              <button 
+                onClick={() => {
+                  sound.playClick();
+                  onEnterLiveTheater();
+                }}
+                className="py-2 px-3 sm:px-4 text-xs sm:text-sm font-display font-bold flex items-center gap-1.5 text-gold hover:text-cream border border-gold/40 hover:border-gold rounded-xl bg-gold/10 hover:bg-gold/20 transition-all cursor-pointer shadow-[0_0_10px_rgba(190,141,44,0.2)]"
+              >
+                <Drama size={15} className="text-maya-red" />
+                <span className="hidden xs:inline">EN VIVO</span>
+                <span className="xs:hidden">TEATRO</span>
+                <span className="hidden sm:inline">(TEATRO)</span>
+              </button>
+            )}
+
             <Button 
               onClick={() => {
                 sound.playMysticChime();
                 onEnterGame();
               }}
               size="sm"
-              className="py-2.5 px-5 text-xs sm:text-sm font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(190,141,44,0.4)]"
+              className="py-2.5 px-3.5 sm:px-5 text-xs sm:text-sm font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(190,141,44,0.4)]"
             >
               <Play size={15} className="fill-current" />
-              <span>JUGAR AHORA</span>
+              <span>{content.playButtonText || 'JUGAR'}</span>
             </Button>
           </div>
         </div>
       </header>
 
       {/* HERO SECTION CON PORTADA, SOL Y NUBES CELESTIALES */}
-      <section className="relative z-10 pt-6 pb-16 px-4 max-w-5xl mx-auto text-center flex flex-col items-center">
+      <section className="relative z-10 pt-6 pb-16 px-4 max-w-6xl mx-auto text-center flex flex-col items-center">
         
+        {/* Banner Destacado: Obra en Vivo en Teatro Municipal */}
+        {onEnterLiveTheater && (
+          <motion.div
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            whileHover={{ scale: 1.02 }}
+            onClick={() => {
+              sound.playClick();
+              onEnterLiveTheater();
+            }}
+            className="mb-6 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-maya-red/30 via-gold/20 to-maya-red/30 border border-gold/50 cursor-pointer shadow-[0_0_20px_rgba(190,141,44,0.25)] flex items-center gap-3 text-left group max-w-2xl"
+          >
+            <div className="w-9 h-9 rounded-xl bg-gold/20 flex items-center justify-center text-gold shrink-0 border border-gold/40">
+              <Drama size={19} className="text-gold group-hover:rotate-12 transition-transform" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] sm:text-[11px] uppercase font-display font-bold tracking-widest text-gold bg-black/60 px-2 py-0.5 rounded border border-gold/30">
+                {content.bannerBadge}
+              </span>
+              <p className="text-xs sm:text-sm font-display text-cream font-bold leading-tight mt-1 truncate sm:whitespace-normal">
+                {content.bannerTitle}
+              </p>
+            </div>
+          </motion.div>
+        )}
+
         {/* Composición Celestial: Sol flotante y Nubes */}
-        <div className="relative w-full max-w-lg mx-auto mb-5 flex items-center justify-center">
+        <div className="relative w-full max-w-lg md:max-w-xl lg:max-w-2xl mx-auto mb-6 flex items-center justify-center">
           {/* Nube izquierda flotante */}
           <motion.img
             src={nubeIzqPng}
             alt="Nube Mística Izquierda"
-            animate={{ x: [-8, 8, -8], y: [-3, 3, -3] }}
+            animate={{ x: [-10, 10, -10], y: [-4, 4, -4] }}
             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -left-3 sm:-left-12 top-2 w-24 sm:w-32 opacity-85 pointer-events-none drop-shadow-md z-20"
+            className="absolute -left-3 sm:-left-10 md:-left-16 lg:-left-24 top-2 w-24 sm:w-32 md:w-40 lg:w-48 opacity-85 pointer-events-none drop-shadow-md z-20"
           />
 
           {/* Sol central resplandeciente */}
           <motion.div
-            animate={{ rotate: [0, 360], scale: [1, 1.05, 1] }}
+            animate={{ rotate: [0, 360], scale: [1, 1.06, 1] }}
             transition={{ rotate: { duration: 40, repeat: Infinity, ease: "linear" }, scale: { duration: 5, repeat: Infinity, ease: "easeInOut" } }}
             className="relative z-10"
           >
-            <div className="absolute inset-0 bg-gold/30 blur-2xl rounded-full pointer-events-none" />
+            <div className="absolute inset-0 bg-gold/35 blur-3xl rounded-full pointer-events-none" />
             <img 
               src={solPng} 
               alt="Sol Místico de Guatemala" 
-              className="w-24 sm:w-32 mx-auto drop-shadow-[0_0_25px_rgba(252,207,101,0.7)] object-contain"
+              className="w-24 sm:w-32 md:w-40 lg:w-48 mx-auto drop-shadow-[0_0_35px_rgba(252,207,101,0.8)] object-contain"
             />
           </motion.div>
 
@@ -197,25 +198,25 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           <motion.img
             src={nubeDerPng}
             alt="Nube Mística Derecha"
-            animate={{ x: [8, -8, 8], y: [3, -3, 3] }}
+            animate={{ x: [10, -10, 10], y: [4, -4, 4] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -right-3 sm:-right-12 top-4 w-24 sm:w-32 opacity-85 pointer-events-none drop-shadow-md z-20"
+            className="absolute -right-3 sm:-right-10 md:-right-16 lg:-right-24 top-4 w-24 sm:w-32 md:w-40 lg:w-48 opacity-85 pointer-events-none drop-shadow-md z-20"
           />
         </div>
 
-        {/* Imagen Oficial de Portada de la Casa de las Leyendas */}
+        {/* Imagen Oficial de Portada Ampliada para Web */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.92, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="relative max-w-md sm:max-w-lg mx-auto mb-6 group w-full"
+          className="relative max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto mb-8 group w-full px-2 sm:px-0"
         >
-          <div className="absolute -inset-1 bg-gradient-to-r from-gold via-maya-red to-gold rounded-2xl blur-lg opacity-40 group-hover:opacity-75 transition duration-700 pointer-events-none" />
-          <div className="relative rounded-2xl overflow-hidden border-2 border-gold/50 shadow-[0_0_35px_rgba(190,141,44,0.3)] bg-black/70">
+          <div className="absolute -inset-1.5 bg-gradient-to-r from-gold via-maya-red to-gold rounded-2xl md:rounded-3xl blur-xl opacity-45 group-hover:opacity-80 transition duration-700 pointer-events-none" />
+          <div className="relative rounded-2xl md:rounded-3xl overflow-hidden border-2 border-gold/60 shadow-[0_0_45px_rgba(190,141,44,0.4)] bg-black/80">
             <img 
-              src={portadaPng} 
+              src={content.heroCoverImageUrl || portadaPng} 
               alt="Portada La Casa de las Leyendas" 
-              className="w-full h-auto object-contain max-h-[380px] sm:max-h-[460px] mx-auto hover:scale-[1.02] transition-transform duration-500"
+              className="w-full h-auto object-contain max-h-[380px] sm:max-h-[480px] md:max-h-[560px] lg:max-h-[640px] mx-auto hover:scale-[1.015] transition-transform duration-500"
             />
           </div>
         </motion.div>
@@ -228,19 +229,18 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           className="space-y-4 max-w-3xl"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs sm:text-sm font-display tracking-widest uppercase">
-            <Sparkles size={15} /> El Portal Místico de Guatemala
+            <Sparkles size={15} /> {content.heroBadge}
           </div>
 
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-display text-gold tracking-tight leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-            DESCUBRE EL MISTERIO. <br />
+            {content.heroTitle} <br />
             <span className="text-cream italic font-serif text-2xl sm:text-4xl block mt-1">
-              Vive las Leyendas de Nuestros Ancestros.
+              {content.heroTitleItalic}
             </span>
           </h1>
 
           <p className="text-cream/90 text-base sm:text-lg font-serif italic max-w-2xl mx-auto leading-relaxed px-2">
-            Una experiencia cultural e interactiva que combina el juego de mesa físico, 
-            el recorrido presencial con códigos QR y desafíos digitales en tiempo real.
+            {content.heroDescription}
           </p>
 
           {/* Botones de Acción Primaria */}
@@ -254,7 +254,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(190,141,44,0.6)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105"
             >
               <Play size={18} className="fill-obsidian" />
-              <span>ENTRAR AL JUEGO</span>
+              <span>{content.playButtonText}</span>
             </Button>
 
             <Button 
@@ -267,7 +267,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base flex items-center justify-center gap-2 border-gold text-gold hover:bg-gold/15"
             >
               <Compass size={18} />
-              <span>PASAPORTE DE SELLOS</span>
+              <span>{content.passportButtonText}</span>
             </Button>
           </div>
         </motion.div>
@@ -277,19 +277,20 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
         <div className="text-center space-y-2 mb-10">
           <span className="text-xs sm:text-sm font-display text-gold tracking-widest uppercase flex items-center justify-center gap-1.5 font-bold">
-            <KeyRound size={16} /> Dinámica Educativa de Secretos
+            <KeyRound size={16} /> {content.locksSectionBadge}
           </span>
           <h2 className="text-2xl sm:text-4xl font-display text-cream tracking-wide">
-            DESCUBRE QUÉ HAY DETRÁS DE CADA CANDADO
+            {content.locksSectionTitle}
           </h2>
           <p className="text-sm sm:text-base text-cream/80 font-serif italic max-w-2xl mx-auto leading-relaxed px-2">
-            Abre los candados sagrados de Oro, Plata, Jade y Vida para revelar la sabiduría y el trasfondo histórico de nuestras tradiciones:
+            {content.locksSectionDescription}
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {ELEMENTAL_LOCKS.map((lock) => {
+          {content.locks.map((lock) => {
             const isUnlocked = !!unlockedLocks[lock.id];
+            const lockImg = LOCK_IMAGES[lock.type] || candadoOroPng;
 
             return (
               <Card 
@@ -306,7 +307,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     <div className="relative">
                       <div className="absolute inset-0 bg-gold/10 blur-md rounded-full" />
                       <img 
-                        src={lock.image} 
+                        src={lockImg} 
                         alt={lock.name} 
                         className={`w-16 h-16 object-contain transition-transform duration-500 ${
                           isUnlocked ? 'scale-110 drop-shadow-[0_0_15px_rgba(252,207,101,0.8)]' : 'opacity-90'
@@ -385,13 +386,13 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
         <div className="text-center space-y-2 mb-10">
           <span className="text-xs sm:text-sm font-display text-maya-red tracking-widest uppercase font-bold">
-            Dinámicas y Mecánicas
+            {content.pillarsSectionBadge}
           </span>
           <h2 className="text-2xl sm:text-4xl font-display text-gold">
-            ¿CÓMO FUNCIONA LA EXPERIENCIA?
+            {content.pillarsSectionTitle}
           </h2>
           <p className="text-sm sm:text-base text-cream/80 font-serif italic max-w-xl mx-auto px-2">
-            Combina el mundo físico con la magia digital a través de 3 pilares únicos:
+            {content.pillarsSectionDescription}
           </p>
         </div>
 
@@ -400,9 +401,9 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             <div className="w-14 h-14 rounded-2xl bg-gold/15 border border-gold/40 flex items-center justify-center text-gold">
               <QrCode size={28} />
             </div>
-            <h3 className="text-lg font-display text-gold font-bold">1. Escanea las Estaciones</h3>
+            <h3 className="text-lg font-display text-gold font-bold">{content.pillar1Title}</h3>
             <p className="text-sm text-cream/85 font-serif italic leading-relaxed">
-              Apunta con la cámara de tu móvil a las cartas físicas o a las placas en la Casa de las Leyendas para invocar el reto de cada espectro.
+              {content.pillar1Description}
             </p>
           </Card>
 
@@ -410,9 +411,9 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             <div className="w-14 h-14 rounded-2xl bg-maya-red/20 border border-maya-red/40 flex items-center justify-center text-maya-red">
               <Sparkles size={28} />
             </div>
-            <h3 className="text-lg font-display text-gold font-bold">2. Supera las Pruebas</h3>
+            <h3 className="text-lg font-display text-gold font-bold">{content.pillar2Title}</h3>
             <p className="text-sm text-cream/85 font-serif italic leading-relaxed">
-              Responde preguntas con tiempo límite, descubre personajes con pistas misteriosas y actúa retos de mímica ante tus compañeros.
+              {content.pillar2Description}
             </p>
           </Card>
 
@@ -420,9 +421,9 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
               <Trophy size={28} />
             </div>
-            <h3 className="text-lg font-display text-gold font-bold">3. Colecciona los Sellos</h3>
+            <h3 className="text-lg font-display text-gold font-bold">{content.pillar3Title}</h3>
             <p className="text-sm text-cream/85 font-serif italic leading-relaxed">
-              Completa tu Pasaporte Digital con los 7 sellos ancestrales y desbloquea el título de Maestro de Leyendas de Guatemala.
+              {content.pillar3Description}
             </p>
           </Card>
         </div>
@@ -454,7 +455,13 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               className="p-5 rounded-2xl bg-black/60 border border-gold/30 hover:border-gold/60 transition-all cursor-pointer text-left space-y-3 relative overflow-hidden"
             >
               <div className="flex items-center justify-between">
-                <PassportStampSvg code={legend.code} name={legend.name} isUnlocked={true} size={48} />
+                <PassportStampSvg 
+                  code={legend.code} 
+                  name={legend.name} 
+                  isUnlocked={true} 
+                  size={48} 
+                  imageUrl={content.legendFichasImages?.[legend.id]} 
+                />
                 <span className="text-xs uppercase font-display text-cream/60 font-semibold px-2 py-0.5 rounded bg-black/40 border border-white/10">
                   {legend.category}
                 </span>
@@ -494,15 +501,15 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 blur-3xl rounded-full pointer-events-none" />
           
           <span className="text-xs sm:text-sm font-display text-gold uppercase tracking-widest block font-bold">
-            ¿Estás listo para el ritual?
+            {content.ctaBadge}
           </span>
 
           <h2 className="text-3xl sm:text-4xl font-display text-cream">
-            COMIENZA TU AVENTURA EN LA CASA DE LAS LEYENDAS
+            {content.ctaTitle}
           </h2>
 
           <p className="text-sm sm:text-base text-cream/90 font-serif italic max-w-xl mx-auto leading-relaxed">
-            Ingresa desde tu teléfono para jugar en mesa con tus amigos o para realizar el recorrido interactivo por nuestras instalaciones.
+            {content.ctaDescription}
           </p>
 
           <Button 
@@ -514,7 +521,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             className="px-10 py-5 text-sm sm:text-base inline-flex items-center gap-3 shadow-[0_0_30px_rgba(190,141,44,0.7)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105 rounded-xl"
           >
             <Play size={20} className="fill-obsidian" />
-            <span>INICIAR EXPERIENCIA DIGITAL</span>
+            <span>{content.ctaButtonText}</span>
           </Button>
         </Card>
       </section>
@@ -522,10 +529,10 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       {/* FOOTER */}
       <footer className="relative z-10 border-t border-gold/20 py-8 px-4 text-center text-xs sm:text-sm text-cream/60 space-y-2">
         <p className="font-display text-gold tracking-widest text-sm sm:text-base font-bold">
-          LA CASA DE LAS LEYENDAS • GUATEMALA
+          {content.footerTitle}
         </p>
         <p className="font-serif italic text-xs sm:text-sm">
-          Preservando el patrimonio oral, la magia y las tradiciones populares de Guatemala.
+          {content.footerDescription}
         </p>
         <p className="text-xs text-cream/40 pt-2">
           © {new Date().getFullYear()} lacasadelasleyendas.com. Todos los derechos reservados.

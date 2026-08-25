@@ -35,9 +35,13 @@ const TriviaModule = lazy(() => import('./views/modules/TriviaModule').then((m) 
 const CharacterGuessModule = lazy(() => import('./views/modules/CharacterGuessModule').then((m) => ({ default: m.CharacterGuessModule })));
 const MimeChallengeModule = lazy(() => import('./views/modules/MimeChallengeModule').then((m) => ({ default: m.MimeChallengeModule })));
 const StoryApparitionModule = lazy(() => import('./views/modules/StoryApparitionModule').then((m) => ({ default: m.StoryApparitionModule })));
+const LiveTheaterView = lazy(() => import('./views/LiveTheaterView').then((m) => ({ default: m.LiveTheaterView })));
+const MayordomoView = lazy(() => import('./views/MayordomoView').then((m) => ({ default: m.MayordomoView })));
 
 type Screen = 
   | 'landing'
+  | 'theater'
+  | 'mayordomo'
   | 'login' 
   | 'welcome' 
   | 'explorer' 
@@ -92,13 +96,22 @@ export default function App() {
     window.history.pushState(state, '');
   };
 
-  // Deep linking por QR: ?legend=sombreron o ?room=ABC123
+  // Deep linking por QR o URL directa: /mayordomo, ?envivo=true, ?legend=sombreron, ?room=ABC123
   useEffect(() => {
+    const path = window.location.pathname.toLowerCase();
     const params = new URLSearchParams(window.location.search);
+    const isMayordomoPath = path.includes('/mayordomo') || params.has('mayordomo');
     const legendParam = params.get('legend') || params.get('id') || params.get('code');
     const roomParam = params.get('room');
+    const theaterParam = params.get('envivo') || params.get('teatro') || params.get('live') || path.includes('/envivo');
 
-    if (legendParam) {
+    if (isMayordomoPath) {
+      setScreen('mayordomo');
+      window.history.replaceState({ screen: 'mayordomo' } satisfies HistoryState, '');
+    } else if (theaterParam) {
+      setScreen('theater');
+      window.history.replaceState({ screen: 'theater' } satisfies HistoryState, '');
+    } else if (legendParam) {
       const found = parseQRData(legendParam);
       if (found) {
         setActiveLegend(found);
@@ -109,8 +122,8 @@ export default function App() {
       setPendingRoomCode(roomParam.toUpperCase());
     }
 
-    // Limpiar los parámetros de la URL para evitar reintentos confusos al recargar
-    if ((legendParam || roomParam) && window.location.search) {
+    // Limpiar los parámetros de la URL de ser necesario
+    if ((legendParam || roomParam || theaterParam) && window.location.search) {
       window.history.replaceState(window.history.state, '', window.location.pathname);
     }
   }, []);
@@ -426,7 +439,32 @@ export default function App() {
       <LandingPageView
         onEnterGame={handleEnterFromLanding}
         onEnterExplorer={handleEnterExplorerFromLanding}
+        onEnterLiveTheater={() => navigate('theater')}
       />
+    );
+  }
+
+  // Si estamos en la página del Teatro en Vivo
+  if (screen === 'theater') {
+    return (
+      <Suspense fallback={<MysticLoader />}>
+        <LiveTheaterView
+          onBack={() => navigate('landing')}
+          onEnterGame={handleEnterFromLanding}
+        />
+      </Suspense>
+    );
+  }
+
+  // Si estamos en el panel administrativo Mayordomo
+  if (screen === 'mayordomo') {
+    return (
+      <Suspense fallback={<MysticLoader />}>
+        <MayordomoView
+          onGoToLanding={() => navigate('landing')}
+          onGoToTheater={() => navigate('theater')}
+        />
+      </Suspense>
     );
   }
 

@@ -13,6 +13,7 @@ import { Button, Card, MysticalTitle } from '../components/Theme';
 import { sound } from '../lib/audio';
 import { PassportStampSvg } from '../components/svgs/PassportStampSvg';
 import { MysticLock } from '../components/svgs/MysticLock';
+import { getLocalContent } from '../services/contentService';
 
 interface ExplorerViewProps {
   stamps: Stamp[];
@@ -30,6 +31,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
   onBack
 }) => {
   const [selectedLegendDetail, setSelectedLegendDetail] = useState<Legend | null>(null);
+  const legendImages = getLocalContent().landing.legendFichasImages || {};
 
   const unlockedLegendIds = new Set(stamps.map((s) => s.legendId));
   const completionPercentage = Math.round((stamps.length / LEYENDAS_DATA.length) * 100);
@@ -151,7 +153,13 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                 )}
 
                 <div className="flex items-center gap-3 mb-2">
-                  <PassportStampSvg code={legend.code} name={legend.name} isUnlocked={isUnlocked} size={52} />
+                  <PassportStampSvg 
+                    code={legend.code} 
+                    name={legend.name} 
+                    isUnlocked={isUnlocked} 
+                    size={52} 
+                    imageUrl={legendImages[legend.id]} 
+                  />
                   <div>
                     <h4 className="font-display text-sm sm:text-base text-cream leading-tight font-bold">
                       {legend.name}
