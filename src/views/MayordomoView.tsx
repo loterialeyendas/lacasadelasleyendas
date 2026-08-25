@@ -32,7 +32,8 @@ import {
   QrCode,
   Tag,
   Check,
-  Handshake
+  Handshake,
+  BookOpen
 } from 'lucide-react';
 import { Button, Card } from '../components/Theme';
 import { sound } from '../lib/audio';
@@ -1051,15 +1052,15 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
           </div>
         )}
 
-        {/* CONTENIDO TAB 2: TEATRO EN VIVO, ESTACIONES Y BOLETERÍA */}
+        {/* CONTENIDO TAB 2: TEATRO EN VIVO, ESTACIONES, BOLETERÍA Y PATROCINIOS */}
         {activeTab === 'theater' && (
           <div className="space-y-8">
             
-            {/* DATOS GENERALES DEL EVENTO */}
+            {/* SECCIÓN 1: DATOS GENERALES Y CARTEL DEL EVENTO */}
             <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
               <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
                 <Calendar size={20} />
-                <h2 className="font-display text-lg sm:text-xl font-bold">1. Datos Generales de la Producción</h2>
+                <h2 className="font-display text-lg sm:text-xl font-bold">1. Datos Generales & Cartel de la Producción</h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1089,7 +1090,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
 
                 <div>
                   <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
-                    Subtítulo / Lugar
+                    Subtítulo / Obra
                   </label>
                   <input
                     type="text"
@@ -1134,17 +1135,240 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                     className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
                   />
                 </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Duración Estimada
+                  </label>
+                  <input
+                    type="text"
+                    value={content.theater.duration}
+                    onChange={(e) => updateTheater('duration', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Subtítulo de Duración
+                  </label>
+                  <input
+                    type="text"
+                    value={content.theater.durationSubtitle}
+                    onChange={(e) => updateTheater('durationSubtitle', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    URL Cartel / Portada del Teatro
+                  </label>
+                  <input
+                    type="text"
+                    value={content.theater.coverImageUrl || ''}
+                    onChange={(e) => updateTheater('coverImageUrl', e.target.value)}
+                    placeholder="https://... o sube una imagen abajo"
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
               </div>
             </Card>
 
-            {/* LAS 4 ESTACIONES ESCÉNICAS (INCLUYENDO LA VANUSHKA) */}
+            {/* SECCIÓN 2: MANIFIESTO TEATRAL & PROPUESTA CULTURAL */}
+            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+              <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
+                <BookOpen size={20} />
+                <h2 className="font-display text-lg sm:text-xl font-bold">2. Manifiesto Teatral & Propuesta Cultural</h2>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Párrafo 1 (Presentación de la Fecha y el Teatro)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={content.theater.manifestoP1}
+                    onChange={(e) => updateTheater('manifestoP1', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none leading-relaxed"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Párrafo 2 (Enfoque Inmersivo e Identidad Guatemalteca)
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={content.theater.manifestoP2}
+                    onChange={(e) => updateTheater('manifestoP2', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none leading-relaxed"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Cita Destacada / Resumen de Valor
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={content.theater.manifestoHighlight}
+                    onChange={(e) => updateTheater('manifestoHighlight', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none leading-relaxed font-serif italic"
+                  />
+                </div>
+              </div>
+            </Card>
+
+            {/* SECCIÓN 3: ESTRUCTURA, DINÁMICA DEL RECORRIDO & PERSONAJE GUÍA */}
+            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+              <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
+                <Users size={20} />
+                <h2 className="font-display text-lg sm:text-xl font-bold">3. Logística, Grupos y Personaje Guía</h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Badge de Dinámica
+                  </label>
+                  <input
+                    type="text"
+                    value={content.theater.dynamicsSectionBadge}
+                    onChange={(e) => updateTheater('dynamicsSectionBadge', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Título de Dinámica
+                  </label>
+                  <input
+                    type="text"
+                    value={content.theater.dynamicsSectionTitle}
+                    onChange={(e) => updateTheater('dynamicsSectionTitle', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Descripción Introductoria
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={content.theater.dynamicsSectionDescription}
+                    onChange={(e) => updateTheater('dynamicsSectionDescription', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Tarjeta 1: Grupos Controlados */}
+              <div className="p-5 rounded-2xl bg-black/80 border border-gold/30 space-y-3">
+                <h3 className="text-sm font-display text-gold font-bold">Pilar A: Grupos Controlados & Horarios</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[11px] text-cream/70 uppercase block mb-1">Título</label>
+                    <input
+                      type="text"
+                      value={content.theater.groupTitle}
+                      onChange={(e) => updateTheater('groupTitle', e.target.value)}
+                      className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] text-cream/70 uppercase block mb-1">Nota al Pie</label>
+                    <input
+                      type="text"
+                      value={content.theater.groupFootnote}
+                      onChange={(e) => updateTheater('groupFootnote', e.target.value)}
+                      className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="text-[11px] text-cream/70 uppercase block mb-1">Descripción</label>
+                    <textarea
+                      rows={2}
+                      value={content.theater.groupDescription}
+                      onChange={(e) => updateTheater('groupDescription', e.target.value)}
+                      className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Tarjeta 2: Personaje Guía */}
+              <div className="p-5 rounded-2xl bg-black/80 border border-gold/30 space-y-3">
+                <h3 className="text-sm font-display text-gold font-bold">Pilar B: Personaje Guía & Farol Místico</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[11px] text-cream/70 uppercase block mb-1">Título</label>
+                    <input
+                      type="text"
+                      value={content.theater.guideTitle}
+                      onChange={(e) => updateTheater('guideTitle', e.target.value)}
+                      className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] text-cream/70 uppercase block mb-1">Nota al Pie</label>
+                    <input
+                      type="text"
+                      value={content.theater.guideFootnote}
+                      onChange={(e) => updateTheater('guideFootnote', e.target.value)}
+                      className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="text-[11px] text-cream/70 uppercase block mb-1">Descripción</label>
+                    <textarea
+                      rows={2}
+                      value={content.theater.guideDescription}
+                      onChange={(e) => updateTheater('guideDescription', e.target.value)}
+                      className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* SECCIÓN 4: LAS 4 ESTACIONES ESCÉNICAS (INCLUYENDO LA VANUSHKA) */}
             <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
               <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2.5 text-gold">
                   <Drama size={20} />
-                  <h2 className="font-display text-lg sm:text-xl font-bold">2. Estaciones Escénicas Teatrales</h2>
+                  <h2 className="font-display text-lg sm:text-xl font-bold">4. Estaciones Escénicas Teatrales</h2>
                 </div>
-                <span className="text-xs font-mono text-gold/80">Estación 4: La Vanushka</span>
+                <span className="text-xs font-mono text-gold/80">4 Actos Escénicos</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Badge de Estaciones
+                  </label>
+                  <input
+                    type="text"
+                    value={content.theater.stationsSectionBadge}
+                    onChange={(e) => updateTheater('stationsSectionBadge', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Título de Estaciones
+                  </label>
+                  <input
+                    type="text"
+                    value={content.theater.stationsSectionTitle}
+                    onChange={(e) => updateTheater('stationsSectionTitle', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1242,304 +1466,349 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                         className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none leading-relaxed"
                       />
                     </div>
+
+                    <div>
+                      <label className="text-[11px] text-cream/70 uppercase block mb-1">
+                        Elementos Destacados (1 por línea)
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={(st.highlights || []).join('\n')}
+                        onChange={(e) => {
+                          const updated = [...content.theater.stations];
+                          updated[idx].highlights = e.target.value.split('\n').filter(Boolean);
+                          updateTheater('stations', updated);
+                        }}
+                        placeholder="Escenografía de época&#10;Gran despliegue coreográfico&#10;Elenco teatral estelar"
+                        className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-mono"
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             </Card>
 
-            {/* SECCIÓN 3: SISTEMA DE BOLETERÍA EN LÍNEA & PLANES (JADE, VIDA, ORO, PLATA) */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
-              <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
-                <div className="flex items-center gap-2.5 text-gold">
-                  <Ticket size={22} />
-                  <div>
-                    <h2 className="font-display text-lg sm:text-xl font-bold">3. Sistema de Boletería en Línea y Planes de Acceso</h2>
-                    <p className="text-xs text-cream/70 font-serif italic">
-                      Administra la propuesta operativa, fases de preventa y los 4 planes de llaves sagradas (Jade, Vida, Oro, Plata).
-                    </p>
-                  </div>
-                </div>
-              </div>
+            {/* SECCIÓN 5: SISTEMA DE BOLETERÍA EN LÍNEA & PLANES (JADE, VIDA, ORO, PLATA) */}
+            {(() => {
+              const currentTicketing = content.theater.ticketing || DEFAULT_TICKETING_CONTENT;
+              const currentPhases = currentTicketing.phases || DEFAULT_TICKETING_CONTENT.phases;
+              const currentPlans = currentTicketing.plans || DEFAULT_TICKETING_CONTENT.plans;
 
-              {/* Textos Generales de Boletería */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
-                    Badge de Sección
-                  </label>
-                  <input
-                    type="text"
-                    value={currentTicketing.sectionBadge}
-                    onChange={(e) => updateTicketing('sectionBadge', e.target.value)}
-                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
-                    Título de Sección
-                  </label>
-                  <input
-                    type="text"
-                    value={currentTicketing.sectionTitle}
-                    onChange={(e) => updateTicketing('sectionTitle', e.target.value)}
-                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
-                    Descripción General de Boletería
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={currentTicketing.sectionDescription}
-                    onChange={(e) => updateTicketing('sectionDescription', e.target.value)}
-                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
-                    Título Autogestión Digital
-                  </label>
-                  <input
-                    type="text"
-                    value={currentTicketing.selfServiceTitle}
-                    onChange={(e) => updateTicketing('selfServiceTitle', e.target.value)}
-                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
-                    Nota al Pie (QR / Escáner)
-                  </label>
-                  <input
-                    type="text"
-                    value={currentTicketing.selfServiceFootnote}
-                    onChange={(e) => updateTicketing('selfServiceFootnote', e.target.value)}
-                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
-                    Descripción de Autogestión
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={currentTicketing.selfServiceDescription}
-                    onChange={(e) => updateTicketing('selfServiceDescription', e.target.value)}
-                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Fases de Preventa */}
-              <div className="space-y-4 pt-4 border-t border-gold/20">
-                <div className="flex items-center gap-2">
-                  <Calendar size={18} className="text-gold" />
-                  <h3 className="font-display text-base font-bold text-gold">Fases de Preventa (Octubre)</h3>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {currentPhases.map((phase, pIdx) => (
-                    <div key={phase.id} className="p-4 rounded-2xl bg-black/80 border border-gold/30 space-y-3">
+              return (
+                <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+                  <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
+                    <div className="flex items-center gap-2.5 text-gold">
+                      <Ticket size={22} />
                       <div>
-                        <label className="text-[11px] text-gold uppercase font-bold block mb-1">Título de Fase</label>
-                        <input
-                          type="text"
-                          value={phase.title}
-                          onChange={(e) => {
-                            const updated = [...currentPhases];
-                            updated[pIdx].title = e.target.value;
-                            updateTicketing('phases', updated);
-                          }}
-                          className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-bold"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Fechas</label>
-                          <input
-                            type="text"
-                            value={phase.dates}
-                            onChange={(e) => {
-                              const updated = [...currentPhases];
-                              updated[pIdx].dates = e.target.value;
-                              updateTicketing('phases', updated);
-                            }}
-                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Badge de Descuento</label>
-                          <input
-                            type="text"
-                            value={phase.discountBadge || ''}
-                            onChange={(e) => {
-                              const updated = [...currentPhases];
-                              updated[pIdx].discountBadge = e.target.value;
-                              updateTicketing('phases', updated);
-                            }}
-                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="text-[11px] text-cream/70 uppercase block mb-1">Descripción</label>
-                        <textarea
-                          rows={2}
-                          value={phase.description}
-                          onChange={(e) => {
-                            const updated = [...currentPhases];
-                            updated[pIdx].description = e.target.value;
-                            updateTicketing('phases', updated);
-                          }}
-                          className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
-                        />
+                        <h2 className="font-display text-lg sm:text-xl font-bold">5. Sistema de Boletería en Línea y Planes de Acceso</h2>
+                        <p className="text-xs text-cream/70 font-serif italic">
+                          Administra la propuesta operativa, fases de preventa y los 4 planes de llaves sagradas (Jade, Vida, Oro, Plata).
+                        </p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Editor de los 4 Planes (Jade, Vida, Oro, Plata) */}
-              <div className="space-y-4 pt-4 border-t border-gold/20">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <Key size={18} className="text-gold" />
-                    <h3 className="font-display text-base font-bold text-gold">Planes de Llaves Sagradas (4 Planes)</h3>
                   </div>
-                  <span className="text-xs font-mono text-gold/80">Orden: Jade → Vida → Oro → Plata</span>
-                </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {currentPlans.map((plan, plIdx) => (
-                    <div key={plan.id} className="p-5 rounded-2xl bg-black/85 border border-gold/40 space-y-4 shadow-md">
-                      
-                      <div className="flex items-center justify-between border-b border-gold/20 pb-2.5">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-display font-bold uppercase tracking-wider text-gold bg-gold/15 px-2.5 py-0.5 rounded border border-gold/30">
-                            {plan.keyType.toUpperCase()}
-                          </span>
-                          <span className="font-display text-sm text-cream font-bold">{plan.name}</span>
-                        </div>
-                        <span className="text-sm font-display text-gold font-bold">{plan.price}</span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Nombre del Plan</label>
-                          <input
-                            type="text"
-                            value={plan.name}
-                            onChange={(e) => {
-                              const updated = [...currentPlans];
-                              updated[plIdx].name = e.target.value;
-                              updateTicketing('plans', updated);
-                            }}
-                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-bold"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Badge de Etiqueta</label>
-                          <input
-                            type="text"
-                            value={plan.badge}
-                            onChange={(e) => {
-                              const updated = [...currentPlans];
-                              updated[plIdx].badge = e.target.value;
-                              updateTicketing('plans', updated);
-                            }}
-                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Precio (ej: Q350 / Q50)</label>
-                          <input
-                            type="text"
-                            value={plan.price}
-                            onChange={(e) => {
-                              const updated = [...currentPlans];
-                              updated[plIdx].price = e.target.value;
-                              updateTicketing('plans', updated);
-                            }}
-                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-gold font-bold outline-none"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Nota de Precio / Desglose</label>
-                          <input
-                            type="text"
-                            value={plan.priceNote}
-                            onChange={(e) => {
-                              const updated = [...currentPlans];
-                              updated[plIdx].priceNote = e.target.value;
-                              updateTicketing('plans', updated);
-                            }}
-                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
-                          />
-                        </div>
-
-                        <div className="sm:col-span-2">
-                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Capacidad / Personas</label>
-                          <input
-                            type="text"
-                            value={plan.capacityText}
-                            onChange={(e) => {
-                              const updated = [...currentPlans];
-                              updated[plIdx].capacityText = e.target.value;
-                              updateTicketing('plans', updated);
-                            }}
-                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
-                          />
-                        </div>
-
-                        <div className="sm:col-span-2">
-                          <label className="text-[11px] text-cream/70 uppercase block mb-1">Descripción del Plan</label>
-                          <textarea
-                            rows={2}
-                            value={plan.description}
-                            onChange={(e) => {
-                              const updated = [...currentPlans];
-                              updated[plIdx].description = e.target.value;
-                              updateTicketing('plans', updated);
-                            }}
-                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
-                          />
-                        </div>
-
-                        <div className="sm:col-span-2">
-                          <label className="text-[11px] text-cream/70 uppercase block mb-1">
-                            Elementos Incluidos (1 por línea)
-                          </label>
-                          <textarea
-                            rows={3}
-                            value={plan.includes.join('\n')}
-                            onChange={(e) => {
-                              const updated = [...currentPlans];
-                              updated[plIdx].includes = e.target.value.split('\n').filter(Boolean);
-                              updateTicketing('plans', updated);
-                            }}
-                            className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-mono"
-                          />
-                        </div>
-                      </div>
+                  {/* Textos Generales de Boletería */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Badge de Sección
+                      </label>
+                      <input
+                        type="text"
+                        value={currentTicketing.sectionBadge}
+                        onChange={(e) => updateTicketing('sectionBadge', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
                     </div>
-                  ))}
-                </div>
-              </div>
-            </Card>
 
-            {/* SECCIÓN 4: PATROCINIOS CORPORATIVOS Y ALIANZAS */}
+                    <div>
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Título de Sección
+                      </label>
+                      <input
+                        type="text"
+                        value={currentTicketing.sectionTitle}
+                        onChange={(e) => updateTicketing('sectionTitle', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Descripción General de Boletería
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={currentTicketing.sectionDescription}
+                        onChange={(e) => updateTicketing('sectionDescription', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Título Autogestión Digital
+                      </label>
+                      <input
+                        type="text"
+                        value={currentTicketing.selfServiceTitle}
+                        onChange={(e) => updateTicketing('selfServiceTitle', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Nota al Pie (QR / Escáner)
+                      </label>
+                      <input
+                        type="text"
+                        value={currentTicketing.selfServiceFootnote}
+                        onChange={(e) => updateTicketing('selfServiceFootnote', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Descripción de Autogestión
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={currentTicketing.selfServiceDescription}
+                        onChange={(e) => updateTicketing('selfServiceDescription', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Nota de Soporte y Confirmación
+                      </label>
+                      <input
+                        type="text"
+                        value={currentTicketing.supportNote}
+                        onChange={(e) => updateTicketing('supportNote', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Fases de Preventa */}
+                  <div className="space-y-4 pt-4 border-t border-gold/20">
+                    <div className="flex items-center gap-2">
+                      <Calendar size={18} className="text-gold" />
+                      <h3 className="font-display text-base font-bold text-gold">Fases de Preventa (Octubre)</h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {currentPhases.map((phase, pIdx) => (
+                        <div key={phase.id} className="p-4 rounded-2xl bg-black/80 border border-gold/30 space-y-3">
+                          <div>
+                            <label className="text-[11px] text-gold uppercase font-bold block mb-1">Título de Fase</label>
+                            <input
+                              type="text"
+                              value={phase.title}
+                              onChange={(e) => {
+                                const updated = [...currentPhases];
+                                updated[pIdx].title = e.target.value;
+                                updateTicketing('phases', updated);
+                              }}
+                              className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-bold"
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-[11px] text-cream/70 uppercase block mb-1">Fechas / Días</label>
+                              <input
+                                type="text"
+                                value={phase.dates}
+                                onChange={(e) => {
+                                  const updated = [...currentPhases];
+                                  updated[pIdx].dates = e.target.value;
+                                  updateTicketing('phases', updated);
+                                }}
+                                className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[11px] text-cream/70 uppercase block mb-1">Badge Descuento</label>
+                              <input
+                                type="text"
+                                value={phase.discountBadge || ''}
+                                onChange={(e) => {
+                                  const updated = [...currentPhases];
+                                  updated[pIdx].discountBadge = e.target.value;
+                                  updateTicketing('phases', updated);
+                                }}
+                                className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-gold outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="text-[11px] text-cream/70 uppercase block mb-1">Descripción</label>
+                            <textarea
+                              rows={2}
+                              value={phase.description}
+                              onChange={(e) => {
+                                const updated = [...currentPhases];
+                                updated[pIdx].description = e.target.value;
+                                updateTicketing('phases', updated);
+                              }}
+                              className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[11px] text-cream/70 uppercase block mb-1">Beneficios / Horarios (1 por línea)</label>
+                            <textarea
+                              rows={2}
+                              value={phase.highlights.join('\n')}
+                              onChange={(e) => {
+                                const updated = [...currentPhases];
+                                updated[pIdx].highlights = e.target.value.split('\n').filter(Boolean);
+                                updateTicketing('phases', updated);
+                              }}
+                              className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-mono"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Los 4 Planes de Llaves Sagradas */}
+                  <div className="space-y-4 pt-4 border-t border-gold/20">
+                    <div className="flex items-center gap-2">
+                      <Tag size={18} className="text-gold" />
+                      <h3 className="font-display text-base font-bold text-gold">
+                        Los 4 Planes de Llaves Sagradas (Jade, Vida, Oro, Plata)
+                      </h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {currentPlans.map((plan, plIdx) => (
+                        <div key={plan.id} className="p-5 rounded-2xl bg-black/80 border border-gold/30 space-y-4">
+                          <div className="flex items-center justify-between">
+                            <span className="font-display text-sm font-bold text-gold">{plan.name}</span>
+                            <span className="text-xs uppercase px-2.5 py-0.5 rounded border border-gold/40 text-gold font-bold">
+                              Llave {plan.keyType}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="sm:col-span-2">
+                              <label className="text-[11px] text-cream/70 uppercase block mb-1">Nombre Completo del Plan</label>
+                              <input
+                                type="text"
+                                value={plan.name}
+                                onChange={(e) => {
+                                  const updated = [...currentPlans];
+                                  updated[plIdx].name = e.target.value;
+                                  updateTicketing('plans', updated);
+                                }}
+                                className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-bold"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[11px] text-cream/70 uppercase block mb-1">Badge de Tarifa</label>
+                              <input
+                                type="text"
+                                value={plan.badge}
+                                onChange={(e) => {
+                                  const updated = [...currentPlans];
+                                  updated[plIdx].badge = e.target.value;
+                                  updateTicketing('plans', updated);
+                                }}
+                                className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[11px] text-cream/70 uppercase block mb-1">Precio Base</label>
+                              <input
+                                type="text"
+                                value={plan.price}
+                                onChange={(e) => {
+                                  const updated = [...currentPlans];
+                                  updated[plIdx].price = e.target.value;
+                                  updateTicketing('plans', updated);
+                                }}
+                                className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-gold font-bold outline-none"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[11px] text-cream/70 uppercase block mb-1">Nota de Precio / Desglose</label>
+                              <input
+                                type="text"
+                                value={plan.priceNote}
+                                onChange={(e) => {
+                                  const updated = [...currentPlans];
+                                  updated[plIdx].priceNote = e.target.value;
+                                  updateTicketing('plans', updated);
+                                }}
+                                className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                              />
+                            </div>
+
+                            <div className="sm:col-span-2">
+                              <label className="text-[11px] text-cream/70 uppercase block mb-1">Capacidad / Personas</label>
+                              <input
+                                type="text"
+                                value={plan.capacityText}
+                                onChange={(e) => {
+                                  const updated = [...currentPlans];
+                                  updated[plIdx].capacityText = e.target.value;
+                                  updateTicketing('plans', updated);
+                                }}
+                                className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                              />
+                            </div>
+
+                            <div className="sm:col-span-2">
+                              <label className="text-[11px] text-cream/70 uppercase block mb-1">Descripción del Plan</label>
+                              <textarea
+                                rows={2}
+                                value={plan.description}
+                                onChange={(e) => {
+                                  const updated = [...currentPlans];
+                                  updated[plIdx].description = e.target.value;
+                                  updateTicketing('plans', updated);
+                                }}
+                                className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                              />
+                            </div>
+
+                            <div className="sm:col-span-2">
+                              <label className="text-[11px] text-cream/70 uppercase block mb-1">
+                                Elementos Incluidos (1 por línea)
+                              </label>
+                              <textarea
+                                rows={3}
+                                value={plan.includes.join('\n')}
+                                onChange={(e) => {
+                                  const updated = [...currentPlans];
+                                  updated[plIdx].includes = e.target.value.split('\n').filter(Boolean);
+                                  updateTicketing('plans', updated);
+                                }}
+                                className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-mono"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </Card>
+              );
+            })()}
+
+            {/* SECCIÓN 6: PATROCINIOS CORPORATIVOS Y ALIANZAS */}
             {(() => {
               const currentSponsorship = content.theater.sponsorship || DEFAULT_SPONSORSHIP_CONTENT;
               const currentTiers = currentSponsorship.tiers || DEFAULT_SPONSORSHIP_CONTENT.tiers;
@@ -1549,7 +1818,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                   <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
                     <Handshake size={20} />
                     <h2 className="font-display text-lg sm:text-xl font-bold">
-                      4. Alianzas Estratégicas & Oportunidades para Patrocinadores
+                      6. Alianzas Estratégicas & Oportunidades para Patrocinadores
                     </h2>
                   </div>
 
@@ -1724,6 +1993,40 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                 </Card>
               );
             })()}
+
+            {/* SECCIÓN 7: PIE DE PÁGINA DE PRODUCCIÓN EN VIVO */}
+            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+              <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
+                <Shield size={20} />
+                <h2 className="font-display text-lg sm:text-xl font-bold">7. Pie de Página de Producción en Vivo</h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Título del Pie
+                  </label>
+                  <input
+                    type="text"
+                    value={content.theater.footerTitle}
+                    onChange={(e) => updateTheater('footerTitle', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                    Descripción / Subtítulo del Pie
+                  </label>
+                  <input
+                    type="text"
+                    value={content.theater.footerDescription}
+                    onChange={(e) => updateTheater('footerDescription', e.target.value)}
+                    className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                  />
+                </div>
+              </div>
+            </Card>
 
           </div>
         )}
