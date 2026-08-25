@@ -359,7 +359,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       </AnimatePresence>
 
       {/* HERO SECTION CON PORTADA, SOL Y NUBES CELESTIALES */}
-      <section className="relative z-10 pt-6 pb-16 px-4 max-w-6xl mx-auto text-center flex flex-col items-center">
+      <section className="relative z-10 pt-6 pb-16 px-3 sm:px-4 max-w-6xl mx-auto text-center flex flex-col items-center w-full box-border overflow-hidden sm:overflow-visible">
         
         {/* Banner Destacado: Obra en Vivo en Teatro Municipal (Abre en ventana nueva) */}
         <motion.a
@@ -369,31 +369,37 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           initial={{ y: -10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => sound.playClick()}
-          className="mb-6 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-maya-red/30 via-gold/20 to-maya-red/30 border border-gold/50 cursor-pointer shadow-[0_0_20px_rgba(190,141,44,0.25)] flex items-center gap-3 text-left group max-w-2xl"
+          className="w-full max-w-xl mx-auto mb-6 p-2.5 sm:p-3.5 rounded-2xl bg-gradient-to-r from-maya-red/30 via-gold/20 to-maya-red/30 border border-gold/50 cursor-pointer shadow-[0_0_20px_rgba(190,141,44,0.25)] flex items-center gap-2.5 sm:gap-3 text-left group box-border overflow-hidden"
         >
-          <div className="w-9 h-9 rounded-xl bg-gold/20 flex items-center justify-center text-gold shrink-0 border border-gold/40">
-            <Drama size={19} className="text-gold group-hover:rotate-12 transition-transform" />
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gold/20 flex items-center justify-center text-gold shrink-0 border border-gold/40">
+            <Drama size={18} className="text-gold group-hover:rotate-12 transition-transform" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] sm:text-[11px] uppercase font-display font-bold tracking-widest text-gold bg-black/60 px-2 py-0.5 rounded border border-gold/30">
-              {content.bannerBadge}
-            </span>
-            <p className="text-xs sm:text-sm font-display text-cream font-bold leading-tight mt-1 truncate sm:whitespace-normal">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[9px] sm:text-[11px] uppercase font-display font-bold tracking-widest text-gold bg-black/70 px-2 py-0.5 rounded border border-gold/30">
+                {content.bannerBadge}
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm font-display text-cream font-bold leading-tight mt-1 break-words line-clamp-2 sm:line-clamp-none">
               {content.bannerTitle}
             </p>
+          </div>
+          <div className="hidden xs:flex items-center text-gold/70 group-hover:text-gold shrink-0 pl-1">
+            <ExternalLink size={14} />
           </div>
         </motion.a>
 
         {/* Composición Celestial: Sol flotante y Nubes */}
-        <div className="relative w-full max-w-lg md:max-w-xl lg:max-w-2xl mx-auto mb-6 flex items-center justify-center">
+        <div className="relative w-full max-w-lg md:max-w-xl lg:max-w-2xl mx-auto mb-6 flex items-center justify-center overflow-hidden sm:overflow-visible py-2">
           {/* Nube izquierda flotante */}
           <motion.img
             src={nubeIzqPng}
             alt="Nube Mística Izquierda"
-            animate={{ x: [-10, 10, -10], y: [-4, 4, -4] }}
+            animate={{ x: [-6, 6, -6], y: [-3, 3, -3] }}
             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -left-3 sm:-left-10 md:-left-16 lg:-left-24 top-2 w-24 sm:w-32 md:w-40 lg:w-48 opacity-85 pointer-events-none drop-shadow-md z-20"
+            className="absolute left-0 sm:-left-10 md:-left-16 lg:-left-24 top-2 w-20 sm:w-32 md:w-40 lg:w-48 opacity-85 pointer-events-none drop-shadow-md z-20"
           />
 
           {/* Sol resplandeciente central */}
@@ -402,16 +408,16 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             alt="Sol Ancestral Maya"
             animate={{ rotate: 360 }}
             transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-            className="w-32 h-32 sm:w-44 sm:h-44 md:w-52 md:h-52 object-contain drop-shadow-[0_0_35px_rgba(252,207,101,0.6)] z-10 select-none"
+            className="w-28 h-28 sm:w-44 sm:h-44 md:w-52 md:h-52 object-contain drop-shadow-[0_0_35px_rgba(252,207,101,0.6)] z-10 select-none"
           />
 
           {/* Nube derecha flotante */}
           <motion.img
             src={nubeDerPng}
             alt="Nube Mística Derecha"
-            animate={{ x: [10, -10, 10], y: [4, -4, 4] }}
+            animate={{ x: [6, -6, 6], y: [3, -3, 3] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -right-3 sm:-right-10 md:-right-16 lg:-right-24 top-4 w-24 sm:w-32 md:w-40 lg:w-48 opacity-85 pointer-events-none drop-shadow-md z-20"
+            className="absolute right-0 sm:-right-10 md:-right-16 lg:-right-24 top-4 w-20 sm:w-32 md:w-40 lg:w-48 opacity-85 pointer-events-none drop-shadow-md z-20"
           />
         </div>
 
@@ -419,10 +425,10 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs sm:text-sm font-display tracking-widest uppercase mb-4 shadow-[0_0_20px_rgba(190,141,44,0.3)]"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs sm:text-sm font-display tracking-widest uppercase mb-4 shadow-[0_0_20px_rgba(190,141,44,0.3)] max-w-full truncate"
         >
-          <Sparkles size={16} />
-          <span>{content.heroBadge}</span>
+          <Sparkles size={16} className="shrink-0" />
+          <span className="truncate">{content.heroBadge}</span>
         </motion.div>
 
         {/* Título Principal */}
