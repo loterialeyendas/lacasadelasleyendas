@@ -368,15 +368,15 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
           </form>
 
           <div className="pt-2 border-t border-gold/20 flex items-center justify-between text-xs">
-            <button
-              onClick={() => {
-                sound.playClick();
-                onGoToLanding();
-              }}
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sound.playClick()}
               className="text-cream/60 hover:text-gold transition-colors flex items-center gap-1 cursor-pointer"
             >
               <ArrowLeft size={14} /> Volver a la Landing
-            </button>
+            </a>
             <span className="text-[11px] text-gold/60 font-mono">v2.1 • CMS Oficial</span>
           </div>
         </Card>
@@ -414,31 +414,33 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             </div>
           </div>
 
-          {/* Botones de Acción Global */}
+          {/* Botones de Acción Global (Abren en ventana nueva) */}
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            <button
-              onClick={() => {
-                sound.playClick();
-                onGoToTheater();
-              }}
-              className="py-2 px-3 text-xs font-display font-semibold flex items-center gap-1.5 text-maya-red hover:text-cream border border-maya-red/40 hover:border-maya-red rounded-xl bg-maya-red/10 transition-all cursor-pointer"
-              title="Previsualizar Teatro en Vivo"
+            <a
+              href="/rutadeleyendas"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sound.playClick()}
+              className="py-2 px-3 text-xs font-display font-semibold flex items-center gap-1.5 text-maya-red hover:text-cream border border-maya-red/40 hover:border-maya-red rounded-xl bg-maya-red/10 transition-all cursor-pointer shadow-sm"
+              title="Abrir Ruta de Leyendas en nueva ventana"
             >
               <Drama size={14} />
               <span className="hidden xs:inline">Ver Teatro</span>
-            </button>
+              <ExternalLink size={12} className="opacity-70" />
+            </a>
 
-            <button
-              onClick={() => {
-                sound.playClick();
-                onGoToLanding();
-              }}
-              className="py-2 px-3 text-xs font-display font-semibold flex items-center gap-1.5 text-gold hover:text-cream border border-gold/40 hover:border-gold rounded-xl bg-gold/10 transition-all cursor-pointer"
-              title="Previsualizar Portal Landing"
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sound.playClick()}
+              className="py-2 px-3 text-xs font-display font-semibold flex items-center gap-1.5 text-gold hover:text-cream border border-gold/40 hover:border-gold rounded-xl bg-gold/10 transition-all cursor-pointer shadow-sm"
+              title="Abrir Portal Landing en nueva ventana"
             >
               <Eye size={14} />
               <span className="hidden xs:inline">Ver Portal</span>
-            </button>
+              <ExternalLink size={12} className="opacity-70" />
+            </a>
 
             <Button
               onClick={handleSave}

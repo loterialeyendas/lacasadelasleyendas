@@ -62,16 +62,16 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
       {/* Header Sticky con Botón de Regreso */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-obsidian/90 border-b border-gold/30 px-4 py-3.5">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <button 
-            onClick={() => {
-              sound.playClick();
-              onBack();
-            }}
+          <a 
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => sound.playClick()}
             className="flex items-center gap-2 text-gold hover:text-cream transition-colors text-xs sm:text-sm font-display font-bold cursor-pointer group"
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
             <span>VOLVER AL INICIO</span>
-          </button>
+          </a>
 
           <div className="flex items-center gap-3">
             <img 
@@ -84,17 +84,16 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
             </span>
           </div>
 
-          <Button 
-            onClick={() => {
-              sound.playMysticChime();
-              onEnterGame();
-            }}
-            size="sm"
-            className="py-2 px-4 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(190,141,44,0.4)]"
+          <a 
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => sound.playMysticChime()}
+            className="py-2.5 px-4 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(190,141,44,0.4)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold rounded-xl hover:scale-105 transition-transform"
           >
             <Play size={14} className="fill-current" />
             <span>APP DIGITAL</span>
-          </Button>
+          </a>
         </div>
       </header>
 
@@ -340,30 +339,27 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <Button 
-              onClick={() => {
-                sound.playMysticChime();
-                onEnterGame();
-              }}
-              size="lg"
-              className="w-full sm:w-auto px-9 py-4 text-sm sm:text-base inline-flex items-center justify-center gap-2.5 shadow-[0_0_25px_rgba(190,141,44,0.6)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105 rounded-xl"
+            <a 
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sound.playMysticChime()}
+              className="w-full sm:w-auto px-9 py-4 text-sm sm:text-base inline-flex items-center justify-center gap-2.5 shadow-[0_0_25px_rgba(190,141,44,0.6)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold font-bold hover:scale-105 rounded-xl transition-transform"
             >
               <Play size={18} className="fill-obsidian" />
               <span>{content.ctaButtonText}</span>
-            </Button>
+            </a>
 
-            <Button 
-              variant="outline"
-              onClick={() => {
-                sound.playClick();
-                onBack();
-              }}
-              size="lg"
-              className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base inline-flex items-center justify-center gap-2 border-gold text-gold hover:bg-gold/15 rounded-xl"
+            <a 
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sound.playClick()}
+              className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base inline-flex items-center justify-center gap-2 border border-gold text-gold hover:bg-gold/15 rounded-xl font-display font-bold transition-all"
             >
               <ArrowLeft size={16} />
               <span>REGRESAR AL PORTAL</span>
-            </Button>
+            </a>
           </div>
         </Card>
       </section>

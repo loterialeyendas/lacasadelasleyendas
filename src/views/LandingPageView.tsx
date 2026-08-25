@@ -110,20 +110,18 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            {onEnterLiveTheater && (
-              <button 
-                onClick={() => {
-                  sound.playClick();
-                  onEnterLiveTheater();
-                }}
-                className="py-2 px-3 sm:px-4 text-xs sm:text-sm font-display font-bold flex items-center gap-1.5 text-gold hover:text-cream border border-gold/40 hover:border-gold rounded-xl bg-gold/10 hover:bg-gold/20 transition-all cursor-pointer shadow-[0_0_10px_rgba(190,141,44,0.2)]"
-              >
-                <Drama size={15} className="text-maya-red" />
-                <span className="hidden xs:inline">EN VIVO</span>
-                <span className="xs:hidden">TEATRO</span>
-                <span className="hidden sm:inline">(TEATRO)</span>
-              </button>
-            )}
+            <a 
+              href="/rutadeleyendas"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sound.playClick()}
+              className="py-2 px-3 sm:px-4 text-xs sm:text-sm font-display font-bold flex items-center gap-1.5 text-gold hover:text-cream border border-gold/40 hover:border-gold rounded-xl bg-gold/10 hover:bg-gold/20 transition-all cursor-pointer shadow-[0_0_10px_rgba(190,141,44,0.2)]"
+            >
+              <Drama size={15} className="text-maya-red" />
+              <span className="hidden xs:inline">EN VIVO</span>
+              <span className="xs:hidden">TEATRO</span>
+              <span className="hidden sm:inline">(TEATRO)</span>
+            </a>
 
             <Button 
               onClick={() => {
@@ -143,31 +141,29 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       {/* HERO SECTION CON PORTADA, SOL Y NUBES CELESTIALES */}
       <section className="relative z-10 pt-6 pb-16 px-4 max-w-6xl mx-auto text-center flex flex-col items-center">
         
-        {/* Banner Destacado: Obra en Vivo en Teatro Municipal */}
-        {onEnterLiveTheater && (
-          <motion.div
-            initial={{ y: -10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            whileHover={{ scale: 1.02 }}
-            onClick={() => {
-              sound.playClick();
-              onEnterLiveTheater();
-            }}
-            className="mb-6 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-maya-red/30 via-gold/20 to-maya-red/30 border border-gold/50 cursor-pointer shadow-[0_0_20px_rgba(190,141,44,0.25)] flex items-center gap-3 text-left group max-w-2xl"
-          >
-            <div className="w-9 h-9 rounded-xl bg-gold/20 flex items-center justify-center text-gold shrink-0 border border-gold/40">
-              <Drama size={19} className="text-gold group-hover:rotate-12 transition-transform" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <span className="text-[10px] sm:text-[11px] uppercase font-display font-bold tracking-widest text-gold bg-black/60 px-2 py-0.5 rounded border border-gold/30">
-                {content.bannerBadge}
-              </span>
-              <p className="text-xs sm:text-sm font-display text-cream font-bold leading-tight mt-1 truncate sm:whitespace-normal">
-                {content.bannerTitle}
-              </p>
-            </div>
-          </motion.div>
-        )}
+        {/* Banner Destacado: Obra en Vivo en Teatro Municipal (Abre en ventana nueva) */}
+        <motion.a
+          href="/rutadeleyendas"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          whileHover={{ scale: 1.02 }}
+          onClick={() => sound.playClick()}
+          className="mb-6 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-maya-red/30 via-gold/20 to-maya-red/30 border border-gold/50 cursor-pointer shadow-[0_0_20px_rgba(190,141,44,0.25)] flex items-center gap-3 text-left group max-w-2xl"
+        >
+          <div className="w-9 h-9 rounded-xl bg-gold/20 flex items-center justify-center text-gold shrink-0 border border-gold/40">
+            <Drama size={19} className="text-gold group-hover:rotate-12 transition-transform" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="text-[10px] sm:text-[11px] uppercase font-display font-bold tracking-widest text-gold bg-black/60 px-2 py-0.5 rounded border border-gold/30">
+              {content.bannerBadge}
+            </span>
+            <p className="text-xs sm:text-sm font-display text-cream font-bold leading-tight mt-1 truncate sm:whitespace-normal">
+              {content.bannerTitle}
+            </p>
+          </div>
+        </motion.a>
 
         {/* Composición Celestial: Sol flotante y Nubes */}
         <div className="relative w-full max-w-lg md:max-w-xl lg:max-w-2xl mx-auto mb-6 flex items-center justify-center">
