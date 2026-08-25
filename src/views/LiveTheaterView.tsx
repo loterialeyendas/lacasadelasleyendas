@@ -116,27 +116,16 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
             <span>VOLVER AL INICIO</span>
           </a>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <img 
               src={logoPng} 
               alt="Casa de las Leyendas" 
-              className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(190,141,44,0.4)]"
+              className="w-8 h-8 sm:w-9 sm:h-9 object-contain drop-shadow-[0_0_8px_rgba(190,141,44,0.4)]"
             />
-            <span className="hidden sm:inline font-display text-xs tracking-widest text-gold font-bold">
+            <span className="font-display text-xs sm:text-sm tracking-widest text-gold font-bold">
               PRODUCCIÓN EN VIVO
             </span>
           </div>
-
-          <a 
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => sound.playMysticChime()}
-            className="py-2.5 px-4 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(190,141,44,0.4)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold rounded-xl hover:scale-105 transition-transform"
-          >
-            <Play size={14} className="fill-current" />
-            <span>APP DIGITAL</span>
-          </a>
         </div>
       </header>
 
@@ -592,90 +581,51 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
             })}
           </div>
 
-          {/* SIMULADOR INTERACTIVO / RESUMEN DE RESERVACIÓN */}
-          <div className="mt-12 p-6 sm:p-10 rounded-3xl bg-gradient-to-b from-black/95 to-earth-brown/40 border-2 border-gold/70 shadow-[0_0_50px_rgba(190,141,44,0.3)]">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              
-              {/* Información del Plan Seleccionado */}
-              <div className="lg:col-span-7 space-y-4 text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/20 border border-gold/40 text-gold text-xs font-display font-bold">
-                  <Sparkles size={14} />
-                  <span>Resumen de tu Experiencia Teatral</span>
+          {/* PASE TEATRAL DIGITAL QR Y SIMULADOR INTERACTIVO */}
+          <div className="mt-12 flex flex-col items-center">
+            <div className="w-full max-w-md rounded-3xl bg-gradient-to-b from-black/95 via-obsidian to-black border-2 border-gold/80 p-6 sm:p-8 text-center space-y-5 shadow-[0_0_50px_rgba(190,141,44,0.35)] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gold/10 blur-2xl rounded-full pointer-events-none" />
+
+              <div className="flex items-center justify-between border-b border-gold/30 pb-3.5">
+                <div className="flex items-center gap-2.5">
+                  <img src={logoPng} alt="Logo" className="w-7 h-7 object-contain drop-shadow" />
+                  <span className="text-xs sm:text-sm font-display text-gold font-bold tracking-wider">
+                    PASE TEATRAL QR
+                  </span>
                 </div>
+                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-500/50 font-bold">
+                  AUTOGESTIÓN
+                </span>
+              </div>
 
-                <h3 className="text-2xl sm:text-3xl font-display text-cream font-bold">
-                  {selectedPlan.name}
-                </h3>
+              {/* QR Code Simulado Interactivo */}
+              <div className="flex flex-col items-center justify-center p-5 bg-white rounded-2xl shadow-inner mx-auto max-w-[220px]">
+                <QrCode size={140} className="text-obsidian" />
+                <span className="text-[10px] font-mono text-obsidian/80 mt-2 font-bold tracking-wider">
+                  COD: {selectedPlan.keyType.toUpperCase()}-2026-TEATRO
+                </span>
+              </div>
 
-                <p className="text-sm sm:text-base text-cream/90 font-serif italic">
-                  {selectedPlan.description}
-                </p>
-
-                <div className="p-4 rounded-2xl bg-black/60 border border-gold/30 space-y-2 text-xs text-cream/90">
-                  <div className="flex justify-between items-center text-sm font-display font-bold border-b border-gold/20 pb-2">
-                    <span className="text-gold">Inversión Estimada:</span>
-                    <span className="text-gold text-lg">{selectedPlan.price}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-cream/70 pt-1">
-                    <span>Modalidad de Entrada:</span>
-                    <span className="font-semibold text-cream">{selectedPlan.capacityText}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-cream/70">
-                    <span>Fase de Adquisición:</span>
-                    <span className="font-semibold text-gold">
-                      {phases.find(p => p.id === activePhaseId)?.title || 'Preventa Cultural'}
-                    </span>
-                  </div>
-                </div>
-
-                <p className="text-[11px] text-cream/60 font-sans italic">
-                  * {ticketing.supportNote}
+              <div className="space-y-1.5 text-center">
+                <span className="text-xs uppercase tracking-widest text-gold font-display font-bold block">
+                  {selectedPlan.name} • {selectedPlan.price}
+                </span>
+                <p className="text-xs text-cream/80 font-serif italic">
+                  Teatro Municipal de Quetzaltenango • 31 de Octubre
                 </p>
               </div>
 
-              {/* Boleto Digital Simulado con QR */}
-              <div className="lg:col-span-5 flex flex-col items-center">
-                <div className="w-full max-w-sm rounded-3xl bg-black/90 border-2 border-gold p-6 text-center space-y-4 shadow-[0_0_30px_rgba(190,141,44,0.3)] relative overflow-hidden">
-                  <div className="flex items-center justify-between border-b border-gold/30 pb-3">
-                    <div className="flex items-center gap-2">
-                      <img src={logoPng} alt="Logo" className="w-6 h-6 object-contain" />
-                      <span className="text-xs font-display text-gold font-bold">PASE TEATRAL QR</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-500/40">
-                      DISPONIBLE
-                    </span>
-                  </div>
-
-                  {/* QR Code Simulado Interactivo */}
-                  <div className="flex flex-col items-center justify-center p-4 bg-white rounded-2xl shadow-inner my-2">
-                    <QrCode size={130} className="text-obsidian" />
-                    <span className="text-[10px] font-mono text-obsidian/70 mt-1 font-bold">
-                      COD: {selectedPlan.keyType.toUpperCase()}-2026-TEATRO
-                    </span>
-                  </div>
-
-                  <div className="space-y-1 text-left text-xs">
-                    <div className="text-gold font-display font-bold truncate">
-                      {selectedPlan.name}
-                    </div>
-                    <div className="text-cream/70 text-[11px]">
-                      Teatro Municipal de Quetzaltenango • 31 Oct
-                    </div>
-                  </div>
-
-                  <Button
-                    onClick={() => {
-                      sound.playMysticChime();
-                      setShowSimulatedPass(true);
-                    }}
-                    size="sm"
-                    className="w-full py-3 text-xs font-display font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(190,141,44,0.5)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold hover:scale-105 rounded-xl transition-all"
-                  >
-                    <Send size={14} />
-                    <span>SIMULAR RESERVACIÓN DE BOLETO</span>
-                  </Button>
-                </div>
-              </div>
+              <Button
+                onClick={() => {
+                  sound.playMysticChime();
+                  setShowSimulatedPass(true);
+                }}
+                size="md"
+                className="w-full py-3.5 text-xs sm:text-sm font-display font-bold flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(190,141,44,0.5)] text-obsidian bg-gradient-to-r from-gold via-cream to-gold hover:scale-105 rounded-xl transition-all cursor-pointer"
+              >
+                <Send size={15} />
+                <span>SIMULAR RESERVACIÓN DE BOLETO</span>
+              </Button>
             </div>
           </div>
         </div>
