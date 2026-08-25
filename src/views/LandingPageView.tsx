@@ -133,20 +133,8 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             </div>
           </div>
 
-          {/* Botón de WhatsApp y Toggle del Menú */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <a
-              href={WHATSAPP_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => sound.playClick()}
-              className="py-1.5 px-2.5 sm:py-2 sm:px-3.5 text-[11px] sm:text-xs font-display font-bold flex items-center gap-1.5 text-emerald-300 hover:text-white border border-emerald-500/50 hover:border-emerald-400 rounded-xl bg-emerald-950/80 hover:bg-emerald-900/80 transition-all cursor-pointer shadow-[0_0_12px_rgba(16,185,129,0.25)] active:scale-95"
-              title="Chatear por WhatsApp: +502 4674-1239"
-            >
-              <MessageCircle size={14} className="text-emerald-400 fill-emerald-400" />
-              <span className="hidden xs:inline">WhatsApp</span>
-            </a>
-
+          {/* Toggle del Menú */}
+          <div className="flex items-center gap-2 shrink-0">
             {/* BOTÓN DEL MENÚ DESPLEGABLE */}
             <button
               onClick={() => {
@@ -154,7 +142,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
               aria-label="Abrir Menú de Navegación"
-              className="py-1.5 px-2.5 sm:py-2 sm:px-3.5 rounded-xl border border-gold/50 hover:border-gold bg-gold/15 hover:bg-gold/25 text-gold transition-all cursor-pointer shadow-[0_0_12px_rgba(190,141,44,0.25)] active:scale-95 flex items-center gap-1.5 font-display text-xs sm:text-sm font-bold"
+              className="py-1.5 px-3 sm:py-2 sm:px-4 rounded-xl border border-gold/50 hover:border-gold bg-gold/15 hover:bg-gold/25 text-gold transition-all cursor-pointer shadow-[0_0_12px_rgba(190,141,44,0.25)] active:scale-95 flex items-center gap-1.5 font-display text-xs sm:text-sm font-bold"
             >
               {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
               <span>MENÚ</span>
@@ -213,30 +201,6 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     <X size={18} />
                   </button>
                 </div>
-
-                {/* BOTÓN OFICIAL DE WHATSAPP (DESTACADO) */}
-                <a
-                  href={WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => sound.playClick()}
-                  className="w-full p-4 rounded-2xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 border-2 border-emerald-500/80 text-emerald-200 flex items-center gap-3.5 shadow-[0_0_25px_rgba(16,185,129,0.35)] hover:scale-[1.02] active:scale-95 transition-all group"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-emerald-500 text-obsidian flex items-center justify-center shrink-0 shadow-md group-hover:rotate-12 transition-transform">
-                    <MessageCircle size={24} className="fill-obsidian" />
-                  </div>
-                  <div className="flex-1 text-left min-w-0">
-                    <span className="text-[10px] uppercase font-display font-bold tracking-widest text-emerald-400 block">
-                      ATENCIÓN DIRECTA & PREGUNTAS
-                    </span>
-                    <span className="text-sm font-display font-bold text-white block">
-                      WhatsApp: +502 4674-1239
-                    </span>
-                    <span className="text-[11px] text-emerald-300/80 font-sans italic block">
-                      Toca para chatear con nosotros al instante →
-                    </span>
-                  </div>
-                </a>
 
                 {/* GRUPO 1: EXPERIENCIA DIGITAL & JUEGO */}
                 <div className="space-y-2">
@@ -829,6 +793,32 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           © {new Date().getFullYear()} lacasadelasleyendas.com. Todos los derechos reservados.
         </p>
       </footer>
+
+      {/* BOTÓN FLOTANTE DE WHATSAPP (ESQUINA INFERIOR DERECHA) */}
+      <motion.a
+        href={WHATSAPP_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => sound.playClick()}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        whileHover={{ scale: 1.06 }}
+        whileTap={{ scale: 0.94 }}
+        className="fixed bottom-5 right-5 z-40 py-2.5 px-3.5 sm:py-3 sm:px-4 text-xs font-display font-bold flex items-center gap-2 text-emerald-300 hover:text-white border-2 border-emerald-500/80 hover:border-emerald-400 rounded-2xl bg-gradient-to-r from-emerald-950/95 via-emerald-900/95 to-emerald-950/95 shadow-[0_0_20px_rgba(16,185,129,0.45)] hover:shadow-[0_0_30px_rgba(16,185,129,0.7)] transition-all cursor-pointer backdrop-blur-md group"
+        title="Chatear por WhatsApp: +502 4674-1239"
+      >
+        <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-110 transition-transform">
+          <MessageCircle size={16} className="text-emerald-400 fill-emerald-400" />
+        </div>
+        <div className="flex flex-col text-left leading-tight">
+          <span className="text-[9px] uppercase tracking-widest text-emerald-400 font-bold">
+            WhatsApp
+          </span>
+          <span className="text-xs font-mono font-bold text-white">
+            +502 4674-1239
+          </span>
+        </div>
+      </motion.a>
     </div>
   );
 };
