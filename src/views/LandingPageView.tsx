@@ -381,7 +381,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       {/* PILARES DE LA EXPERIENCIA */}
       <section className="relative z-10 py-14 px-4 max-w-6xl mx-auto border-t border-gold/20">
         <div className="text-center space-y-2 mb-10">
-          <span className="text-xs sm:text-sm font-display text-maya-red tracking-widest uppercase font-bold">
+          <span className="text-xs sm:text-sm font-display text-gold tracking-widest uppercase font-bold">
             {content.pillarsSectionBadge}
           </span>
           <h2 className="text-2xl sm:text-4xl font-display text-gold">

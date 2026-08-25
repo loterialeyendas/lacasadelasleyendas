@@ -100,13 +100,13 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
       {/* Hero Principal del Evento Escénico */}
       <section className="relative z-10 pt-8 pb-14 px-4 max-w-5xl mx-auto text-center flex flex-col items-center">
         
-        {/* Badge de Categoría */}
+        {/* Badge de Categoría con Alto Contraste */}
         <motion.div
           initial={{ y: -10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-maya-red/20 border border-maya-red/50 text-red-200 text-xs sm:text-sm font-display tracking-widest uppercase mb-4 shadow-lg"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/85 border border-gold/70 text-gold text-xs sm:text-sm font-display font-bold tracking-widest uppercase mb-4 shadow-[0_0_20px_rgba(190,141,44,0.3)]"
         >
-          <Drama size={16} className="text-maya-red" />
+          <Drama size={16} className="text-gold" />
           <span>{content.badge}</span>
         </motion.div>
 
@@ -256,7 +256,7 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
         {/* LAS 4 ESTACIONES ESCÉNICAS */}
         <div className="space-y-6">
           <div className="text-center space-y-1 mb-8">
-            <span className="text-xs font-display uppercase tracking-widest text-maya-red font-bold">
+            <span className="text-xs font-display uppercase tracking-widest text-gold font-bold">
               {content.stationsSectionBadge}
             </span>
             <h3 className="text-2xl sm:text-3xl font-display text-gold">

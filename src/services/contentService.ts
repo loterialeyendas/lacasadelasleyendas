@@ -151,7 +151,7 @@ export const DEFAULT_LANDING_CONTENT: LandingContent = {
       id: 'lock-vida',
       name: 'Candado de Vida y Trascendencia',
       type: 'vida',
-      badgeBg: 'bg-maya-red/25 text-red-100 border-maya-red/50 font-bold',
+      badgeBg: 'bg-black/90 text-amber-200 border-gold/60 font-bold',
       subtitle: 'El Trascender de las Almas y la Memoria',
       question: '¿Por qué el Carretón y La Llorona siguen recorriendo las calles empedradas?',
       answer: 'Recuerdan el valor de la vida terrenal y la penitencia eterna de las almas que buscan redención y paz en la noche.',
@@ -241,7 +241,7 @@ export const DEFAULT_THEATER_CONTENT: LiveTheaterContent = {
       legend: 'La Vanushka',
       code: 'VANU',
       badge: 'Gran Escenario Principal & Danza',
-      badgeColor: 'border-maya-red/40 text-red-200 bg-maya-red/20',
+      badgeColor: 'border-gold/70 text-gold bg-black/90 font-bold shadow-md',
       description: 'El escenario principal del teatro albergará la escena culminante con la conmovedora leyenda de amor y destino de la gitana Vanushka Cárdenas en Quetzaltenango, destacando por su despliegue coreográfico, escenografía de época y trabajo actoral de alto nivel artístico.',
       highlights: ['Escenografía de época', 'Gran despliegue coreográfico', 'Elenco teatral estelar'],
       imageUrl: ''
@@ -270,11 +270,13 @@ export function getLocalContent(): SiteContent {
       // Auto-migrar la estación de la Siguanaba a La Vanushka si viene del caché anterior
       let theaterStations = parsed.theater?.stations || DEFAULT_THEATER_CONTENT.stations;
       theaterStations = theaterStations.map((st: TheaterStationContent) => {
-        if (st.number === 4 && (st.legend === 'La Siguanaba' || !st.legend)) {
+        if (st.number === 4) {
+          const isOldBadge = !st.badgeColor || st.badgeColor.includes('red-200') || st.badgeColor.includes('maya-red/20');
           return {
             ...st,
-            legend: 'La Vanushka',
+            legend: (st.legend === 'La Siguanaba' || !st.legend) ? 'La Vanushka' : st.legend,
             code: st.code === 'SIGU' ? 'VANU' : (st.code || 'VANU'),
+            badgeColor: isOldBadge ? 'border-gold/70 text-gold bg-black/90 font-bold shadow-md' : st.badgeColor,
             description: st.description.includes('Vanushka') 
               ? st.description 
               : 'El escenario principal del teatro albergará la escena culminante con la conmovedora leyenda de amor y destino de la gitana Vanushka Cárdenas en Quetzaltenango, destacando por su despliegue coreográfico, escenografía de época y trabajo actoral de alto nivel artístico.'
@@ -315,11 +317,13 @@ export async function fetchSiteContent(): Promise<SiteContent> {
       
       let theaterStations = remote.theater?.stations || DEFAULT_THEATER_CONTENT.stations;
       theaterStations = theaterStations.map((st: TheaterStationContent) => {
-        if (st.number === 4 && (st.legend === 'La Siguanaba' || !st.legend)) {
+        if (st.number === 4) {
+          const isOldBadge = !st.badgeColor || st.badgeColor.includes('red-200') || st.badgeColor.includes('maya-red/20');
           return {
             ...st,
-            legend: 'La Vanushka',
-            code: st.code === 'SIGU' ? 'VANU' : (st.code || 'VANU')
+            legend: (st.legend === 'La Siguanaba' || !st.legend) ? 'La Vanushka' : st.legend,
+            code: st.code === 'SIGU' ? 'VANU' : (st.code || 'VANU'),
+            badgeColor: isOldBadge ? 'border-gold/70 text-gold bg-black/90 font-bold shadow-md' : st.badgeColor
           };
         }
         return st;
