@@ -133,43 +133,31 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             </div>
           </div>
 
-          {/* Botones de Acción y Toggle del Menú */}
-          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-            <a 
-              href="/rutadeleyendas"
+          {/* Botón de WhatsApp y Toggle del Menú */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <a
+              href={WHATSAPP_LINK}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sound.playClick()}
-              className="py-1.5 px-2.5 sm:py-2 sm:px-4 text-[11px] sm:text-sm font-display font-bold flex items-center gap-1 sm:gap-1.5 text-gold hover:text-cream border border-gold/40 hover:border-gold rounded-xl bg-gold/10 hover:bg-gold/20 transition-all cursor-pointer shadow-[0_0_10px_rgba(190,141,44,0.2)] active:scale-95"
+              className="py-1.5 px-2.5 sm:py-2 sm:px-3.5 text-[11px] sm:text-xs font-display font-bold flex items-center gap-1.5 text-emerald-300 hover:text-white border border-emerald-500/50 hover:border-emerald-400 rounded-xl bg-emerald-950/80 hover:bg-emerald-900/80 transition-all cursor-pointer shadow-[0_0_12px_rgba(16,185,129,0.25)] active:scale-95"
+              title="Chatear por WhatsApp: +502 4674-1239"
             >
-              <Drama size={14} className="text-maya-red" />
-              <span className="xs:hidden">TEATRO</span>
-              <span className="hidden xs:inline sm:hidden">EN VIVO</span>
-              <span className="hidden sm:inline">EN VIVO (TEATRO)</span>
+              <MessageCircle size={14} className="text-emerald-400 fill-emerald-400" />
+              <span className="hidden xs:inline">WhatsApp</span>
             </a>
 
-            <Button 
-              onClick={() => {
-                sound.playMysticChime();
-                onEnterGame();
-              }}
-              size="sm"
-              className="py-1.5 px-2.5 sm:py-2.5 sm:px-5 text-[11px] sm:text-sm font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(190,141,44,0.4)] active:scale-95"
-            >
-              <Play size={13} className="fill-current" />
-              <span>{content.playButtonText || 'JUGAR'}</span>
-            </Button>
-
-            {/* BOTÓN HAMBURGUESA / MENÚ DESPLEGABLE */}
+            {/* BOTÓN DEL MENÚ DESPLEGABLE */}
             <button
               onClick={() => {
                 sound.playClick();
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
               aria-label="Abrir Menú de Navegación"
-              className="p-2 sm:p-2.5 rounded-xl border border-gold/40 hover:border-gold bg-gold/15 hover:bg-gold/25 text-gold transition-all cursor-pointer shadow-sm active:scale-95 flex items-center justify-center"
+              className="py-1.5 px-2.5 sm:py-2 sm:px-3.5 rounded-xl border border-gold/50 hover:border-gold bg-gold/15 hover:bg-gold/25 text-gold transition-all cursor-pointer shadow-[0_0_12px_rgba(190,141,44,0.25)] active:scale-95 flex items-center gap-1.5 font-display text-xs sm:text-sm font-bold"
             >
-              {isMobileMenuOpen ? <X size={19} /> : <Menu size={19} />}
+              {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+              <span>MENÚ</span>
             </button>
           </div>
         </div>
