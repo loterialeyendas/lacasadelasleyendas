@@ -22,7 +22,11 @@ import {
   ArrowRight,
   Send,
   X,
-  MessageCircle
+  MessageCircle,
+  Building2,
+  Handshake,
+  Crown,
+  Award
 } from 'lucide-react';
 import { Button, Card } from '../components/Theme';
 import { sound } from '../lib/audio';
@@ -31,6 +35,7 @@ import {
   TicketPlanContent,
   DEFAULT_THEATER_CONTENT, 
   DEFAULT_TICKETING_CONTENT,
+  DEFAULT_SPONSORSHIP_CONTENT,
   fetchSiteContent, 
   getLocalContent 
 } from '../services/contentService';
@@ -71,6 +76,7 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
   }, []);
 
   const ticketing = content.ticketing || DEFAULT_TICKETING_CONTENT;
+  const sponsorship = content.sponsorship || DEFAULT_SPONSORSHIP_CONTENT;
   const plans = (ticketing.plans && ticketing.plans.length > 0) ? ticketing.plans : DEFAULT_TICKETING_CONTENT.plans;
   const phases = (ticketing.phases && ticketing.phases.length > 0) ? ticketing.phases : DEFAULT_TICKETING_CONTENT.phases;
 
@@ -628,6 +634,152 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
               </Button>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* SECCIÓN CORPORATIVA: ALIANZAS ESTRATÉGICAS Y OPORTUNIDADES PARA PATROCINADORES */}
+      <section id="patrocinios" className="relative z-10 py-16 px-4 max-w-6xl mx-auto border-t border-gold/20">
+        <div className="space-y-12">
+          
+          {/* Cabecera de Patrocinios */}
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs font-display font-bold tracking-widest uppercase shadow-sm">
+              <Handshake size={15} />
+              <span>{sponsorship.sectionBadge}</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-4xl font-display text-cream font-bold leading-tight">
+              {sponsorship.sectionTitle}
+            </h2>
+
+            <p className="text-sm sm:text-base text-cream/80 font-serif italic leading-relaxed">
+              {sponsorship.sectionDescription}
+            </p>
+          </div>
+
+          {/* Cards de Categorías de Patrocinio */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {sponsorship.tiers.map((tier) => {
+              const isLeyenda = tier.id === 'leyenda';
+              const isCultural = tier.id === 'cultural';
+
+              return (
+                <motion.div
+                  key={tier.id}
+                  whileHover={{ y: -6 }}
+                  className={`p-6 sm:p-7 rounded-3xl border flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${
+                    isLeyenda
+                      ? 'bg-gradient-to-b from-black via-earth-brown/40 to-black border-2 border-gold shadow-[0_0_35px_rgba(190,141,44,0.35)]'
+                      : isCultural
+                      ? 'bg-black/85 border-gold/60 shadow-lg'
+                      : 'bg-black/70 border-gold/30 hover:border-gold/60'
+                  }`}
+                >
+                  {isLeyenda && (
+                    <div className="absolute top-0 right-0 bg-gradient-to-l from-gold to-amber-500 text-obsidian text-[10px] font-display font-bold tracking-wider py-1 px-4 rounded-bl-xl uppercase shadow-md flex items-center gap-1">
+                      <Crown size={12} className="fill-obsidian" /> ALIADO PRINCIPAL
+                    </div>
+                  )}
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between pt-1">
+                      <span className={`text-[10px] uppercase font-display font-bold tracking-wider px-3 py-1 rounded-full border ${
+                        isLeyenda 
+                          ? 'bg-gold/20 text-gold border-gold/50' 
+                          : isCultural 
+                          ? 'bg-cyan-950/80 text-cyan-300 border-cyan-500/40' 
+                          : 'bg-slate-800 text-slate-200 border-slate-600'
+                      }`}>
+                        {tier.badge}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xl sm:text-2xl font-display text-cream font-bold">
+                        {tier.name}
+                      </h3>
+                      <div className="mt-2.5 p-3.5 rounded-xl bg-gold/10 border border-gold/30 text-left space-y-0.5">
+                        <span className="text-[10px] text-cream/70 font-mono uppercase block">
+                          Aporte / Inversión:
+                        </span>
+                        <span className="text-sm sm:text-base font-display text-gold font-bold block leading-snug">
+                          {tier.investment}
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-cream/85 font-serif italic leading-relaxed">
+                      "{tier.description}"
+                    </p>
+
+                    {/* Beneficios Clave */}
+                    <div className="space-y-2 pt-3 border-t border-gold/20 text-xs">
+                      <span className="text-[11px] font-display text-gold font-bold uppercase tracking-wider block">
+                        Beneficios Clave:
+                      </span>
+                      {tier.benefits.map((benefit, idx) => (
+                        <div key={idx} className="flex items-start gap-2 text-cream/90 font-sans">
+                          <Check size={14} className="text-gold shrink-0 mt-0.5" />
+                          <span className="leading-snug text-xs">{benefit}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Botón de Contacto por WhatsApp para esta Categoría */}
+                  <div className="pt-6 mt-auto">
+                    <a
+                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola%20Casa%20de%20las%20Leyendas,%20deseamos%20informaci%C3%B3n%20para%20participar%20con%20el%20${encodeURIComponent(tier.name)}%20(${encodeURIComponent(tier.badge)}).`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => sound.playClick()}
+                      className={`w-full py-3 px-4 rounded-xl text-xs font-display font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md ${
+                        isLeyenda
+                          ? 'bg-gradient-to-r from-gold via-cream to-gold text-obsidian hover:scale-105 shadow-[0_0_15px_rgba(190,141,44,0.4)]'
+                          : 'border border-gold text-gold hover:bg-gold/15'
+                      }`}
+                    >
+                      <MessageCircle size={14} className={isLeyenda ? 'fill-obsidian' : 'text-gold'} />
+                      <span>SOLICITAR CONVENIO</span>
+                    </a>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Banner de Contacto Corporativo y Facturación */}
+          <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-black via-obsidian to-black border-2 border-gold/60 text-center space-y-4 shadow-[0_0_40px_rgba(190,141,44,0.25)] relative overflow-hidden">
+            <div className="w-12 h-12 rounded-2xl bg-gold/15 border border-gold/40 flex items-center justify-center text-gold mx-auto shadow-inner">
+              <Building2 size={24} />
+            </div>
+
+            <div className="space-y-1.5 max-w-2xl mx-auto">
+              <span className="text-xs font-display text-gold font-bold uppercase tracking-widest block">
+                {sponsorship.contactBadge}
+              </span>
+              <h3 className="text-xl sm:text-3xl font-display text-cream font-bold">
+                {sponsorship.contactTitle}
+              </h3>
+              <p className="text-xs sm:text-sm text-cream/80 font-serif italic">
+                {sponsorship.contactDescription}
+              </p>
+            </div>
+
+            <div className="pt-2 flex justify-center">
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(sponsorship.whatsappMessage)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => sound.playClick()}
+                className="py-3.5 px-8 text-xs sm:text-sm font-display font-bold inline-flex items-center gap-2.5 shadow-[0_0_25px_rgba(16,185,129,0.4)] text-emerald-100 bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 border-2 border-emerald-500 hover:border-emerald-400 hover:scale-105 rounded-2xl transition-all cursor-pointer"
+              >
+                <MessageCircle size={18} className="text-emerald-400 fill-emerald-400" />
+                <span>{sponsorship.contactButtonText}</span>
+              </a>
+            </div>
+          </div>
+
         </div>
       </section>
 

@@ -100,6 +100,28 @@ export interface TheaterTicketingContent {
   supportNote: string;
 }
 
+export interface SponsorTierContent {
+  id: string;
+  name: string;
+  badge: string;
+  investment: string;
+  description: string;
+  benefits: string[];
+  isFeatured?: boolean;
+}
+
+export interface TheaterSponsorshipContent {
+  sectionBadge: string;
+  sectionTitle: string;
+  sectionDescription: string;
+  tiers: SponsorTierContent[];
+  contactBadge: string;
+  contactTitle: string;
+  contactDescription: string;
+  contactButtonText: string;
+  whatsappMessage: string;
+}
+
 export interface LiveTheaterContent {
   badge: string;
   title: string;
@@ -126,6 +148,7 @@ export interface LiveTheaterContent {
   stationsSectionTitle: string;
   stations: TheaterStationContent[];
   ticketing: TheaterTicketingContent; // Sistema de boletería en línea y planes
+  sponsorship: TheaterSponsorshipContent; // Alianzas estratégicas y patrocinadores
   footerTitle: string;
   footerDescription: string;
 }
@@ -321,6 +344,60 @@ export const DEFAULT_TICKETING_CONTENT: TheaterTicketingContent = {
   supportNote: 'Los pagos en línea contarán con confirmación inmediata por WhatsApp y correo electrónico con el boleto digital QR adjunto.'
 };
 
+export const DEFAULT_SPONSORSHIP_CONTENT: TheaterSponsorshipContent = {
+  sectionBadge: 'Marcas & Alianzas Corporativas',
+  sectionTitle: 'Alianzas Estratégicas y Oportunidades para Patrocinadores',
+  sectionDescription: 'Una producción cultural de esta magnitud representa una vitrina comercial excelente para marcas comprometidas con el desarrollo artístico y el turismo de Xela. Ofrecemos tres categorías de patrocinio corporativo:',
+  tiers: [
+    {
+      id: 'leyenda',
+      name: 'Patrocinio Leyenda',
+      badge: 'Aliado Principal',
+      investment: 'Q5,000.00 o su equivalente en especie',
+      description: 'Presencia de marca integrada en la escenografía de la estación de cierre, mención destacada en la campaña publicitaria digital y física, y presencia en los pases de acceso digital. Presencia en campañas digitales y físicas.',
+      benefits: [
+        'Presencia de marca integrada en la escenografía de la estación de cierre',
+        'Mención destacada en campaña publicitaria digital y física',
+        'Presencia oficial en los pases de acceso digital (QR)',
+        'Menciones de agradecimiento en vivo durante las funciones'
+      ],
+      isFeatured: true
+    },
+    {
+      id: 'cultural',
+      name: 'Patrocinio Cultural',
+      badge: 'Aliados del Foyer',
+      investment: 'Q2,500.00 o su equivalente en especie',
+      description: 'Ubicación preferencial de tótems informativos en el área de recepción y descanso, ideal para empresas de servicios, banca o gastronomía, con difusión constante en redes sociales durante octubre.',
+      benefits: [
+        'Ubicación preferencial de tótems en recepción y descanso',
+        'Ideal para empresas de servicios, banca o gastronomía',
+        'Difusión constante en redes sociales durante todo octubre',
+        'Logotipo en materiales institucionales del evento'
+      ],
+      isFeatured: false
+    },
+    {
+      id: 'especial',
+      name: 'Patrocinio Especial',
+      badge: 'Mecenas del Patrimonio',
+      investment: 'Q1,000.00 o su equivalente en especie',
+      description: 'Inserción del logotipo corporativo en la boletería digital y en el panel institucional de agradecimiento ubicado en la fachada del Teatro Municipal la noche del evento.',
+      benefits: [
+        'Inserción de logotipo corporativo en boletería digital',
+        'Panel institucional de agradecimiento en fachada del Teatro Municipal',
+        'Agradecimiento público en memoria digital del proyecto'
+      ],
+      isFeatured: false
+    }
+  ],
+  contactBadge: 'Contacto Corporativo',
+  contactTitle: '¿Deseas unir tu marca a esta experiencia legendaria?',
+  contactDescription: 'Comunícate directamente con la comisión organizadora para formalizar convenios institucionales, facturación y detalles de activación de marca.',
+  contactButtonText: 'CONECTAR CON LA ORGANIZACIÓN POR WHATSAPP',
+  whatsappMessage: 'Hola Comisión Organizadora de La Casa de las Leyendas, represento a una marca y deseamos información para participar como patrocinadores del evento teatral.'
+};
+
 export const DEFAULT_THEATER_CONTENT: LiveTheaterContent = {
   badge: 'Producción Escénica Inmersiva',
   title: 'LA CASA DE LAS LEYENDAS',
@@ -340,30 +417,30 @@ export const DEFAULT_THEATER_CONTENT: LiveTheaterContent = {
   groupTitle: 'Grupos Controlados & Horarios',
   groupDescription: 'Los visitantes accederán en grupos controlados de máximo 15 personas cada 12 minutos, iniciando el trayecto desde el vestíbulo principal. El recorrido completo tendrá una duración aproximada de 45 minutos.',
   groupFootnote: 'Aforo limitado para una inmersión íntima',
-  guideTitle: 'El Guía de la Tradición (Maestro de Ceremonias)',
-  guideDescription: 'Un actor con indumentaria de época o inspirado en personajes icónicos de la literatura popular recibirá a los asistentes, entregando un farol de luz ambiental y explicando las normas de convivencia y seguridad de la travesía.',
-  guideFootnote: 'Farol ceremonial entregado a cada grupo',
-  stationsSectionBadge: 'Recorrido Inmersivo por el Teatro',
-  stationsSectionTitle: 'LAS ESTACIONES ESCÉNICAS',
+  guideTitle: 'Personaje Guía & Farol Místico',
+  guideDescription: 'Cada grupo será conducido por un personaje guía caracterizado que portará un farol ceremonial, asegurando la inmersión atmosférica y guiando al público a través de los cuatro actos del recorrido.',
+  guideFootnote: 'Acompañamiento teatral continuo',
+  stationsSectionBadge: 'Los 4 Actos Escénicos',
+  stationsSectionTitle: 'ESTACIONES ESCÉNICAS EN EL TEATRO',
   stations: [
     {
       number: 1,
-      location: 'Los Sótanos',
-      legend: 'La Llorona',
-      code: 'LLOR',
-      badge: 'Arquitectura Oculta & Misterio',
-      badgeColor: 'border-cyan-500/40 text-cyan-300 bg-cyan-950/40',
-      description: 'El diseño sonoro de ambiente y efectos lumínicos guiarán al grupo por los espacios arquitectónicos más resguardados del teatro, recreando la atmósfera clásica de esta leyenda nacional.',
-      highlights: ['Diseño sonoro envolvente', 'Efectos lumínicos inmersivos', 'Atmósfera colonial clásica'],
+      location: 'El Vestíbulo Principal',
+      legend: 'El Sombrerón',
+      code: 'SOMB',
+      badge: 'Bienvenida & Apertura Mística',
+      badgeColor: 'border-amber-400/40 text-amber-300 bg-amber-900/40',
+      description: 'Recepción del público con ambientación colonial, donde se revelará la historia del galán misterioso que trenza los cabellos y encanta las noches con su serenata.',
+      highlights: ['Recepción y ambientación colonial', 'Efectos de sombras y susurros', 'El farolero místico guía'],
       imageUrl: ''
     },
     {
       number: 2,
-      location: 'Los Palcos Altos',
-      legend: 'El Sombrerón',
-      code: 'SOMB',
-      badge: 'Música Acústica & Tradición Oral',
-      badgeColor: 'border-gold/40 text-gold bg-gold/10',
+      location: 'Los Pasillos y Palcos',
+      legend: 'La Llorona',
+      code: 'LLOR',
+      badge: 'Música Tradicional en Vivo',
+      badgeColor: 'border-blue-400/40 text-blue-300 bg-blue-900/40',
       description: 'Un espacio ambientado con música tradicional acústica en vivo, donde la narrativa oral cobra protagonismo a través de una emotiva y cautivadora interpretación actoral.',
       highlights: ['Música tradicional en vivo', 'Serenatas y guitarra acústica', 'Narrativa oral de época'],
       imageUrl: ''
@@ -392,6 +469,7 @@ export const DEFAULT_THEATER_CONTENT: LiveTheaterContent = {
     }
   ],
   ticketing: DEFAULT_TICKETING_CONTENT,
+  sponsorship: DEFAULT_SPONSORSHIP_CONTENT,
   footerTitle: 'LA CASA DE LAS LEYENDAS • TEATRO MUNICIPAL DE QUETZALTENANGO',
   footerDescription: '31 de Octubre de 2026 • Turismo Cultural, Arte Dramático y Patrimonio Intangible de Guatemala.'
 };
@@ -441,6 +519,13 @@ export function getLocalContent(): SiteContent {
           phases: (parsed.theater?.ticketing?.phases && parsed.theater.ticketing.phases.length > 0)
             ? parsed.theater.ticketing.phases
             : DEFAULT_TICKETING_CONTENT.phases
+        },
+        sponsorship: {
+          ...DEFAULT_SPONSORSHIP_CONTENT,
+          ...(parsed.theater?.sponsorship || {}),
+          tiers: (parsed.theater?.sponsorship?.tiers && parsed.theater.sponsorship.tiers.length > 0)
+            ? parsed.theater.sponsorship.tiers
+            : DEFAULT_SPONSORSHIP_CONTENT.tiers
         }
       };
 
@@ -497,16 +582,23 @@ export async function fetchSiteContent(): Promise<SiteContent> {
           phases: (remote.theater?.ticketing?.phases && remote.theater.ticketing.phases.length > 0)
             ? remote.theater.ticketing.phases
             : DEFAULT_TICKETING_CONTENT.phases
+        },
+        sponsorship: {
+          ...DEFAULT_SPONSORSHIP_CONTENT,
+          ...(remote.theater?.sponsorship || {}),
+          tiers: (remote.theater?.sponsorship?.tiers && remote.theater.sponsorship.tiers.length > 0)
+            ? remote.theater.sponsorship.tiers
+            : DEFAULT_SPONSORSHIP_CONTENT.tiers
         }
       };
 
-      const merged: SiteContent = {
+      const finalContent: SiteContent = {
         landing: { ...DEFAULT_LANDING_CONTENT, ...remote.landing },
         theater: mergedTheater,
         lastUpdated: remote.lastUpdated || Date.now()
       };
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(merged));
-      return merged;
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(finalContent));
+      return finalContent;
     }
   } catch (err) {
     console.warn('No se pudo sincronizar contenido con Firestore (usando caché):', err);

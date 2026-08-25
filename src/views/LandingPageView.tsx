@@ -19,7 +19,8 @@ import {
   ExternalLink,
   Shield,
   Layers,
-  Phone
+  Phone,
+  Handshake
 } from 'lucide-react';
 import { Button, Card } from '../components/Theme';
 import { LEYENDAS_DATA } from '../services/legendService';
@@ -288,6 +289,28 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                       <div>
                         <span className="text-xs font-display font-bold text-gold block">Sistema de Boletería & Planes</span>
                         <span className="text-[11px] text-cream/70 font-sans">Planes Jade, Vida, Oro y Plata</span>
+                      </div>
+                    </div>
+                    <ExternalLink size={14} className="text-gold" />
+                  </a>
+
+                  <a
+                    href="/rutadeleyendas#patrocinios"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      sound.playClick();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/40 hover:border-gold flex items-center justify-between text-left transition text-cream cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center text-gold shrink-0">
+                        <Handshake size={16} />
+                      </div>
+                      <div>
+                        <span className="text-xs font-display font-bold text-gold block">Patrocinios & Marcas</span>
+                        <span className="text-[11px] text-cream/70 font-sans">Alianzas Corporativas en Xela</span>
                       </div>
                     </div>
                     <ExternalLink size={14} className="text-gold" />

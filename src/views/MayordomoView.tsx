@@ -31,7 +31,8 @@ import {
   Ticket,
   QrCode,
   Tag,
-  Check
+  Check,
+  Handshake
 } from 'lucide-react';
 import { Button, Card } from '../components/Theme';
 import { sound } from '../lib/audio';
@@ -42,12 +43,15 @@ import {
   TheaterStationContent,
   TicketPlanContent,
   TheaterTicketingContent,
+  TheaterSponsorshipContent,
+  SponsorTierContent,
   fetchSiteContent, 
   saveSiteContent, 
   resetSiteContentToDefaults, 
   DEFAULT_LANDING_CONTENT, 
   DEFAULT_THEATER_CONTENT,
-  DEFAULT_TICKETING_CONTENT
+  DEFAULT_TICKETING_CONTENT,
+  DEFAULT_SPONSORSHIP_CONTENT
 } from '../services/contentService';
 import { LEYENDAS_DATA } from '../services/legendService';
 import { optimizeImageFile } from '../lib/imageUtils';
@@ -255,6 +259,22 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
           ...prev.theater,
           ticketing: {
             ...currentTicketing,
+            [key]: value
+          }
+        }
+      };
+    });
+  };
+
+  const updateSponsorship = <K extends keyof TheaterSponsorshipContent>(key: K, value: TheaterSponsorshipContent[K]) => {
+    setContent((prev) => {
+      const currentSponsorship = prev.theater.sponsorship || DEFAULT_SPONSORSHIP_CONTENT;
+      return {
+        ...prev,
+        theater: {
+          ...prev.theater,
+          sponsorship: {
+            ...currentSponsorship,
             [key]: value
           }
         }
@@ -1518,6 +1538,192 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
                 </div>
               </div>
             </Card>
+
+            {/* SECCIÓN 4: PATROCINIOS CORPORATIVOS Y ALIANZAS */}
+            {(() => {
+              const currentSponsorship = content.theater.sponsorship || DEFAULT_SPONSORSHIP_CONTENT;
+              const currentTiers = currentSponsorship.tiers || DEFAULT_SPONSORSHIP_CONTENT.tiers;
+
+              return (
+                <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+                  <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
+                    <Handshake size={20} />
+                    <h2 className="font-display text-lg sm:text-xl font-bold">
+                      4. Alianzas Estratégicas & Oportunidades para Patrocinadores
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Badge de la Sección
+                      </label>
+                      <input
+                        type="text"
+                        value={currentSponsorship.sectionBadge}
+                        onChange={(e) => updateSponsorship('sectionBadge', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Título de la Sección
+                      </label>
+                      <input
+                        type="text"
+                        value={currentSponsorship.sectionTitle}
+                        onChange={(e) => updateSponsorship('sectionTitle', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="text-xs font-display uppercase tracking-wider text-gold/90 block mb-1.5 font-bold">
+                        Descripción Introductoria para Marcas
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={currentSponsorship.sectionDescription}
+                        onChange={(e) => updateSponsorship('sectionDescription', e.target.value)}
+                        className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Edición de los 3 Tiers de Patrocinio */}
+                  <div className="space-y-4 pt-4 border-t border-gold/20">
+                    <h3 className="text-sm font-display uppercase tracking-wider text-gold font-bold">
+                      Categorías de Patrocinio (Leyenda, Cultural, Especial)
+                    </h3>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                      {currentTiers.map((tier, tIdx) => (
+                        <div key={tier.id} className="p-4 rounded-2xl bg-black/80 border border-gold/30 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="font-display text-sm font-bold text-gold">{tier.name}</span>
+                            <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-gold/10 text-gold border border-gold/30">
+                              {tier.badge}
+                            </span>
+                          </div>
+
+                          <div>
+                            <label className="text-[11px] text-cream/70 uppercase block mb-1">Nombre de Categoría</label>
+                            <input
+                              type="text"
+                              value={tier.name}
+                              onChange={(e) => {
+                                const updated = [...currentTiers];
+                                updated[tIdx].name = e.target.value;
+                                updateSponsorship('tiers', updated);
+                              }}
+                              className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[11px] text-cream/70 uppercase block mb-1">Subtítulo / Badge</label>
+                            <input
+                              type="text"
+                              value={tier.badge}
+                              onChange={(e) => {
+                                const updated = [...currentTiers];
+                                updated[tIdx].badge = e.target.value;
+                                updateSponsorship('tiers', updated);
+                              }}
+                              className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[11px] text-cream/70 uppercase block mb-1">Inversión / Aporte</label>
+                            <input
+                              type="text"
+                              value={tier.investment}
+                              onChange={(e) => {
+                                const updated = [...currentTiers];
+                                updated[tIdx].investment = e.target.value;
+                                updateSponsorship('tiers', updated);
+                              }}
+                              className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-gold font-bold outline-none"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[11px] text-cream/70 uppercase block mb-1">Descripción del Paquete</label>
+                            <textarea
+                              rows={3}
+                              value={tier.description}
+                              onChange={(e) => {
+                                const updated = [...currentTiers];
+                                updated[tIdx].description = e.target.value;
+                                updateSponsorship('tiers', updated);
+                              }}
+                              className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[11px] text-cream/70 uppercase block mb-1">
+                              Beneficios Clave (1 por línea)
+                            </label>
+                            <textarea
+                              rows={3}
+                              value={tier.benefits.join('\n')}
+                              onChange={(e) => {
+                                const updated = [...currentTiers];
+                                updated[tIdx].benefits = e.target.value.split('\n').filter(Boolean);
+                                updateSponsorship('tiers', updated);
+                              }}
+                              className="w-full bg-black/60 border border-white/15 focus:border-gold rounded-lg px-3 py-1.5 text-xs text-cream outline-none font-mono"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Configuración del Call to Action de Patrocinios */}
+                  <div className="space-y-4 pt-4 border-t border-gold/20">
+                    <h3 className="text-sm font-display uppercase tracking-wider text-gold font-bold">
+                      Banner y Botón de Contacto por WhatsApp para Empresas
+                    </h3>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[11px] text-cream/70 uppercase block mb-1">Título del Banner</label>
+                        <input
+                          type="text"
+                          value={currentSponsorship.contactTitle}
+                          onChange={(e) => updateSponsorship('contactTitle', e.target.value)}
+                          className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] text-cream/70 uppercase block mb-1">Texto del Botón</label>
+                        <input
+                          type="text"
+                          value={currentSponsorship.contactButtonText}
+                          onChange={(e) => updateSponsorship('contactButtonText', e.target.value)}
+                          className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                        />
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label className="text-[11px] text-cream/70 uppercase block mb-1">Mensaje Precargado de WhatsApp</label>
+                        <input
+                          type="text"
+                          value={currentSponsorship.whatsappMessage}
+                          onChange={(e) => updateSponsorship('whatsappMessage', e.target.value)}
+                          className="w-full bg-black/60 border border-gold/30 focus:border-gold rounded-xl px-3.5 py-2 text-sm text-cream outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              );
+            })()}
 
           </div>
         )}
