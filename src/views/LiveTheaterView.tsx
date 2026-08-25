@@ -21,7 +21,8 @@ import {
   Tag,
   ArrowRight,
   Send,
-  X
+  X,
+  MessageCircle
 } from 'lucide-react';
 import { Button, Card } from '../components/Theme';
 import { sound } from '../lib/audio';
@@ -33,6 +34,9 @@ import {
   fetchSiteContent, 
   getLocalContent 
 } from '../services/contentService';
+
+const WHATSAPP_NUMBER = '50246741239';
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=Hola%20Casa%20de%20las%20Leyendas,%20deseo%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20evento%20y%20el%20juego%20de%20mesa.`;
 
 import logoPng from '../images/logo.png';
 import fondoSvg from '../images/optimized/Fondo.svg';
@@ -749,6 +753,25 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
           © {new Date().getFullYear()} lacasadelasleyendas.com. Todos los derechos reservados.
         </p>
       </footer>
+
+      {/* BOTÓN FLOTANTE DE WHATSAPP (ESQUINA INFERIOR DERECHA - SOLO ICONO) */}
+      <motion.a
+        href={WHATSAPP_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => sound.playClick()}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.92 }}
+        className="fixed bottom-5 right-5 z-40 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-950/95 via-emerald-900/95 to-emerald-950/95 border-2 border-emerald-500/80 hover:border-emerald-400 text-emerald-300 hover:text-white flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:shadow-[0_0_35px_rgba(16,185,129,0.8)] transition-all cursor-pointer backdrop-blur-md group"
+        title="Chatear por WhatsApp Oficial: +502 4674-1239"
+        aria-label="Chatear por WhatsApp"
+      >
+        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500/25 border border-emerald-400/50 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:rotate-6 transition-all">
+          <MessageCircle size={20} className="text-emerald-400 fill-emerald-400" />
+        </div>
+      </motion.a>
     </div>
   );
 };

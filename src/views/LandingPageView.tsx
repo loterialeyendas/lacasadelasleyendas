@@ -794,7 +794,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
         </p>
       </footer>
 
-      {/* BOTÓN FLOTANTE DE WHATSAPP (ESQUINA INFERIOR DERECHA) */}
+      {/* BOTÓN FLOTANTE DE WHATSAPP (ESQUINA INFERIOR DERECHA - SOLO ICONO) */}
       <motion.a
         href={WHATSAPP_LINK}
         target="_blank"
@@ -802,21 +802,14 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
         onClick={() => sound.playClick()}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        whileHover={{ scale: 1.06 }}
-        whileTap={{ scale: 0.94 }}
-        className="fixed bottom-5 right-5 z-40 py-2.5 px-3.5 sm:py-3 sm:px-4 text-xs font-display font-bold flex items-center gap-2 text-emerald-300 hover:text-white border-2 border-emerald-500/80 hover:border-emerald-400 rounded-2xl bg-gradient-to-r from-emerald-950/95 via-emerald-900/95 to-emerald-950/95 shadow-[0_0_20px_rgba(16,185,129,0.45)] hover:shadow-[0_0_30px_rgba(16,185,129,0.7)] transition-all cursor-pointer backdrop-blur-md group"
-        title="Chatear por WhatsApp: +502 4674-1239"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.92 }}
+        className="fixed bottom-5 right-5 z-40 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-950/95 via-emerald-900/95 to-emerald-950/95 border-2 border-emerald-500/80 hover:border-emerald-400 text-emerald-300 hover:text-white flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:shadow-[0_0_35px_rgba(16,185,129,0.8)] transition-all cursor-pointer backdrop-blur-md group"
+        title="Chatear por WhatsApp Oficial: +502 4674-1239"
+        aria-label="Chatear por WhatsApp"
       >
-        <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-110 transition-transform">
-          <MessageCircle size={16} className="text-emerald-400 fill-emerald-400" />
-        </div>
-        <div className="flex flex-col text-left leading-tight">
-          <span className="text-[9px] uppercase tracking-widest text-emerald-400 font-bold">
-            WhatsApp
-          </span>
-          <span className="text-xs font-mono font-bold text-white">
-            +502 4674-1239
-          </span>
+        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500/25 border border-emerald-400/50 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:rotate-6 transition-all">
+          <MessageCircle size={20} className="text-emerald-400 fill-emerald-400" />
         </div>
       </motion.a>
     </div>
