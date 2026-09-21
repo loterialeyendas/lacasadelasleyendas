@@ -1,3 +1,5 @@
+import { KeyType } from './game';
+
 export type GameModule = 'trivia' | 'character' | 'social' | 'mime' | 'apparition';
 
 export interface TriviaQuestion {
@@ -23,6 +25,15 @@ export interface ActionChallenge {
   points: number;
 }
 
+export interface SocialChallenge {
+  title: string;
+  instructions: string;
+  poseDescription: string;
+  suggestedHashtag: string;
+  shareQuote: string;
+  points: number;
+}
+
 export interface Legend {
   id: string;
   code: string; // Código corto para QR/manual (ej: "LLOR", "SOMB", "CADE")
@@ -38,6 +49,8 @@ export interface Legend {
   trivia?: TriviaQuestion;
   riddle?: CharacterRiddle;
   challenge?: ActionChallenge;
+  socialChallenge?: SocialChallenge;
+  keyReward?: KeyType; // Llave mística que otorga al resolver
   pointsReward: number;
 }
 
@@ -46,5 +59,7 @@ export interface Stamp {
   legendName: string;
   unlockedAt: number; // Timestamp
   pointsEarned: number;
+  keyEarned?: KeyType; // Llave ganada en este reto
   mode: 'explorer' | 'room';
 }
+

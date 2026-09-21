@@ -4,7 +4,7 @@ import { auth } from './lib/firebase';
 import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth';
 
 import { Legend, Stamp } from './types/legend';
-import { GameRoom } from './types/game';
+import { GameRoom, KeyType } from './types/game';
 import { LEYENDAS_DATA, getLegendById, parseQRData } from './services/legendService';
 import { loadLocalPassport, saveStamp, syncRemotePassport, UserPassportData } from './services/passportService';
 import { 
@@ -22,6 +22,7 @@ import { sound } from './lib/audio';
 import { LandingPageView } from './views/LandingPageView';
 import { Navbar } from './components/Navbar';
 import { MysticLoader } from './components/Theme';
+import { KeyUnlockModal } from './components/KeyUnlockModal';
 
 // Vistas y Módulos cargados bajo demanda (code-splitting)
 const Login = lazy(() => import('./components/Login').then((m) => ({ default: m.Login })));
@@ -34,6 +35,7 @@ const GameRoomView = lazy(() => import('./views/GameRoomView').then((m) => ({ de
 const TriviaModule = lazy(() => import('./views/modules/TriviaModule').then((m) => ({ default: m.TriviaModule })));
 const CharacterGuessModule = lazy(() => import('./views/modules/CharacterGuessModule').then((m) => ({ default: m.CharacterGuessModule })));
 const MimeChallengeModule = lazy(() => import('./views/modules/MimeChallengeModule').then((m) => ({ default: m.MimeChallengeModule })));
+const SocialChallengeModule = lazy(() => import('./views/modules/SocialChallengeModule').then((m) => ({ default: m.SocialChallengeModule })));
 const StoryApparitionModule = lazy(() => import('./views/modules/StoryApparitionModule').then((m) => ({ default: m.StoryApparitionModule })));
 const LiveTheaterView = lazy(() => import('./views/LiveTheaterView').then((m) => ({ default: m.LiveTheaterView })));
 const MayordomoView = lazy(() => import('./views/MayordomoView').then((m) => ({ default: m.MayordomoView })));
@@ -76,6 +78,15 @@ export default function App() {
 
   // Leyenda / Módulo Activo
   const [activeLegend, setActiveLegend] = useState<Legend | null>(null);
+
+  // Modal de Llave Mística Conquistada
+  const [unlockedKeyInfo, setUnlockedKeyInfo] = useState<{
+    isOpen: boolean;
+    keyType: KeyType;
+    legendName: string;
+    totalKeys: number;
+    hasWon: boolean;
+  } | null>(null);
 
   // Refs para acceder al estado más reciente desde listeners de larga vida
   const screenRef = useRef(screen);
@@ -376,16 +387,23 @@ export default function App() {
     navigate('module', legend);
   };
 
-  // Completar Reto / Desafío y Ganar Puntos
+  // Completar Reto / Desafío y Ganar Llave Mística + Puntos
   const handleCompleteModule = async (pointsEarned: number) => {
     if (!activeLegend) return;
 
-    // Crear Sello
+    const keyEarned: KeyType = activeLegend.keyReward || (
+      activeLegend.category === 'social' ? 'obsidian' :
+      activeLegend.category === 'mime' ? 'silver' :
+      activeLegend.category === 'character' ? 'jade' : 'gold'
+    );
+
+    // Crear Sello con Llave
     const stamp: Stamp = {
       legendId: activeLegend.id,
       legendName: activeLegend.name,
       unlockedAt: Date.now(),
       pointsEarned,
+      keyEarned,
       mode: currentRoom ? 'room' : 'explorer'
     };
 
@@ -398,7 +416,18 @@ export default function App() {
       await updatePlayerScore(currentRoom.id, user.uid, pointsEarned);
     }
 
-    // Regresar a la pantalla correspondiente
+    // Mostrar modal ceremonial de llave forjada
+    setUnlockedKeyInfo({
+      isOpen: true,
+      keyType: keyEarned,
+      legendName: activeLegend.name,
+      totalKeys: updatedPassport.totalKeys,
+      hasWon: updatedPassport.hasWon
+    });
+  };
+
+  const handleCloseKeyModal = () => {
+    setUnlockedKeyInfo(null);
     if (currentRoom) {
       navigate('game');
     } else {
@@ -455,8 +484,15 @@ export default function App() {
             onCancel={returnScreen}
           />
         );
-      case 'apparition':
       case 'social':
+        return (
+          <SocialChallengeModule
+            legend={activeLegend}
+            onComplete={handleCompleteModule}
+            onCancel={returnScreen}
+          />
+        );
+      case 'apparition':
       default:
         return (
           <StoryApparitionModule
@@ -546,6 +582,7 @@ export default function App() {
               <ExplorerView
                 stamps={passport.stamps}
                 totalScore={passport.totalScore}
+                keys={passport.keys}
                 onOpenScanner={handleOpenScanner}
                 onSelectLegend={handleLegendFound}
                 onBack={() => navigate('welcome')}
@@ -608,7 +645,20 @@ export default function App() {
             </div>
           )}
         </AnimatePresence>
+
+        {/* Modal Ceremonial de Llave Mística Conquistada */}
+        {unlockedKeyInfo?.isOpen && (
+          <KeyUnlockModal
+            isOpen={unlockedKeyInfo.isOpen}
+            keyType={unlockedKeyInfo.keyType}
+            legendName={unlockedKeyInfo.legendName}
+            totalKeys={unlockedKeyInfo.totalKeys}
+            hasWon={unlockedKeyInfo.hasWon}
+            onClose={handleCloseKeyModal}
+          />
+        )}
       </main>
     </div>
   );
 }
+

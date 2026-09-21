@@ -19,6 +19,11 @@ export const ScannerView: React.FC<ScannerViewProps> = ({ onLegendFound, onBack 
 
   const handleScanSuccess = (data: string) => {
     sound.playMysticChime();
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      try {
+        navigator.vibrate([60, 40, 60]);
+      } catch {}
+    }
     const legend = parseQRData(data);
     if (legend) {
       onLegendFound(legend);
@@ -33,19 +38,23 @@ export const ScannerView: React.FC<ScannerViewProps> = ({ onLegendFound, onBack 
     setError('');
 
     if (!manualCode.trim()) {
-      setError('Ingresa el código de 4 letras de la estación o carta.');
+      setError('Ingresa el código de la tarjeta física o estación (ej: SOMB, TRIV-CADE, TATU).');
       return;
     }
 
-    const legend = getLegendByCode(manualCode);
+    const legend = parseQRData(manualCode) || getLegendByCode(manualCode);
     if (legend) {
       sound.playMysticChime();
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        try { navigator.vibrate(50); } catch {}
+      }
       onLegendFound(legend);
     } else {
       sound.playError();
-      setError(`Código "${manualCode.toUpperCase()}" no encontrado. Códigos de ejemplo: SOMB, CADE, LLOR, SIGU, TATU, CARR, CIPI.`);
+      setError(`Código "${manualCode.toUpperCase()}" no encontrado. Códigos de ejemplo: SOMB, CADE, LLOR, SIGU, TATU, CARR, CIPI (o tarjetas tipo TRIV-CADE).`);
     }
   };
+
 
   return (
     <motion.div

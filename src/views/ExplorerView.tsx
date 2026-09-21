@@ -8,16 +8,21 @@ import {
   MapPin
 } from 'lucide-react';
 import { Legend, Stamp } from '../types/legend';
+import { PlayerKeys, KeyType } from '../types/game';
 import { LEYENDAS_DATA } from '../services/legendService';
+import { extractKeysFromStamps } from '../services/passportService';
 import { Button, Card, MysticalTitle } from '../components/Theme';
 import { sound } from '../lib/audio';
 import { PassportStampSvg } from '../components/svgs/PassportStampSvg';
 import { MysticLock } from '../components/svgs/MysticLock';
+import { MysticKey } from '../components/svgs/MysticKey';
+import { MysticKeyring } from '../components/MysticKeyring';
 import { getLocalContent } from '../services/contentService';
 
 interface ExplorerViewProps {
   stamps: Stamp[];
   totalScore: number;
+  keys?: PlayerKeys;
   onOpenScanner: () => void;
   onSelectLegend: (legend: Legend) => void;
   onBack: () => void;
@@ -26,6 +31,7 @@ interface ExplorerViewProps {
 export const ExplorerView: React.FC<ExplorerViewProps> = ({
   stamps,
   totalScore,
+  keys,
   onOpenScanner,
   onSelectLegend,
   onBack
@@ -33,8 +39,10 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
   const [selectedLegendDetail, setSelectedLegendDetail] = useState<Legend | null>(null);
   const legendImages = getLocalContent().landing.legendFichasImages || {};
 
+  const currentKeys = keys || extractKeysFromStamps(stamps);
   const unlockedLegendIds = new Set(stamps.map((s) => s.legendId));
   const completionPercentage = Math.round((stamps.length / LEYENDAS_DATA.length) * 100);
+
 
   return (
     <motion.div
@@ -100,15 +108,18 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
           className="w-full py-4 flex items-center justify-center gap-2 text-xs sm:text-sm shadow-lg font-bold rounded-xl"
         >
           <QrCode size={20} />
-          <span>Escanear Estación o Código</span>
+          <span>Escanear Tarjeta QR o Código</span>
         </Button>
       </Card>
+
+      {/* Altar de las 4 Llaves Sagradas del Tablero */}
+      <MysticKeyring keys={currentKeys} />
 
       {/* Cuadrícula de Sellos del Pasaporte */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <h3 className="text-xs sm:text-sm font-display uppercase tracking-wider text-gold font-bold">
-            Álbum de Estaciones
+            Álbum de Estaciones y Retos
           </h3>
           <span className="text-xs text-cream/70 font-serif italic">
             Toca una leyenda para ver detalles
@@ -118,6 +129,11 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {LEYENDAS_DATA.map((legend) => {
             const isUnlocked = unlockedLegendIds.has(legend.id);
+            const keyVariant: KeyType = legend.keyReward || (
+              legend.category === 'social' ? 'obsidian' :
+              legend.category === 'mime' ? 'silver' :
+              legend.category === 'character' ? 'jade' : 'gold'
+            );
 
             return (
               <motion.div
@@ -142,7 +158,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                 {isUnlocked && (
                   <div className="absolute top-2.5 right-2.5 flex items-center gap-1 bg-gold/20 text-gold px-2.5 py-0.5 rounded-full border border-gold/40 text-[10px] font-display font-bold">
                     <CheckCircle2 size={12} className="text-emerald-400" />
-                    <span>SELLADO</span>
+                    <span>LLAVE GANADA</span>
                   </div>
                 )}
 
@@ -165,11 +181,14 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                       {legend.name}
                     </h4>
                     <span className="text-[11px] text-gold font-display font-semibold block mt-0.5">
-                      Código: {legend.code}
+                      Tarjeta: {legend.code}
                     </span>
-                    <span className="text-[10px] uppercase font-display text-cream/50">
-                      {legend.category}
-                    </span>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <MysticKey variant={keyVariant} size={14} />
+                      <span className="text-[10px] uppercase font-display text-cream/70 font-semibold">
+                        Llave de {keyVariant === 'gold' ? 'Oro' : keyVariant === 'jade' ? 'Jade' : keyVariant === 'silver' ? 'Plata' : 'Obsidiana'}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -185,6 +204,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                     {isUnlocked ? 'Ver Historia 📜' : '¡Resolver Reto! ⚡'}
                   </span>
                 </div>
+
               </motion.div>
             );
           })}
