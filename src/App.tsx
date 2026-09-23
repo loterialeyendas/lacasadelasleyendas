@@ -176,10 +176,27 @@ export default function App() {
 
   // Escuchar Autenticación
   useEffect(() => {
+    // Restaurar perfil local persistente si existe (enfoque offline-first)
+    const savedLocalUid = localStorage.getItem('casa_leyendas_local_uid');
+    const savedLocalName = localStorage.getItem('casa_leyendas_local_name');
+    if (savedLocalUid && savedLocalName && !userRef.current) {
+      const localUser = {
+        uid: savedLocalUid,
+        displayName: savedLocalName,
+        isAnonymous: true
+      } as any;
+      setUser(localUser);
+      syncRemotePassport(savedLocalUid).then((data) => setPassport(data));
+
+      if (screenRef.current === 'login') {
+        setScreen('welcome');
+        window.history.replaceState({ screen: 'welcome' } satisfies HistoryState, '', '/juego');
+      }
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
-      setUser(u);
       if (u) {
-        // Cargar pasaporte local y sincronizar con Firestore
+        setUser(u);
         const data = await syncRemotePassport(u.uid);
         setPassport(data);
 
@@ -457,7 +474,14 @@ export default function App() {
 
   // Cerrar Sesión
   const handleLogout = async () => {
-    await signOut(auth);
+    localStorage.removeItem('casa_leyendas_local_uid');
+    localStorage.removeItem('casa_leyendas_local_name');
+    try {
+      await signOut(auth);
+    } catch {
+      // Ignorar si auth no estaba activo
+    }
+    setUser(null);
     setRoomId('');
     setCurrentRoom(null);
     setPendingRoomCode('');

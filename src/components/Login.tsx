@@ -107,11 +107,28 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
     setError('');
 
     try {
-      // 1. Iniciar sesión anónima en Firebase
-      const userCredential = await signInAnonymously(auth);
-      await updateProfile(userCredential.user, {
-        displayName: cleanName
-      });
+      let finalUser: any = null;
+
+      try {
+        // 1. Intentar inicio de sesión anónima en Firebase Authentication
+        const userCredential = await signInAnonymously(auth);
+        await updateProfile(userCredential.user, {
+          displayName: cleanName
+        });
+        finalUser = userCredential.user;
+      } catch (authErr: any) {
+        console.warn('Firebase Auth no disponible en este momento, usando perfil local offline-first:', authErr);
+        // Si el proveedor Anónimo no está habilitado en Firebase Console o no hay red:
+        // Se crea un usuario local persistente para garantizar una experiencia offline-first fluida
+        const localUid = localStorage.getItem('casa_leyendas_local_uid') || ('exp_' + Math.random().toString(36).substring(2, 9));
+        localStorage.setItem('casa_leyendas_local_uid', localUid);
+        localStorage.setItem('casa_leyendas_local_name', cleanName);
+        finalUser = {
+          uid: localUid,
+          displayName: cleanName,
+          isAnonymous: true
+        };
+      }
 
       // 2. Animación mística de desbloqueo de cerrojo
       setIsUnlocking(true);
@@ -128,7 +145,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
 
       // 3. Pausa para permitir que la animación y sonido concluyan
       setTimeout(() => {
-        onLogin(userCredential.user);
+        onLogin(finalUser);
       }, 750);
     } catch (err: any) {
       console.error(err);
