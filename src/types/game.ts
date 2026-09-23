@@ -9,11 +9,15 @@ export interface PlayerKeys {
   obsidian: boolean;  // Llave de Obsidiana (Retos en Redes Sociales)
 }
 
+export type PlayerRole = 'mayordomo' | 'invitado';
+
 export interface Player {
   id: string;
   name: string;
   avatar?: string;
   points: number;
+  role?: PlayerRole;
+  customTitle?: string;
   keys?: PlayerKeys;
   totalKeys?: number;
   isWinner?: boolean;
@@ -32,6 +36,7 @@ export interface GameRoom {
   status: RoomStatus;
   currentRound: number;
   maxRounds: number;
+  maxGuests?: number;
   players: Player[];
   activeLegendId?: string;
   activeModule?: GameModule;

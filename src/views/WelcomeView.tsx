@@ -82,16 +82,16 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
       </Card>
 
       {/* Sección Multijugador / Sala */}
-      <Card className="space-y-4">
+      <Card className="space-y-4 border border-gold/30">
         <div className="text-left space-y-1">
-          <div className="flex items-center gap-2 text-maya-red">
+          <div className="flex items-center gap-2 text-gold">
             <Users size={18} />
             <h3 className="font-display text-sm uppercase tracking-wider text-gold">
-              Ritual en Grupo (Multijugador)
+              Sala de Convocatoria (Multijugador)
             </h3>
           </div>
-          <p className="text-xs text-cream/60 font-serif italic">
-            Compite o colabora con amigos en una misma partida sincronizada.
+          <p className="text-xs text-cream/70 font-serif italic">
+            El Mayordomo abre la sala y convoca hasta 5 invitados con el número de sala.
           </p>
         </div>
 
@@ -102,9 +102,12 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
               sound.playClick();
               onCreateRoom();
             }}
-            className="flex items-center justify-center gap-2 py-3 text-xs"
+            className="flex flex-col items-center justify-center gap-1 py-3 px-2 text-xs border-gold/40 hover:border-gold"
           >
-            <Crown size={16} /> Ser Anfitrión
+            <div className="flex items-center gap-1.5 text-gold font-bold">
+              <Crown size={16} /> Ser Mayordomo
+            </div>
+            <span className="text-[9px] text-cream/50 lowercase tracking-normal">Crear sala (Host)</span>
           </Button>
 
           <Button
@@ -113,9 +116,12 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
               sound.playClick();
               onJoinRoom();
             }}
-            className="flex items-center justify-center gap-2 py-3 text-xs"
+            className="flex flex-col items-center justify-center gap-1 py-3 px-2 text-xs border-white/20 hover:border-gold/40"
           >
-            <Users size={16} /> Unirse a Sala
+            <div className="flex items-center gap-1.5 text-cream font-bold">
+              <Users size={16} className="text-emerald-400" /> Entrar como Invitado
+            </div>
+            <span className="text-[9px] text-cream/50 lowercase tracking-normal">Ingresar código</span>
           </Button>
         </div>
       </Card>

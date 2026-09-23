@@ -48,8 +48,11 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
         <div className="text-center space-y-2">
           <MysticalTitle className="text-2xl mb-1">CÓDIGO DE SALA</MysticalTitle>
           <p className="text-xs text-cream/70 font-serif italic">
-            Ingresa el código de 6 caracteres compartido por el anfitrión.
+            Ingresa el código de 6 caracteres compartido por el Mayordomo.
           </p>
+          <span className="text-[10px] font-mono text-gold/70 block">
+            (Hasta 5 invitados por sala convocada)
+          </span>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -64,7 +67,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
           />
 
           {error && (
-            <div className="p-3 bg-maya-red/20 border border-maya-red/40 rounded-lg flex items-center gap-2 text-xs text-red-900">
+            <div className="p-3 bg-maya-red/20 border border-maya-red/40 rounded-lg flex items-center gap-2 text-xs text-red-200">
               <AlertCircle size={16} className="text-maya-red shrink-0" />
               <span>{error}</span>
             </div>
@@ -79,7 +82,7 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
               <div className="w-5 h-5 border-2 border-obsidian border-t-transparent rounded-full animate-spin" />
             ) : (
               <>
-                <Sparkles size={16} /> Vincular Almas
+                <Sparkles size={16} /> Entrar como Invitado
               </>
             )}
           </Button>

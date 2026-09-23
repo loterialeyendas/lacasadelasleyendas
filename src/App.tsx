@@ -96,7 +96,7 @@ export default function App() {
   useEffect(() => { roomIdRef.current = roomId; }, [roomId]);
   useEffect(() => { userRef.current = user; }, [user]);
 
-  // Navegación integrada con el historial del navegador y URLs limpias (/rutadeleyendas, /mayordomo, /)
+  // Navegación integrada con el historial del navegador y URLs limpias (/juego, /rutadeleyendas, /mayordomo, /)
   const navigate = (to: Screen, legend?: Legend) => {
     setActiveLegend(to === 'module' && legend ? legend : null);
     setScreen(to);
@@ -113,16 +113,14 @@ export default function App() {
     } else if (to === 'landing') {
       targetUrl = '/';
     } else {
-      // Si navegamos dentro del juego desde una ruta especial, mantener raíz limpia
-      targetUrl = window.location.pathname === '/rutadeleyendas' || window.location.pathname === '/mayordomo'
-        ? '/'
-        : (window.location.pathname || '/');
+      // Pantallas del juego (login, welcome, lobby, join, explorer, scanner, module, game)
+      targetUrl = '/juego';
     }
 
     window.history.pushState(state, '', targetUrl);
   };
 
-  // Deep linking por URL directa (/rutadeleyendas, /mayordomo, ?legend=sombreron, ?room=ABC123)
+  // Deep linking por URL directa (/juego, /rutadeleyendas, /mayordomo, ?legend=sombreron, ?room=ABC123)
   useEffect(() => {
     const rawPath = window.location.pathname.toLowerCase();
     const path = rawPath.replace(/\/+$/, ''); // eliminar trailing slash
@@ -138,6 +136,7 @@ export default function App() {
       params.has('envivo') || 
       params.has('teatro') || 
       params.has('live');
+    const isJuegoPath = path === '/juego' || path.includes('/juego') || params.has('juego');
     const legendParam = params.get('legend') || params.get('id') || params.get('code');
     const roomParam = params.get('room');
 
@@ -147,20 +146,30 @@ export default function App() {
     } else if (isRutaDeLeyendas) {
       setScreen('theater');
       window.history.replaceState({ screen: 'theater' } satisfies HistoryState, '', '/rutadeleyendas');
+    } else if (isJuegoPath) {
+      if (roomParam) {
+        setPendingRoomCode(roomParam.toUpperCase());
+      }
+      const initialScreen = userRef.current ? 'welcome' : 'login';
+      setScreen(initialScreen);
+      window.history.replaceState({ screen: initialScreen } satisfies HistoryState, '', '/juego');
     } else if (legendParam) {
       const found = parseQRData(legendParam);
       if (found) {
         setActiveLegend(found);
         setScreen('module');
-        window.history.replaceState({ screen: 'module', legendId: found.id } satisfies HistoryState, '', '/');
+        window.history.replaceState({ screen: 'module', legendId: found.id } satisfies HistoryState, '', '/juego');
       }
     } else if (roomParam) {
       setPendingRoomCode(roomParam.toUpperCase());
+      const initialScreen = userRef.current ? 'welcome' : 'login';
+      setScreen(initialScreen);
+      window.history.replaceState({ screen: initialScreen } satisfies HistoryState, '', '/juego');
     }
 
     // Limpiar parámetros residuales de consulta manteniendo la ruta limpia
     if ((legendParam || roomParam || params.has('envivo') || params.has('rutadeleyendas')) && window.location.search) {
-      const cleanPath = isRutaDeLeyendas ? '/rutadeleyendas' : (isMayordomoPath ? '/mayordomo' : '/');
+      const cleanPath = isRutaDeLeyendas ? '/rutadeleyendas' : (isMayordomoPath ? '/mayordomo' : (isJuegoPath ? '/juego' : '/'));
       window.history.replaceState(window.history.state, '', cleanPath);
     }
   }, []);
@@ -173,6 +182,12 @@ export default function App() {
         // Cargar pasaporte local y sincronizar con Firestore
         const data = await syncRemotePassport(u.uid);
         setPassport(data);
+
+        // Si estaba en la pantalla de login dentro de /juego, pasar a welcome
+        if (screenRef.current === 'login') {
+          setScreen('welcome');
+          window.history.replaceState({ screen: 'welcome' } satisfies HistoryState, '', '/juego');
+        }
       }
     });
 
@@ -191,6 +206,10 @@ export default function App() {
           target = 'theater';
         } else if (rawPath === '/mayordomo' || rawPath.includes('/mayordomo')) {
           target = 'mayordomo';
+        } else if (rawPath === '/juego' || rawPath.includes('/juego')) {
+          target = userRef.current ? 'welcome' : 'login';
+        } else {
+          target = 'landing';
         }
       }
 
