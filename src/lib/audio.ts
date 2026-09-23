@@ -154,6 +154,53 @@ class SoundFX {
     osc.start(now);
     osc.stop(now + 0.04);
   }
+
+  // Sonido de cerrojo abriéndose / llave girando en el candado
+  public playUnlock() {
+    if (this.isMuted) return;
+    this.initCtx();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+
+    // 1. Golpe mecánico metálico del cerrojo
+    const clickOsc = this.ctx.createOscillator();
+    const clickGain = this.ctx.createGain();
+    clickOsc.type = 'square';
+    clickOsc.frequency.setValueAtTime(550, now);
+    clickOsc.frequency.exponentialRampToValueAtTime(140, now + 0.06);
+
+    clickGain.gain.setValueAtTime(0.25, now);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+    clickOsc.connect(clickGain);
+    clickGain.connect(this.ctx.destination);
+
+    clickOsc.start(now);
+    clickOsc.stop(now + 0.07);
+
+    // 2. Chime místico resonante al abrirse el portal
+    const chord = [587.33, 783.99, 1174.66]; // D5, G5, D6
+    chord.forEach((freq, idx) => {
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const start = now + 0.05 + idx * 0.06;
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, start);
+
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(0.15, start + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.7);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(start);
+      osc.stop(start + 0.75);
+    });
+  }
 }
 
 export const sound = new SoundFX();

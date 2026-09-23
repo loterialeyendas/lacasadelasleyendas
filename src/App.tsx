@@ -561,6 +561,7 @@ export default function App() {
                   setUser(u);
                   navigate('welcome');
                 }} 
+                onBack={() => navigate('landing')}
               />
             </Suspense>
           )}
