@@ -21,8 +21,10 @@ import {
   Layers,
   Phone,
   Handshake,
-  Users
+  Users,
+  Smartphone
 } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { Button, Card } from '../components/Theme';
 import { LEYENDAS_DATA } from '../services/legendService';
 import { sound } from '../lib/audio';
@@ -43,6 +45,7 @@ import candadoOroPng from '../images/png/Candado oro.png';
 import candadoPlataPng from '../images/png/Candado plata.png';
 import candadoJadePng from '../images/png/Candado jade.png';
 import candadoVidaPng from '../images/png/Candado vida.png';
+import llaveOroPng from '../images/png/Llave oro.png';
 
 import logoPng from '../images/logo.png';
 import fondoSvg from '../images/optimized/Fondo.svg';
@@ -542,6 +545,65 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             <Users size={20} />
             <span>UNIRSE A SALA</span>
           </Button>
+        </motion.div>
+
+        {/* ANUNCIO MÍSTICO PARA VERSIÓN WEB DE ESCRITORIO: CANDADO, LLAVE Y QR PARA EXPERIENCIA MÓVIL */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="hidden md:flex mt-10 max-w-2xl w-full mx-auto p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 via-black to-neutral-950 border border-gold/50 shadow-[0_0_30px_rgba(252,207,101,0.15)] items-center justify-between gap-4 text-left relative overflow-hidden select-none"
+        >
+          {/* Resplandor dorado de fondo */}
+          <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gold/15 blur-2xl pointer-events-none" />
+
+          {/* Candado y Llave de Oro Místicos */}
+          <div className="flex items-center gap-3.5 shrink-0 pl-1">
+            <div className="relative w-14 h-14 flex items-center justify-center">
+              <motion.img 
+                src={candadoOroPng} 
+                alt="Candado de Oro" 
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="w-12 h-12 object-contain filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]" 
+              />
+              <motion.img 
+                src={llaveOroPng} 
+                alt="Llave de Oro" 
+                animate={{ rotate: [-15, 10, -15], x: [-3, 2, -3] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="w-8 h-8 object-contain absolute -bottom-1 -right-1 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" 
+              />
+            </div>
+            <div className="max-w-[340px]">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-gold font-bold flex items-center gap-1">
+                  <Smartphone size={12} /> Mejor en tu Teléfono Móvil
+                </span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-gold/20 text-gold font-mono font-semibold">
+                  Recomendado
+                </span>
+              </div>
+              <p className="text-xs text-cream/80 font-serif italic mt-0.5 leading-snug">
+                Para escanear cartas físicas, activar retos de cámara y vivir el audio sensorial, abre la experiencia desde tu móvil.
+              </p>
+            </div>
+          </div>
+
+          {/* Mini QR para escaneo instantáneo directo desde la pantalla */}
+          <div className="flex items-center gap-2.5 shrink-0 bg-black/70 border border-gold/40 p-2 rounded-xl shadow-inner">
+            <div className="p-1 bg-white rounded-lg">
+              <QRCodeSVG 
+                value={typeof window !== 'undefined' ? `${window.location.origin}/juego` : 'https://lacasadelasleyendas.com/juego'} 
+                size={54} 
+                level="M" 
+              />
+            </div>
+            <div className="text-[10px] font-mono text-gold leading-tight">
+              <span className="block font-bold">ESCANEA</span>
+              <span className="text-[9px] text-cream/50 block">Con tu celular</span>
+            </div>
+          </div>
         </motion.div>
       </section>
 

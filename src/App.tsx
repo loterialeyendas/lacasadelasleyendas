@@ -24,6 +24,7 @@ import { LandingPageView } from './views/LandingPageView';
 import { Navbar } from './components/Navbar';
 import { MysticLoader } from './components/Theme';
 import { KeyUnlockModal } from './components/KeyUnlockModal';
+import { DesktopMobileAdviceModal } from './components/DesktopMobileAdviceModal';
 
 // Vistas y Módulos cargados bajo demanda (code-splitting)
 const Login = lazy(() => import('./components/Login').then((m) => ({ default: m.Login })));
@@ -563,24 +564,30 @@ export default function App() {
   // Si estamos en la Landing Page, mostrar la vista completa de la landing
   if (screen === 'landing') {
     return (
-      <LandingPageView
-        onEnterGame={handleEnterFromLanding}
-        onEnterExplorer={handleEnterExplorerFromLanding}
-        onEnterLiveTheater={() => navigate('theater')}
-        onEnterMayordomo={() => navigate('mayordomo')}
-      />
+      <>
+        <LandingPageView
+          onEnterGame={handleEnterFromLanding}
+          onEnterExplorer={handleEnterExplorerFromLanding}
+          onEnterLiveTheater={() => navigate('theater')}
+          onEnterMayordomo={() => navigate('mayordomo')}
+        />
+        <DesktopMobileAdviceModal />
+      </>
     );
   }
 
   // Si estamos en la página del Teatro en Vivo
   if (screen === 'theater') {
     return (
-      <Suspense fallback={<MysticLoader />}>
-        <LiveTheaterView
-          onBack={() => navigate('landing')}
-          onEnterGame={handleEnterFromLanding}
-        />
-      </Suspense>
+      <>
+        <Suspense fallback={<MysticLoader />}>
+          <LiveTheaterView
+            onBack={() => navigate('landing')}
+            onEnterGame={handleEnterFromLanding}
+          />
+        </Suspense>
+        <DesktopMobileAdviceModal />
+      </>
     );
   }
 
@@ -722,6 +729,9 @@ export default function App() {
           />
         )}
       </main>
+
+      {/* Anuncio Místico de Experiencia Móvil para versión web de escritorio */}
+      <DesktopMobileAdviceModal />
     </div>
   );
 }
