@@ -467,7 +467,7 @@ export default function App() {
     if (currentRoom) {
       navigate('game');
     } else {
-      navigate('explorer');
+      navigate('welcome');
     }
     setActiveLegend(null);
   };
@@ -495,8 +495,6 @@ export default function App() {
     const returnScreen = () => {
       if (currentRoom) {
         navigate('game');
-      } else if (user) {
-        navigate(previousScreen === 'scanner' ? 'explorer' : previousScreen);
       } else {
         navigate('welcome');
       }
@@ -612,11 +610,8 @@ export default function App() {
           {screen === 'welcome' && (
             <Suspense key="welcome" fallback={<MysticLoader />}>
               <WelcomeView
-                onStartExplorer={() => navigate('explorer')}
                 onCreateRoom={handleCreateRoom}
                 onJoinRoom={() => navigate('join')}
-                completedStamps={passport.completedCount}
-                totalLegends={LEYENDAS_DATA.length}
               />
             </Suspense>
           )}

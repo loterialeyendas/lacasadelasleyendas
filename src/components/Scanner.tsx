@@ -52,7 +52,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onCancel }) => {
         if (!isMounted) return;
         console.error('Error starting camera scanner:', err);
         setCameraError(
-          'No se pudo acceder a la cámara. Asegúrate de otorgar permisos o utiliza el código de 4 letras.'
+          'No se pudo acceder a la cámara. Por favor permite los permisos de cámara en tu navegador para escanear las tarjetas QR.'
         );
         setIsInitializing(false);
       }

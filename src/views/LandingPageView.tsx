@@ -20,7 +20,8 @@ import {
   Shield,
   Layers,
   Phone,
-  Handshake
+  Handshake,
+  Users
 } from 'lucide-react';
 import { Button, Card } from '../components/Theme';
 import { LEYENDAS_DATA } from '../services/legendService';
@@ -230,16 +231,16 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     onClick={() => {
                       sound.playClick();
                       setIsMobileMenuOpen(false);
-                      onEnterExplorer();
+                      onEnterGame();
                     }}
                     className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 hover:border-gold flex items-center gap-3 text-left transition text-cream cursor-pointer"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center text-gold shrink-0">
-                      <Compass size={16} />
+                    <div className="w-8 h-8 rounded-lg bg-emerald-950/60 flex items-center justify-center text-emerald-400 shrink-0">
+                      <Users size={16} />
                     </div>
                     <div>
-                      <span className="text-xs font-display font-bold text-gold block">Pasaporte Digital de Sellos</span>
-                      <span className="text-[11px] text-cream/70 font-sans">Colecciona los 7 sellos ancestrales</span>
+                      <span className="text-xs font-display font-bold text-cream block">Unirse a Sala (Invitado)</span>
+                      <span className="text-[11px] text-cream/70 font-sans">Ingresa con código de 6 caracteres</span>
                     </div>
                   </button>
                 </div>
@@ -519,13 +520,13 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             variant="outline"
             onClick={() => {
               sound.playClick();
-              onEnterExplorer();
+              onEnterGame();
             }}
             size="lg"
             className="w-full sm:w-auto px-8 py-4 text-base sm:text-lg flex items-center justify-center gap-3 border-gold text-gold hover:bg-gold/15 rounded-xl transition-all"
           >
-            <Compass size={20} />
-            <span>{content.passportButtonText || 'PASAPORTE DE SELLOS'}</span>
+            <Users size={20} />
+            <span>UNIRSE A SALA</span>
           </Button>
         </motion.div>
       </section>

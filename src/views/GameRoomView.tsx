@@ -120,9 +120,12 @@ export const GameRoomView: React.FC<GameRoomViewProps> = ({
       <div className="flex justify-between items-center bg-black/70 backdrop-blur-md p-3.5 rounded-xl border border-gold/30">
         <div className="flex items-center gap-2">
           <Trophy size={16} className="text-gold" />
-          <span className="font-display text-cream text-xs">
-            Ronda {room.currentRound} de {room.maxRounds}
-          </span>
+          <div className="flex flex-col text-left">
+            <span className="text-[10px] font-mono text-gold uppercase tracking-wider">Tablero de Juego</span>
+            <span className="font-display text-cream text-xs">
+              Ronda {room.currentRound} de {room.maxRounds}
+            </span>
+          </div>
         </div>
         <div className="text-[10px] font-display text-gold px-2 py-0.5 bg-gold/15 rounded border border-gold/30">
           Sala: {room.id}
@@ -143,10 +146,10 @@ export const GameRoomView: React.FC<GameRoomViewProps> = ({
           </div>
           <div className="text-left flex-1">
             <h3 className="text-base font-display text-gold group-hover:text-cream transition-colors">
-              Escanear Tarjeta / Desafío
+              Escanear Tarjeta QR
             </h3>
             <p className="text-cream/60 text-[11px] font-serif italic leading-tight">
-              Apunta la cámara o escribe el código para invocar el reto de tu turno.
+              Apunta la cámara a tu tarjeta física para invocar el reto de tu turno.
             </p>
           </div>
         </div>
