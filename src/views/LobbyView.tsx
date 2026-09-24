@@ -22,6 +22,7 @@ import { GameRoom } from '../types/game';
 import { Button, Card, MysticalTitle } from '../components/Theme';
 import { sound } from '../lib/audio';
 import { assignPlayerRole } from '../services/roomService';
+import { getCharacterById } from '../data/characters';
 
 import lunaSvg from '../images/Luna.svg';
 import volcanSvg from '../images/volcan.svg';
@@ -301,6 +302,11 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                   {mayordomo?.id === userId && (
                     <span className="text-[8px] font-mono bg-gold text-obsidian px-1 rounded font-bold">TÚ</span>
                   )}
+                  {mayordomo?.characterId && (
+                    <span className="text-[8px] font-mono bg-black/60 border border-gold/40 text-gold px-1 rounded">
+                      🎭 {getCharacterById(mayordomo.characterId).name}
+                    </span>
+                  )}
                 </div>
                 <span className="text-[9px] text-gold/80 font-serif italic block">
                   👑 {mayordomo?.customTitle || 'Mayordomo de la Casa (Host)'}
@@ -321,6 +327,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
               if (guest) {
                 const isCurrentGuest = guest.id === userId;
                 const isEditing = editingPlayerId === guest.id;
+                const guestChar = getCharacterById(guest.characterId);
 
                 return (
                   <motion.div
@@ -345,6 +352,9 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                             {isCurrentGuest && (
                               <span className="text-[8px] font-mono text-gold font-bold">(TÚ)</span>
                             )}
+                            <span className={`text-[8px] font-mono bg-black/60 border border-white/15 px-1 rounded ${guestChar.colorTheme.text}`}>
+                              🎭 {guestChar.name}
+                            </span>
                           </div>
                           <span className="text-[9px] text-gold/80 font-serif italic block">
                             ✨ {guest.customTitle || `Invitado #${slotNumber}`}

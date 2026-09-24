@@ -12,7 +12,7 @@ import {
 import { GameRoom, Player, PlayerRole } from '../types/game';
 import { GameModule } from '../types/legend';
 
-export const createGameRoom = async (hostId: string, hostName: string): Promise<string> => {
+export const createGameRoom = async (hostId: string, hostName: string, hostCharacterId?: string): Promise<string> => {
   // Código alfanumérico amigable de 6 caracteres
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let roomId = '';
@@ -33,6 +33,7 @@ export const createGameRoom = async (hostId: string, hostName: string): Promise<
       {
         id: hostId,
         name: hostName || 'Mayordomo',
+        characterId: hostCharacterId || 'sombreron',
         points: 0,
         isHost: true,
         role: 'mayordomo',
@@ -75,6 +76,7 @@ export const joinGameRoom = async (roomId: string, player: Player): Promise<{ su
 
     const guestPlayer: Player = {
       ...player,
+      characterId: player.characterId || 'sombreron',
       role: 'invitado',
       customTitle: `Invitado #${guestCount + 1}`,
       isHost: false,
@@ -88,6 +90,37 @@ export const joinGameRoom = async (roomId: string, player: Player): Promise<{ su
   }
 
   return { success: true };
+};
+
+export const updatePlayerCharacter = async (
+  roomId: string,
+  playerId: string,
+  characterId: string
+): Promise<void> => {
+  const cleanId = roomId.trim().toUpperCase();
+  if (!cleanId || !playerId) return;
+  const roomRef = doc(db, 'rooms', cleanId);
+
+  await runTransaction(db, async (tx) => {
+    const snap = await tx.get(roomRef);
+    if (!snap.exists()) return;
+
+    const data = snap.data() as GameRoom;
+    const updatedPlayers = data.players.map((p) => {
+      if (p.id === playerId) {
+        return {
+          ...p,
+          characterId,
+          lastActive: Date.now()
+        };
+      }
+      return p;
+    });
+
+    tx.update(roomRef, {
+      players: updatedPlayers
+    });
+  });
 };
 
 export const subscribeToRoom = (

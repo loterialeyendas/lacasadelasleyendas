@@ -15,6 +15,7 @@ export interface Player {
   id: string;
   name: string;
   avatar?: string;
+  characterId?: string;
   points: number;
   role?: PlayerRole;
   customTitle?: string;

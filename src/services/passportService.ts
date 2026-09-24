@@ -6,6 +6,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 const PASSPORT_KEY = 'casa_leyendas_passport_v1';
 const SCORE_KEY = 'casa_leyendas_score_v1';
 const KEYS_KEY = 'casa_leyendas_keys_v1';
+const CHARACTER_KEY = 'casa_leyendas_character_v1';
 
 export interface UserPassportData {
   stamps: Stamp[];
@@ -14,6 +15,7 @@ export interface UserPassportData {
   keys: PlayerKeys;
   totalKeys: number;
   hasWon: boolean;
+  characterId: string;
   lastUpdated: number;
 }
 
@@ -43,6 +45,7 @@ export const loadLocalPassport = (): UserPassportData => {
     const raw = localStorage.getItem(PASSPORT_KEY);
     const scoreRaw = localStorage.getItem(SCORE_KEY);
     const keysRaw = localStorage.getItem(KEYS_KEY);
+    const characterId = localStorage.getItem(CHARACTER_KEY) || 'sombreron';
     
     const stamps: Stamp[] = raw ? JSON.parse(raw) : [];
     const totalScore = scoreRaw ? parseInt(scoreRaw, 10) : 0;
@@ -67,6 +70,7 @@ export const loadLocalPassport = (): UserPassportData => {
       keys,
       totalKeys,
       hasWon: totalKeys >= 4,
+      characterId,
       lastUpdated: Date.now()
     };
   } catch (e) {
@@ -79,9 +83,42 @@ export const loadLocalPassport = (): UserPassportData => {
       keys: emptyKeys,
       totalKeys: 0,
       hasWon: false,
+      characterId: 'sombreron',
       lastUpdated: Date.now()
     };
   }
+};
+
+export const saveUserCharacter = async (
+  userId: string | null,
+  characterId: string
+): Promise<UserPassportData> => {
+  const current = loadLocalPassport();
+  const updated: UserPassportData = {
+    ...current,
+    characterId,
+    lastUpdated: Date.now()
+  };
+
+  try {
+    localStorage.setItem(CHARACTER_KEY, characterId);
+  } catch (err) {
+    console.warn('No se pudo guardar personaje en almacenamiento local:', err);
+  }
+
+  if (userId) {
+    try {
+      const userRef = doc(db, 'users', userId);
+      await setDoc(userRef, {
+        characterId,
+        lastUpdated: Date.now()
+      }, { merge: true });
+    } catch (err) {
+      console.warn('No se pudo guardar personaje en Firestore:', err);
+    }
+  }
+
+  return updated;
 };
 
 export const saveStamp = async (
@@ -119,6 +156,7 @@ export const saveStamp = async (
     keys: updatedKeys,
     totalKeys,
     hasWon,
+    characterId: current.characterId,
     lastUpdated: Date.now()
   };
 
@@ -132,6 +170,7 @@ export const saveStamp = async (
         keys: updatedKeys,
         totalKeys,
         hasWon,
+        characterId: current.characterId,
         lastUpdated: Date.now()
       }, { merge: true });
     } catch (err) {
@@ -152,6 +191,7 @@ export const syncRemotePassport = async (userId: string): Promise<UserPassportDa
       const remoteStamps: Stamp[] = remoteData.stamps || [];
       const remoteScore: number = remoteData.totalScore || 0;
       const remoteKeys: Partial<PlayerKeys> = remoteData.keys || {};
+      const remoteCharacterId: string = remoteData.characterId || local.characterId || 'sombreron';
 
       // Fusionar sellos locales y remotos
       const stampMap = new Map<string, Stamp>();
@@ -171,6 +211,7 @@ export const syncRemotePassport = async (userId: string): Promise<UserPassportDa
       localStorage.setItem(PASSPORT_KEY, JSON.stringify(mergedStamps));
       localStorage.setItem(SCORE_KEY, String(mergedScore));
       localStorage.setItem(KEYS_KEY, JSON.stringify(mergedKeys));
+      localStorage.setItem(CHARACTER_KEY, remoteCharacterId);
 
       return {
         stamps: mergedStamps,
@@ -179,6 +220,7 @@ export const syncRemotePassport = async (userId: string): Promise<UserPassportDa
         keys: mergedKeys,
         totalKeys,
         hasWon: totalKeys >= 4,
+        characterId: remoteCharacterId,
         lastUpdated: Date.now()
       };
     }

@@ -6,7 +6,7 @@ import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth
 import { Legend, Stamp } from './types/legend';
 import { GameRoom, KeyType } from './types/game';
 import { LEYENDAS_DATA, getLegendById, parseQRData } from './services/legendService';
-import { loadLocalPassport, saveStamp, syncRemotePassport, UserPassportData } from './services/passportService';
+import { loadLocalPassport, saveStamp, syncRemotePassport, saveUserCharacter, UserPassportData } from './services/passportService';
 import { 
   createGameRoom, 
   joinGameRoom, 
@@ -14,7 +14,8 @@ import {
   startRoomGame,
   finishRoomGame,
   leaveGameRoom,
-  updatePlayerScore 
+  updatePlayerScore,
+  updatePlayerCharacter 
 } from './services/roomService';
 import { sound } from './lib/audio';
 
@@ -327,6 +328,19 @@ export default function App() {
     }
   };
 
+  // Manejo de Selección y Cambio de Personaje de Leyenda
+  const handleSelectCharacter = async (charId: string) => {
+    try {
+      const updated = await saveUserCharacter(user?.uid || null, charId);
+      setPassport(updated);
+      if (currentRoom && user) {
+        await updatePlayerCharacter(currentRoom.id, user.uid, charId);
+      }
+    } catch (err) {
+      console.error('Error al equipar personaje:', err);
+    }
+  };
+
   // Manejo de Creación de Sala
   const handleCreateRoom = async () => {
     if (!user) return;
@@ -334,7 +348,7 @@ export default function App() {
     setRoomError('');
 
     try {
-      const newRoomId = await createGameRoom(user.uid, user.displayName || 'Anfitrión');
+      const newRoomId = await createGameRoom(user.uid, user.displayName || 'Anfitrión', passport.characterId || 'sombreron');
       setRoomId(newRoomId);
       navigate('lobby');
     } catch (err: any) {
@@ -355,6 +369,7 @@ export default function App() {
       const res = await joinGameRoom(code, {
         id: user.uid,
         name: user.displayName || 'Explorador',
+        characterId: passport.characterId || 'sombreron',
         points: 0,
         isHost: false,
         isReady: true,
@@ -583,13 +598,21 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start py-4 px-2 bg-obsidian text-cream select-none overflow-x-hidden">
-      {/* Barra de Navegación Superior */}
+      {/* Barra de Navegación Superior con Menú de la Luna y Perfil de Personajes */}
       {user && screen !== 'login' && (
         <Navbar
           userName={user.displayName || 'Explorador Místico'}
           totalScore={passport.totalScore}
+          keys={passport.keys}
+          totalKeys={passport.totalKeys}
+          completedStampsCount={passport.completedCount}
+          currentCharacterId={passport.characterId || 'sombreron'}
+          onSelectCharacter={handleSelectCharacter}
           onLogout={handleLogout}
           onGoHome={() => navigate('landing')}
+          onNavigateToPassport={() => navigate('explorer')}
+          onNavigateToJoin={() => navigate('join')}
+          onNavigateToTheater={() => navigate('theater')}
         />
       )}
 
