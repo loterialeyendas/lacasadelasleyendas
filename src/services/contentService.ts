@@ -615,11 +615,23 @@ export async function saveSiteContent(content: SiteContent): Promise<{ success: 
     lastUpdated: Date.now()
   };
 
-  // Guardar local de inmediato
+  // Guardar local de inmediato con salvaguarda adaptativa
   try {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(payload));
-  } catch (err) {
+  } catch (err: any) {
     console.warn('Error guardando en localStorage:', err);
+    if (err?.name === 'QuotaExceededError' || err?.code === 22) {
+      try {
+        const lightweightPayload = {
+          ...payload,
+          landing: { ...payload.landing, heroCoverImageUrl: '' },
+          theater: { ...payload.theater, coverImageUrl: '' }
+        };
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(lightweightPayload));
+      } catch {
+        // Silencioso
+      }
+    }
   }
 
   // Guardar en Firestore

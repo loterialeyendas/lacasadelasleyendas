@@ -25,24 +25,29 @@ export const MimeChallengeModule: React.FC<MimeChallengeProps> = ({ legend, onCo
   const [isFinished, setIsFinished] = useState(false);
   const [verdict, setVerdict] = useState<'success' | 'fail' | null>(null);
 
+  // Temporizador puro sin efectos secundarios en el updater
   useEffect(() => {
-    if (!isActive || isFinished || timeLeft <= 0) return;
+    if (!isActive || isFinished) return;
 
     const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          setIsFinished(true);
-          sound.playError();
-          return 0;
-        }
-        if (prev <= 5) sound.playTick();
-        return prev - 1;
-      });
+      setTimeLeft((prev) => Math.max(0, prev - 1));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isActive, isFinished, timeLeft]);
+  }, [isActive, isFinished]);
+
+  // Efectos de audio y conclusión del tiempo
+  useEffect(() => {
+    if (!isActive || isFinished) return;
+    if (timeLeft <= 0) {
+      setIsFinished(true);
+      sound.playError();
+      return;
+    }
+    if (timeLeft <= 5) {
+      sound.playTick();
+    }
+  }, [timeLeft, isActive, isFinished]);
 
   const handleStart = () => {
     sound.playMysticChime();

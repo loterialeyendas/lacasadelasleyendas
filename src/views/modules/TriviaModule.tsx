@@ -133,7 +133,7 @@ export const TriviaModule: React.FC<TriviaModuleProps> = ({ legend, onComplete, 
               if (idx === trivia.answer) {
                 btnClass += "bg-emerald-950/70 border-emerald-500 text-emerald-200 font-semibold shadow-[0_0_15px_rgba(16,185,129,0.3)]";
               } else if (idx === selectedOption) {
-                btnClass += "bg-maya-red/40 border-maya-red text-red-900";
+                btnClass += "bg-maya-red/40 border-maya-red text-red-200 font-semibold";
               } else {
                 btnClass += "bg-black/20 border-white/5 text-cream/40 opacity-50";
               }

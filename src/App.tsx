@@ -552,6 +552,7 @@ export default function App() {
         onEnterGame={handleEnterFromLanding}
         onEnterExplorer={handleEnterExplorerFromLanding}
         onEnterLiveTheater={() => navigate('theater')}
+        onEnterMayordomo={() => navigate('mayordomo')}
       />
     );
   }
@@ -633,6 +634,7 @@ export default function App() {
             <Suspense key="scanner" fallback={<MysticLoader />}>
               <ScannerView
                 onLegendFound={handleLegendFound}
+                onRoomDetected={(code) => handleJoinRoom(code)}
                 onBack={() => navigate(previousScreen === 'scanner' ? 'welcome' : previousScreen)}
               />
             </Suspense>

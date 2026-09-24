@@ -292,12 +292,13 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
     sound.playClick();
 
     try {
-      // Redimensionar portada a máximo 1280px con compresión WebP
+      // Redimensionar portada a máximo 1000px y 120 KB con compresión WebP
       const optimizedBase64 = await optimizeImageFile(file, {
-        maxWidth: 1280,
-        maxHeight: 1280,
-        quality: 0.85,
-        format: 'image/webp'
+        maxWidth: 1000,
+        maxHeight: 1000,
+        quality: 0.8,
+        format: 'image/webp',
+        maxSizeBytes: 120 * 1024
       });
 
       if (target === 'landingCover') {
@@ -324,10 +325,11 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
 
     try {
       const optimizedBase64 = await optimizeImageFile(file, {
-        maxWidth: 400,
-        maxHeight: 400,
-        quality: 0.88,
-        format: 'image/webp'
+        maxWidth: 320,
+        maxHeight: 320,
+        quality: 0.82,
+        format: 'image/webp',
+        maxSizeBytes: 45 * 1024
       });
 
       const updatedStations = [...content.theater.stations];
@@ -352,10 +354,11 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
 
     try {
       const optimizedBase64 = await optimizeImageFile(file, {
-        maxWidth: 400,
-        maxHeight: 400,
-        quality: 0.88,
-        format: 'image/webp'
+        maxWidth: 320,
+        maxHeight: 320,
+        quality: 0.82,
+        format: 'image/webp',
+        maxSizeBytes: 45 * 1024
       });
 
       const currentImages = content.landing.legendFichasImages || {};
@@ -382,10 +385,11 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
 
     try {
       const optimizedBase64 = await optimizeImageFile(file, {
-        maxWidth: 400,
-        maxHeight: 400,
-        quality: 0.88,
-        format: 'image/webp'
+        maxWidth: 320,
+        maxHeight: 320,
+        quality: 0.82,
+        format: 'image/webp',
+        maxSizeBytes: 45 * 1024
       });
 
       const currentTicketing = content.theater.ticketing || DEFAULT_TICKETING_CONTENT;

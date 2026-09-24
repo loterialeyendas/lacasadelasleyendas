@@ -54,6 +54,7 @@ interface LandingPageViewProps {
   onEnterGame: () => void;
   onEnterExplorer: () => void;
   onEnterLiveTheater?: () => void;
+  onEnterMayordomo?: () => void;
 }
 
 const LOCK_IMAGES: Record<string, string> = {
@@ -69,7 +70,8 @@ const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=Hola%20Casa%20de%20
 export const LandingPageView: React.FC<LandingPageViewProps> = ({
   onEnterGame,
   onEnterExplorer,
-  onEnterLiveTheater
+  onEnterLiveTheater,
+  onEnterMayordomo
 }) => {
   const [content, setContent] = useState<LandingContent>(() => getLocalContent().landing);
   const [selectedTeaser, setSelectedTeaser] = useState<string | null>(null);
@@ -253,11 +255,13 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
 
                   <a
                     href="/rutadeleyendas"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => {
+                    onClick={(e) => {
+                      if (onEnterLiveTheater) {
+                        e.preventDefault();
+                      }
                       sound.playClick();
                       setIsMobileMenuOpen(false);
+                      onEnterLiveTheater?.();
                     }}
                     className="w-full p-3 rounded-xl bg-black/60 hover:bg-maya-red/15 border border-maya-red/40 hover:border-maya-red flex items-center justify-between text-left transition text-cream cursor-pointer"
                   >
@@ -275,11 +279,13 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
 
                   <a
                     href="/rutadeleyendas#boleteria"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => {
+                    onClick={(e) => {
+                      if (onEnterLiveTheater) {
+                        e.preventDefault();
+                      }
                       sound.playClick();
                       setIsMobileMenuOpen(false);
+                      onEnterLiveTheater?.();
                     }}
                     className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/40 hover:border-gold flex items-center justify-between text-left transition text-cream cursor-pointer"
                   >
@@ -297,11 +303,13 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
 
                   <a
                     href="/rutadeleyendas#patrocinios"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => {
+                    onClick={(e) => {
+                      if (onEnterLiveTheater) {
+                        e.preventDefault();
+                      }
                       sound.playClick();
                       setIsMobileMenuOpen(false);
+                      onEnterLiveTheater?.();
                     }}
                     className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/40 hover:border-gold flex items-center justify-between text-left transition text-cream cursor-pointer"
                   >
@@ -354,11 +362,13 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
 
                     <a
                       href="/mayordomo"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => {
+                      onClick={(e) => {
+                        if (onEnterMayordomo) {
+                          e.preventDefault();
+                        }
                         sound.playClick();
                         setIsMobileMenuOpen(false);
+                        onEnterMayordomo?.();
                       }}
                       className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
                     >
@@ -385,16 +395,20 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
       {/* HERO SECTION CON PORTADA, SOL Y NUBES CELESTIALES */}
       <section className="relative z-10 pt-6 pb-16 px-3 sm:px-4 max-w-6xl mx-auto text-center flex flex-col items-center w-full box-border overflow-hidden sm:overflow-visible">
         
-        {/* Banner Destacado: Obra en Vivo en Teatro Municipal (Abre en ventana nueva) */}
+        {/* Banner Destacado: Obra en Vivo en Teatro Municipal */}
         <motion.a
           href="/rutadeleyendas"
-          target="_blank"
-          rel="noopener noreferrer"
           initial={{ y: -10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => sound.playClick()}
+          onClick={(e) => {
+            if (onEnterLiveTheater) {
+              e.preventDefault();
+            }
+            sound.playClick();
+            onEnterLiveTheater?.();
+          }}
           className="w-full max-w-xl mx-auto mb-6 p-2.5 sm:p-3.5 rounded-2xl bg-gradient-to-r from-maya-red/30 via-gold/20 to-maya-red/30 border border-gold/50 cursor-pointer shadow-[0_0_20px_rgba(190,141,44,0.25)] flex items-center gap-2.5 sm:gap-3 text-left group box-border overflow-hidden"
         >
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gold/20 flex items-center justify-center text-gold shrink-0 border border-gold/40">

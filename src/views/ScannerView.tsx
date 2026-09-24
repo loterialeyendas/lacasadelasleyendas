@@ -9,26 +9,58 @@ import { sound } from '../lib/audio';
 
 interface ScannerViewProps {
   onLegendFound: (legend: Legend) => void;
+  onRoomDetected?: (roomCode: string) => void;
   onBack: () => void;
 }
 
-export const ScannerView: React.FC<ScannerViewProps> = ({ onLegendFound, onBack }) => {
+export const ScannerView: React.FC<ScannerViewProps> = ({ 
+  onLegendFound, 
+  onRoomDetected, 
+  onBack 
+}) => {
   const [error, setError] = useState('');
 
-  const handleScanSuccess = (data: string) => {
-    sound.playMysticChime();
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      try {
-        navigator.vibrate([60, 40, 60]);
-      } catch {}
-    }
+  const handleScanSuccess = (data: string): boolean => {
+    setError('');
+
+    // 1. Verificar si corresponde a una leyenda o tarjeta de juego
     const legend = parseQRData(data);
     if (legend) {
+      sound.playMysticChime();
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        try {
+          navigator.vibrate([60, 40, 60]);
+        } catch {}
+      }
       onLegendFound(legend);
-    } else {
-      sound.playError();
-      setError(`Tarjeta QR no reconocida: "${data}". Intenta apuntar de nuevo a la tarjeta oficial.`);
+      return true;
     }
+
+    // 2. Verificar si es un enlace o código de sala convocada
+    const clean = data.trim();
+    let detectedRoomCode = '';
+    if (clean.includes('room=')) {
+      const match = clean.match(/room=([A-Za-z0-9]{4,8})/i);
+      if (match) detectedRoomCode = match[1].toUpperCase();
+    } else if (/^[A-Za-z0-9]{6}$/.test(clean) && !parseQRData(clean)) {
+      detectedRoomCode = clean.toUpperCase();
+    }
+
+    if (detectedRoomCode && onRoomDetected) {
+      sound.playMysticChime();
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        try {
+          navigator.vibrate([50, 50, 80]);
+        } catch {}
+      }
+      onRoomDetected(detectedRoomCode);
+      return true;
+    }
+
+    // 3. Tarjeta no reconocida: advertir pero NO apagar la cámara
+    sound.playError();
+    setError(`Tarjeta QR no reconocida: "${data}". Apunta de nuevo a una tarjeta física oficial.`);
+    return false;
   };
 
   return (

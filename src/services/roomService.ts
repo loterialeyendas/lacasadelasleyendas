@@ -113,7 +113,9 @@ export const subscribeToRoom = (
 };
 
 export const startRoomGame = async (roomId: string): Promise<void> => {
-  const roomRef = doc(db, 'rooms', roomId);
+  const cleanId = roomId.trim().toUpperCase();
+  if (!cleanId) return;
+  const roomRef = doc(db, 'rooms', cleanId);
   await updateDoc(roomRef, {
     status: 'playing',
     currentRound: 1
@@ -121,7 +123,9 @@ export const startRoomGame = async (roomId: string): Promise<void> => {
 };
 
 export const finishRoomGame = async (roomId: string): Promise<void> => {
-  const roomRef = doc(db, 'rooms', roomId);
+  const cleanId = roomId.trim().toUpperCase();
+  if (!cleanId) return;
+  const roomRef = doc(db, 'rooms', cleanId);
   await updateDoc(roomRef, { status: 'finished' });
 };
 
@@ -163,30 +167,37 @@ export const leaveGameRoom = async (roomId: string, playerId: string): Promise<v
   });
 };
 
+// Asignar rol o título honorífico al jugador mediante transacción atómica
 export const assignPlayerRole = async (
   roomId: string,
   targetPlayerId: string,
   customTitle: string,
   newRole?: PlayerRole
 ): Promise<void> => {
-  const roomRef = doc(db, 'rooms', roomId.toUpperCase());
-  const snap = await getDoc(roomRef);
-  if (!snap.exists()) return;
+  const cleanId = roomId.trim().toUpperCase();
+  if (!cleanId || !targetPlayerId) return;
+  const roomRef = doc(db, 'rooms', cleanId);
 
-  const data = snap.data() as GameRoom;
-  const updatedPlayers = data.players.map((p) => {
-    if (p.id === targetPlayerId) {
-      return {
-        ...p,
-        role: newRole || p.role || 'invitado',
-        customTitle: customTitle.trim()
-      };
-    }
-    return p;
-  });
+  await runTransaction(db, async (tx) => {
+    const snap = await tx.get(roomRef);
+    if (!snap.exists()) return;
 
-  await updateDoc(roomRef, {
-    players: updatedPlayers
+    const data = snap.data() as GameRoom;
+    const updatedPlayers = data.players.map((p) => {
+      if (p.id === targetPlayerId) {
+        return {
+          ...p,
+          role: newRole || p.role || 'invitado',
+          customTitle: customTitle.trim(),
+          lastActive: Date.now()
+        };
+      }
+      return p;
+    });
+
+    tx.update(roomRef, {
+      players: updatedPlayers
+    });
   });
 };
 
@@ -195,31 +206,43 @@ export const setRoomActiveLegend = async (
   legendId: string,
   module: GameModule
 ): Promise<void> => {
-  const roomRef = doc(db, 'rooms', roomId);
+  const cleanId = roomId.trim().toUpperCase();
+  if (!cleanId) return;
+  const roomRef = doc(db, 'rooms', cleanId);
   await updateDoc(roomRef, {
     activeLegendId: legendId,
     activeModule: module
   });
 };
 
+// Actualizar puntuación mediante transacción atómica (evita pérdida de puntos entre jugadores simultáneos)
 export const updatePlayerScore = async (
   roomId: string,
   playerId: string,
   pointsToAdd: number
 ): Promise<void> => {
-  const roomRef = doc(db, 'rooms', roomId);
-  const snap = await getDoc(roomRef);
-  if (snap.exists()) {
+  const cleanId = roomId.trim().toUpperCase();
+  if (!cleanId || !playerId) return;
+  const roomRef = doc(db, 'rooms', cleanId);
+
+  await runTransaction(db, async (tx) => {
+    const snap = await tx.get(roomRef);
+    if (!snap.exists()) return;
+
     const data = snap.data() as GameRoom;
     const updatedPlayers = data.players.map((p) => {
       if (p.id === playerId) {
-        return { ...p, points: (p.points || 0) + pointsToAdd };
+        return { 
+          ...p, 
+          points: (p.points || 0) + pointsToAdd,
+          lastActive: Date.now()
+        };
       }
       return p;
     });
 
-    await updateDoc(roomRef, {
+    tx.update(roomRef, {
       players: updatedPlayers
     });
-  }
+  });
 };

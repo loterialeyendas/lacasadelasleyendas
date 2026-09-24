@@ -108,19 +108,20 @@ export const LiveTheaterView: React.FC<LiveTheaterViewProps> = ({
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-b from-maya-red/20 via-gold/15 to-transparent blur-3xl rounded-full" />
       </div>
 
-      {/* Header Sticky con Botón de Regreso (Abre en ventana nueva) */}
+      {/* Header Sticky con Botón de Regreso SPA */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-obsidian/90 border-b border-gold/30 px-4 py-3.5">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <a 
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => sound.playClick()}
+          <button 
+            type="button"
+            onClick={() => {
+              sound.playClick();
+              onBack();
+            }}
             className="flex items-center gap-2 text-gold hover:text-cream transition-colors text-xs sm:text-sm font-display font-bold cursor-pointer group"
           >
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
             <span>VOLVER AL INICIO</span>
-          </a>
+          </button>
 
           <div className="flex items-center gap-2.5">
             <img 

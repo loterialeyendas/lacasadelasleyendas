@@ -57,7 +57,7 @@ export const Card: React.FC<CardProps> = ({ className, children, onClick }) => (
     onClick={onClick}
     className={cn('mystical-card border-none bg-black/60 p-6 relative group', className)}
   >
-    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/old-paper.png')] opacity-5 pointer-events-none" />
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(252,207,101,0.04),transparent_70%)] pointer-events-none" />
     <div className="absolute -inset-0.5 bg-gradient-to-r from-gold/0 via-gold/10 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-xl" />
     <div className="relative z-10">{children}</div>
   </motion.div>

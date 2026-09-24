@@ -103,10 +103,14 @@ export const saveStamp = async (
   const totalKeys = countKeys(updatedKeys);
   const hasWon = totalKeys >= 4;
 
-  // Guardar en LocalStorage (Offline primero)
-  localStorage.setItem(PASSPORT_KEY, JSON.stringify(updatedStamps));
-  localStorage.setItem(SCORE_KEY, String(updatedScore));
-  localStorage.setItem(KEYS_KEY, JSON.stringify(updatedKeys));
+  // Guardar en LocalStorage (Offline primero con salvaguarda de cuota)
+  try {
+    localStorage.setItem(PASSPORT_KEY, JSON.stringify(updatedStamps));
+    localStorage.setItem(SCORE_KEY, String(updatedScore));
+    localStorage.setItem(KEYS_KEY, JSON.stringify(updatedKeys));
+  } catch (err) {
+    console.warn('Almacenamiento local restringido o saturado:', err);
+  }
 
   const result: UserPassportData = {
     stamps: updatedStamps,

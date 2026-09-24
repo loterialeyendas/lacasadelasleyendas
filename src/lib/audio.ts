@@ -2,6 +2,7 @@
 
 class SoundFX {
   private ctx: AudioContext | null = null;
+  private masterGain: GainNode | null = null;
   private isMuted: boolean = false;
 
   constructor() {
@@ -15,16 +16,27 @@ class SoundFX {
       const AudioCtxClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtxClass) {
         this.ctx = new AudioCtxClass();
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 1, this.ctx.currentTime);
+        this.masterGain.connect(this.ctx.destination);
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
     }
+  }
+
+  private getDestination(): AudioNode | null {
+    if (!this.ctx) return null;
+    return this.masterGain || this.ctx.destination;
   }
 
   public toggleMute(): boolean {
     this.isMuted = !this.isMuted;
     localStorage.setItem('leyendas_sound_muted', String(this.isMuted));
+    if (this.ctx && this.masterGain) {
+      this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 1, this.ctx.currentTime);
+    }
     return this.isMuted;
   }
 
@@ -36,7 +48,8 @@ class SoundFX {
   public playMysticChime() {
     if (this.isMuted) return;
     this.initCtx();
-    if (!this.ctx) return;
+    const dest = this.getDestination();
+    if (!this.ctx || !dest) return;
 
     const now = this.ctx.currentTime;
     const notes = [523.25, 659.25, 783.99, 1046.50]; // Acorde C mayor místico
@@ -54,7 +67,7 @@ class SoundFX {
       gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 1.2);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(dest);
 
       osc.start(now + idx * 0.08);
       osc.stop(now + idx * 0.08 + 1.3);
@@ -65,7 +78,8 @@ class SoundFX {
   public playSuccess() {
     if (this.isMuted) return;
     this.initCtx();
-    if (!this.ctx) return;
+    const dest = this.getDestination();
+    if (!this.ctx || !dest) return;
 
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
@@ -79,7 +93,7 @@ class SoundFX {
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
 
     osc.connect(gain);
-    gain.connect(this.ctx.destination);
+    gain.connect(dest);
 
     osc.start(now);
     osc.stop(now + 0.35);
@@ -89,7 +103,8 @@ class SoundFX {
   public playError() {
     if (this.isMuted) return;
     this.initCtx();
-    if (!this.ctx) return;
+    const dest = this.getDestination();
+    if (!this.ctx || !dest) return;
 
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
@@ -103,7 +118,7 @@ class SoundFX {
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
 
     osc.connect(gain);
-    gain.connect(this.ctx.destination);
+    gain.connect(dest);
 
     osc.start(now);
     osc.stop(now + 0.35);
@@ -113,7 +128,8 @@ class SoundFX {
   public playTick() {
     if (this.isMuted) return;
     this.initCtx();
-    if (!this.ctx) return;
+    const dest = this.getDestination();
+    if (!this.ctx || !dest) return;
 
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
@@ -126,7 +142,7 @@ class SoundFX {
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
 
     osc.connect(gain);
-    gain.connect(this.ctx.destination);
+    gain.connect(dest);
 
     osc.start(now);
     osc.stop(now + 0.05);
@@ -136,7 +152,8 @@ class SoundFX {
   public playClick() {
     if (this.isMuted) return;
     this.initCtx();
-    if (!this.ctx) return;
+    const dest = this.getDestination();
+    if (!this.ctx || !dest) return;
 
     const now = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
@@ -149,7 +166,7 @@ class SoundFX {
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
 
     osc.connect(gain);
-    gain.connect(this.ctx.destination);
+    gain.connect(dest);
 
     osc.start(now);
     osc.stop(now + 0.04);
@@ -159,7 +176,8 @@ class SoundFX {
   public playUnlock() {
     if (this.isMuted) return;
     this.initCtx();
-    if (!this.ctx) return;
+    const dest = this.getDestination();
+    if (!this.ctx || !dest) return;
 
     const now = this.ctx.currentTime;
 
@@ -174,7 +192,7 @@ class SoundFX {
     clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
 
     clickOsc.connect(clickGain);
-    clickGain.connect(this.ctx.destination);
+    clickGain.connect(dest);
 
     clickOsc.start(now);
     clickOsc.stop(now + 0.07);
@@ -195,7 +213,7 @@ class SoundFX {
       gain.gain.exponentialRampToValueAtTime(0.001, start + 0.7);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(dest);
 
       osc.start(start);
       osc.stop(start + 0.75);

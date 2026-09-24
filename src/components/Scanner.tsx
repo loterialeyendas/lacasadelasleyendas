@@ -4,7 +4,7 @@ import { Camera, AlertCircle } from 'lucide-react';
 import { Button } from './Theme';
 
 interface ScannerProps {
-  onScan: (data: string) => void;
+  onScan: (data: string) => boolean | void | Promise<boolean | void>;
   onCancel: () => void;
 }
 
@@ -12,7 +12,13 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onCancel }) => {
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const onScanRef = useRef(onScan);
+  const lastScanTimeRef = useRef<number>(0);
   const containerId = 'qr-reader-container';
+
+  useEffect(() => {
+    onScanRef.current = onScan;
+  }, [onScan]);
 
   useEffect(() => {
     let isMounted = true;
@@ -31,14 +37,26 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onCancel }) => {
         await html5QrCode.start(
           { facingMode: 'environment' },
           config,
-          (decodedText) => {
+          async (decodedText) => {
             if (!isMounted) return;
-            // Detener la cámara inmediatamente después del escaneo exitoso
-            html5QrCode.stop().then(() => {
-              onScan(decodedText);
-            }).catch(() => {
-              onScan(decodedText);
-            });
+            const now = Date.now();
+            // Prevenir lecturas redundantes en ráfaga (cooldown de 1.5s)
+            if (now - lastScanTimeRef.current < 1500) {
+              return;
+            }
+            lastScanTimeRef.current = now;
+
+            const res = await onScanRef.current(decodedText);
+            // Solo detener la cámara si el código fue reconocido y aceptado
+            if (res !== false) {
+              try {
+                if (html5QrCode.isScanning) {
+                  await html5QrCode.stop();
+                }
+              } catch {
+                // Silencioso ante detención simultánea
+              }
+            }
           },
           () => {
             // Frame scan status ignorado para no saturar logs
@@ -68,7 +86,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, onCancel }) => {
           .catch((e) => console.warn('Scanner stop error:', e));
       }
     };
-  }, [onScan]);
+  }, []);
 
   return (
     <div className="w-full flex flex-col items-center bg-[#141210] rounded-2xl overflow-hidden border border-gold/30">
