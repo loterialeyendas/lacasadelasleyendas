@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { LogIn, ArrowLeft, X, Sparkles, ShieldCheck, KeyRound } from 'lucide-react';
+import { LogIn, X, Sparkles, ShieldCheck } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { signInAnonymously, updateProfile } from 'firebase/auth';
 import { Button, Card, MysticalTitle } from './Theme';
@@ -60,21 +60,12 @@ const TALISMANS: Record<TalismanType, TalismanConfig> = {
   }
 };
 
-const SUGGESTED_NAMES = [
-  'El Sombrerón',
-  'El Cadejo',
-  'La Tatuana',
-  'El Cipitío',
-  'La Llorona',
-  'Explorador Místico'
-];
-
 interface LoginProps {
   onLogin: (user: any) => void;
   onBack?: () => void;
 }
 
-export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
+export const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [name, setName] = useState('');
   const [selectedTalisman, setSelectedTalisman] = useState<TalismanType>('oro');
   const [loading, setLoading] = useState(false);
@@ -82,12 +73,6 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
   const [error, setError] = useState('');
 
   const currentTalisman = TALISMANS[selectedTalisman];
-
-  const handleSelectSuggestion = (suggestion: string) => {
-    sound.playClick();
-    setName(suggestion);
-    setError('');
-  };
 
   const handleSelectTalisman = (type: TalismanType) => {
     sound.playClick();
@@ -99,7 +84,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
     const cleanName = name.trim();
     if (!cleanName) {
       sound.playError();
-      setError('Escribe tu nombre o elige un apodo místico');
+      setError('Por favor ingresa tu nombre o apodo de explorador');
       return;
     }
 
@@ -118,8 +103,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
         finalUser = userCredential.user;
       } catch (authErr: any) {
         console.warn('Firebase Auth no disponible en este momento, usando perfil local offline-first:', authErr);
-        // Si el proveedor Anónimo no está habilitado en Firebase Console o no hay red:
-        // Se crea un usuario local persistente para garantizar una experiencia offline-first fluida
+        // Respaldo Offline-First si no hay red o auth anónimo
         const localUid = localStorage.getItem('casa_leyendas_local_uid') || ('exp_' + Math.random().toString(36).substring(2, 9));
         localStorage.setItem('casa_leyendas_local_uid', localUid);
         localStorage.setItem('casa_leyendas_local_name', cleanName);
@@ -134,12 +118,12 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
       setIsUnlocking(true);
       sound.playUnlock();
 
-      // Vibración háptica en dispositivos móviles
+      // Vibración háptica en dispositivos móviles compatibles
       if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
         try {
           navigator.vibrate([40, 50, 70]);
         } catch {
-          // Silencioso en navegadores sin soporte
+          // Silencioso
         }
       }
 
@@ -158,160 +142,137 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.4 }}
-      className="w-full max-w-md mx-auto px-4 py-2 sm:py-6 flex flex-col justify-center"
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.35 }}
+      className="w-full max-w-md mx-auto px-3 py-2 flex flex-col justify-center"
     >
-      {/* Botón superior Volver al Portal (Optimizado para móvil) */}
-      {onBack && (
-        <div className="mb-3 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => {
-              sound.playClick();
-              onBack();
-            }}
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-cream/70 hover:text-gold active:scale-95 transition-all py-2 px-3 rounded-lg border border-gold/20 hover:border-gold/50 bg-black/40 backdrop-blur-md cursor-pointer"
-          >
-            <ArrowLeft size={14} className="text-gold" />
-            <span>Volver al portal</span>
-          </button>
-
-          <span className="text-[10px] text-gold/70 font-mono uppercase tracking-wider flex items-center gap-1">
-            <KeyRound size={12} />
-            Acceso Sagrado
-          </span>
-        </div>
-      )}
-
-      {/* Tarjeta Principal Mística */}
-      <Card className="border border-gold/40 backdrop-blur-xl bg-black/80 p-5 sm:p-7 rounded-2xl shadow-[0_0_35px_rgba(0,0,0,0.85)] relative overflow-hidden">
+      {/* Tarjeta Principal Mística con Espaciado Vertical Optimizado */}
+      <Card className="border border-gold/40 backdrop-blur-xl bg-black/85 p-4 sm:p-6 rounded-2xl shadow-[0_0_35px_rgba(0,0,0,0.85)] relative overflow-hidden space-y-4">
         {/* Resplandor místico de fondo según el talismán */}
         <div 
-          className="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full pointer-events-none blur-3xl transition-colors duration-700 opacity-40"
+          className="absolute -top-20 left-1/2 -translate-x-1/2 w-56 h-56 rounded-full pointer-events-none blur-3xl transition-colors duration-700 opacity-35"
           style={{ backgroundColor: currentTalisman.glowColor }}
         />
 
-        {/* Encabezado con Logo y Escenario Candado-Llave */}
-        <div className="relative text-center space-y-3 mb-5">
-          {/* Logo flotante sutil */}
+        {/* Encabezado: Logo y Título Compactos */}
+        <div className="relative text-center space-y-1.5">
           <div className="flex items-center justify-center gap-2">
             <img 
               src={logo} 
               alt="Logo La Casa de las Leyendas" 
-              className="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(190,141,44,0.4)]" 
+              className="w-8 h-8 sm:w-9 sm:h-9 object-contain drop-shadow-[0_0_8px_rgba(190,141,44,0.4)]" 
             />
-            <div className="text-left">
-              <span className="block text-[10px] text-gold/80 font-serif tracking-[0.25em] uppercase">Guatemala</span>
-              <span className="block text-xs font-display text-cream tracking-wider">Casa de las Leyendas</span>
+            <div className="text-left leading-none">
+              <span className="block text-[9px] text-gold/80 font-serif tracking-[0.25em] uppercase">Guatemala</span>
+              <span className="block text-xs font-display text-cream tracking-wider font-bold">Casa de las Leyendas</span>
             </div>
           </div>
 
-          {/* Escenario Ritual: Candado y Llave Interactivos */}
-          <div className="relative h-32 flex items-center justify-center select-none py-1">
-            {/* Halo radiante central */}
-            <motion.div
-              animate={{
-                scale: isUnlocking ? [1, 1.8, 2.2] : [1, 1.08, 1],
-                opacity: isUnlocking ? [0.6, 1, 0] : [0.35, 0.6, 0.35]
-              }}
-              transition={{
-                duration: isUnlocking ? 0.75 : 3.5,
-                repeat: isUnlocking ? 0 : Infinity,
-                ease: "easeInOut"
-              }}
-              className="absolute w-28 h-28 rounded-full pointer-events-none blur-xl"
-              style={{ backgroundColor: currentTalisman.glowColor }}
+          <MysticalTitle className="text-xl sm:text-2xl mb-0 font-bold tracking-wider">
+            RITUAL DE ENTRADA
+          </MysticalTitle>
+          <p className="text-cream/70 italic text-[11px] sm:text-xs font-serif leading-tight">
+            Forja tu identidad para que los guardianes reconozcan tu espíritu
+          </p>
+        </div>
+
+        {/* Escenario Ritual Compacto: Candado y Llave Interactivos */}
+        <div className="relative h-24 sm:h-28 flex items-center justify-center select-none py-1">
+          {/* Halo radiante central */}
+          <motion.div
+            animate={{
+              scale: isUnlocking ? [1, 1.8, 2.2] : [1, 1.08, 1],
+              opacity: isUnlocking ? [0.6, 1, 0] : [0.35, 0.6, 0.35]
+            }}
+            transition={{
+              duration: isUnlocking ? 0.75 : 3.5,
+              repeat: isUnlocking ? 0 : Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute w-24 h-24 rounded-full pointer-events-none blur-xl"
+            style={{ backgroundColor: currentTalisman.glowColor }}
+          />
+
+          {/* Candado Místico */}
+          <motion.div
+            animate={
+              isUnlocking
+                ? { scale: [1, 1.15, 1.25], filter: ['brightness(1)', 'brightness(1.5)', 'brightness(1.8)'] }
+                : { y: [0, -3, 0] }
+            }
+            transition={
+              isUnlocking
+                ? { duration: 0.7 }
+                : { duration: 4, repeat: Infinity, ease: 'easeInOut' }
+            }
+            className="relative z-10"
+          >
+            <img
+              src={currentTalisman.lockImg}
+              alt={currentTalisman.name}
+              className="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] filter"
             />
 
-            {/* Candado Místico */}
-            <motion.div
-              animate={
-                isUnlocking
-                  ? { scale: [1, 1.15, 1.25], filter: ['brightness(1)', 'brightness(1.5)', 'brightness(1.8)'] }
-                  : { y: [0, -4, 0] }
-              }
-              transition={
-                isUnlocking
-                  ? { duration: 0.7 }
-                  : { duration: 4, repeat: Infinity, ease: 'easeInOut' }
-              }
-              className="relative z-10"
-            >
-              <img
-                src={currentTalisman.lockImg}
-                alt={currentTalisman.name}
-                className="w-24 h-24 sm:w-28 sm:h-28 object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] filter"
-              />
+            {/* Indicador de estado del portal */}
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/85 border border-gold/40 px-2 py-0.5 rounded-full text-[9px] font-mono tracking-widest text-gold shadow-sm flex items-center gap-1">
+              {isUnlocking ? (
+                <>
+                  <Sparkles size={10} className="text-gold animate-spin" />
+                  <span className="text-gold font-bold">DESBLOQUEADO</span>
+                </>
+              ) : (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+                  <span>PORTAL SELLADO</span>
+                </>
+              )}
+            </div>
+          </motion.div>
 
-              {/* Indicador de estado místico */}
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/80 border border-gold/40 px-2 py-0.5 rounded-full text-[9px] font-mono tracking-widest text-gold shadow-sm flex items-center gap-1">
-                {isUnlocking ? (
-                  <>
-                    <Sparkles size={10} className="text-gold animate-spin" />
-                    <span className="text-gold font-bold">DESBLOQUEADO</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-                    <span>PORTAL SELLADO</span>
-                  </>
-                )}
-              </div>
-            </motion.div>
-
-            {/* Llave Mística Animada que Encaja en el Candado */}
-            <motion.div
-              animate={
-                isUnlocking
-                  ? {
-                      x: [-45, -12, 0],
-                      y: [10, -5, 0],
-                      rotate: [-20, 45, 90],
-                      opacity: [1, 1, 0.8]
-                    }
-                  : name.trim().length > 0
-                  ? {
-                      x: [-40, -32, -40],
-                      y: [5, 0, 5],
-                      rotate: [-25, -15, -25]
-                    }
-                  : {
-                      x: [-50, -45, -50],
-                      y: [8, 2, 8],
-                      rotate: [-30, -25, -30]
-                    }
-              }
-              transition={
-                isUnlocking
-                  ? { duration: 0.6, ease: "easeOut" }
-                  : { duration: 3, repeat: Infinity, ease: "easeInOut" }
-              }
-              className="absolute z-20 pointer-events-none"
-            >
-              <img
-                src={currentTalisman.keyImg}
-                alt={`Llave ${currentTalisman.name}`}
-                className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
-              />
-            </motion.div>
-          </div>
-
-          <div className="space-y-1">
-            <MysticalTitle className="text-xl sm:text-2xl mb-0">RITUAL DE ENTRADA</MysticalTitle>
-            <p className="text-cream/70 italic text-xs font-serif leading-tight px-2">
-              Forja tu identidad para que los guardianes reconozcan tu espíritu
-            </p>
-          </div>
+          {/* Llave Mística Animada que Encaja en el Candado */}
+          <motion.div
+            animate={
+              isUnlocking
+                ? {
+                    x: [-40, -10, 0],
+                    y: [8, -3, 0],
+                    rotate: [-20, 45, 90],
+                    opacity: [1, 1, 0.8]
+                  }
+                : name.trim().length > 0
+                ? {
+                    x: [-35, -28, -35],
+                    y: [4, 0, 4],
+                    rotate: [-25, -15, -25]
+                  }
+                : {
+                    x: [-42, -38, -42],
+                    y: [6, 2, 6],
+                    rotate: [-30, -25, -30]
+                  }
+            }
+            transition={
+              isUnlocking
+                ? { duration: 0.6, ease: "easeOut" }
+                : { duration: 3, repeat: Infinity, ease: "easeInOut" }
+            }
+            className="absolute z-20 pointer-events-none"
+          >
+            <img
+              src={currentTalisman.keyImg}
+              alt={`Llave ${currentTalisman.name}`}
+              className="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
+            />
+          </motion.div>
         </div>
 
         {/* Selector de Talismán Guardián (Oro, Jade, Plata, Vida) */}
-        <div className="mb-4">
-          <label className="text-[10px] uppercase font-mono tracking-widest text-gold/80 block mb-1.5 px-0.5 flex items-center justify-between">
+        <div>
+          <label className="text-[10px] uppercase font-mono tracking-widest text-gold/80 block mb-1 px-0.5 flex items-center justify-between">
             <span>Elige tu Llave Guardiana:</span>
-            <span className="text-[9px] text-cream/40 lowercase">{currentTalisman.name}</span>
+            <span className="text-[9px] text-cream/40 capitalize">{currentTalisman.name}</span>
           </label>
           <div className="grid grid-cols-4 gap-1.5">
             {(Object.keys(TALISMANS) as TalismanType[]).map((type) => {
@@ -328,7 +289,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
                       : 'border-white/10 hover:border-white/20 bg-white/5 text-cream/60'
                   }`}
                 >
-                  <img src={item.keyImg} alt={item.name} className="w-6 h-6 object-contain mb-1" />
+                  <img src={item.keyImg} alt={item.name} className="w-5 h-5 sm:w-6 sm:h-6 object-contain mb-0.5" />
                   <span className="text-[9px] font-sans capitalize tracking-tight">{type}</span>
                 </button>
               );
@@ -336,12 +297,12 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
           </div>
         </div>
 
-        {/* Formulario de Acceso Optimizado para Pantallas Táctiles */}
-        <form onSubmit={handleLogin} className="space-y-3.5">
-          <div className="space-y-1.5">
+        {/* Formulario de Entrada */}
+        <form onSubmit={handleLogin} className="space-y-3">
+          <div className="space-y-1">
             <label 
               htmlFor="playerNameInput" 
-              className="text-gold text-[11px] uppercase tracking-widest font-mono block px-1"
+              className="text-gold text-[10px] sm:text-[11px] uppercase tracking-widest font-mono block px-1"
             >
               Nombre del Jugador o Apodo
             </label>
@@ -355,7 +316,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
                   setName(e.target.value);
                   if (error) setError('');
                 }}
-                placeholder="Ej. El Cadejo, Sara..."
+                placeholder="Escribe tu nombre o apodo..."
                 maxLength={24}
                 autoFocus
                 autoComplete="nickname"
@@ -365,7 +326,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
                 inputMode="text"
                 enterKeyHint="go"
                 disabled={loading || isUnlocking}
-                className="w-full bg-black/60 border border-gold/30 rounded-xl px-3.5 py-3 pr-10 text-cream text-[16px] placeholder:text-cream/30 focus:border-gold focus:ring-1 focus:ring-gold/50 outline-none transition-all shadow-inner"
+                className="w-full bg-black/60 border border-gold/30 rounded-xl px-3.5 py-3 pr-10 text-cream text-[15px] sm:text-[16px] placeholder:text-cream/30 focus:border-gold focus:ring-1 focus:ring-gold/50 outline-none transition-all shadow-inner"
               />
 
               {/* Botón rápido para limpiar texto en móvil */}
@@ -385,32 +346,6 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
             </div>
           </div>
 
-          {/* Sugerencias Rápidas para Móvil (Apodos Míticos con un solo tap) */}
-          <div className="space-y-1.5">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-cream/50 block px-1">
-              Inspiración Rápida:
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {SUGGESTED_NAMES.map((sug) => {
-                const isActive = name === sug;
-                return (
-                  <button
-                    key={sug}
-                    type="button"
-                    onClick={() => handleSelectSuggestion(sug)}
-                    className={`text-[11px] font-sans px-2.5 py-1 rounded-full border transition-all cursor-pointer active:scale-95 ${
-                      isActive
-                        ? 'border-gold text-gold bg-gold/15 font-semibold'
-                        : 'border-white/10 hover:border-gold/30 text-cream/70 bg-white/5'
-                    }`}
-                  >
-                    {sug}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
           {/* Mensaje de error amigable */}
           <AnimatePresence>
             {error && (
@@ -420,7 +355,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden"
               >
-                <div className="bg-maya-red/15 border border-maya-red/40 rounded-lg p-2.5 text-cream text-[11px] text-center flex items-center justify-center gap-1.5">
+                <div className="bg-maya-red/15 border border-maya-red/40 rounded-lg p-2 text-cream text-[11px] text-center flex items-center justify-center gap-1.5">
                   <span className="text-maya-red font-bold">⚠</span>
                   <span>{error}</span>
                 </div>
@@ -428,10 +363,10 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
             )}
           </AnimatePresence>
 
-          {/* Botón Principal de Gran Área Táctil para Móvil (Mínimo 52px de altura) */}
+          {/* Botón Principal de Acceso */}
           <Button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 min-h-[52px] py-3.5 text-base sm:text-lg tracking-wider rounded-xl shadow-[0_4px_20px_rgba(190,141,44,0.35)] mt-2"
+            className="w-full flex items-center justify-center gap-2 min-h-[48px] py-3 text-sm sm:text-base tracking-wider rounded-xl shadow-[0_4px_20px_rgba(190,141,44,0.35)] cursor-pointer"
             disabled={loading || isUnlocking}
           >
             {isUnlocking ? (
@@ -440,7 +375,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
                 animate={{ scale: 1 }}
                 className="flex items-center gap-2 text-gold font-bold"
               >
-                <Sparkles size={20} className="animate-spin" />
+                <Sparkles size={18} className="animate-spin" />
                 <span>¡Abriendo Portal Sagrado!</span>
               </motion.div>
             ) : loading ? (
@@ -450,7 +385,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
               </div>
             ) : (
               <>
-                <LogIn size={20} className="text-gold" />
+                <LogIn size={18} className="text-gold" />
                 <span>Desbloquear y Entrar</span>
               </>
             )}
@@ -458,18 +393,14 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
         </form>
 
         {/* Pie informativo sutil */}
-        <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[10px] text-cream/40">
+        <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-cream/40">
           <span className="flex items-center gap-1">
             <ShieldCheck size={12} className="text-gold/60" />
-            Sesión Anónima Segura
+            Progreso guardado en tu pasaporte
           </span>
-          <span>Leyendas de Guatemala</span>
+          <span className="font-serif italic">Guatemala</span>
         </div>
       </Card>
-
-      <p className="text-[10px] text-cream/30 text-center uppercase tracking-tight mt-3">
-        Tu pasaporte y tus sellos se conservarán en tu dispositivo.
-      </p>
     </motion.div>
   );
 };
