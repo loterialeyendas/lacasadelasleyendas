@@ -123,27 +123,65 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
       exit={{ opacity: 0, scale: 0.96 }}
       className="w-full max-w-lg mx-auto px-2 sm:px-4 py-2 sm:py-4 space-y-4 relative"
     >
-      {/* Elemento Gráfico Ambiental: Luna Mística Flotante */}
-      <div className="absolute -top-10 -right-2 sm:-right-6 w-24 h-24 sm:w-28 sm:h-28 pointer-events-none opacity-45 mix-blend-screen z-0">
-        <motion.img
-          src={lunaSvg}
-          alt="Luna"
-          animate={{ y: [0, -6, 0], rotate: [0, 2, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(252,207,101,0.6)]"
-        />
-      </div>
-
-      <Card className="border border-gold/40 backdrop-blur-xl bg-black/85 p-4 sm:p-6 rounded-2xl shadow-[0_0_35px_rgba(0,0,0,0.9)] space-y-5 relative z-10 overflow-hidden">
+      <Card className="border-2 border-gold/50 backdrop-blur-xl bg-black/90 p-4 sm:p-6 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.95)] space-y-5 relative z-10 overflow-hidden">
         
+        {/* MURAL MÍSTICO AMBIENTAL: VOLCÁN Y LUNA EN LA SALA */}
+        <div className="relative rounded-2xl overflow-hidden border border-gold/40 bg-gradient-to-b from-[#131a2f] via-[#0b0f1a] to-black/90 p-3 sm:p-4 shadow-2xl">
+          {/* Estrellas de fondo */}
+          <div className="absolute inset-0 bg-[radial-gradient(#fcdc70_1px,transparent_1px)] [background-size:16px_16px] opacity-25 pointer-events-none" />
+
+          <div className="flex items-center justify-between relative z-10 gap-2">
+            {/* VOLCÁN ANCESTRAL (Izquierda) */}
+            <motion.div
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 flex flex-col items-center"
+            >
+              <img
+                src={volcanSvg}
+                alt="Volcán ancestral de Guatemala"
+                className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(239,68,68,0.7)]"
+              />
+              <span className="text-[8px] font-mono text-red-400/90 tracking-wider uppercase -mt-1 font-bold">
+                Tierra Sagrada
+              </span>
+            </motion.div>
+
+            {/* TÍTULO Y AMBIENTACIÓN CENTRAL */}
+            <div className="text-center px-1 flex-1">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-gold/15 border border-gold/40 text-gold text-[9px] uppercase font-mono tracking-widest font-bold">
+                <Crown size={11} className="text-gold" />
+                Sala del Mayordomo
+              </span>
+              <h2 className="font-display text-sm sm:text-base text-cream font-bold mt-1 tracking-wider leading-tight">
+                CONVOCATORIA NOCTURNA
+              </h2>
+              <p className="text-[10px] sm:text-xs text-gold/80 font-serif italic leading-tight mt-0.5">
+                Bajo el resplandor de la Luna y la fuerza del Volcán
+              </p>
+            </div>
+
+            {/* LUNA MAYA DORADA (Derecha) */}
+            <motion.div
+              animate={{ y: [0, -5, 0], rotate: [0, 3, 0] }}
+              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 flex flex-col items-center"
+            >
+              <img
+                src={lunaSvg}
+                alt="Luna maya dorada"
+                className="w-full h-full object-contain filter drop-shadow-[0_0_18px_rgba(252,207,101,0.8)]"
+              />
+              <span className="text-[8px] font-mono text-gold/90 tracking-wider uppercase -mt-1 font-bold">
+                Noche Mística
+              </span>
+            </motion.div>
+          </div>
+        </div>
+
         {/* Cabecera Ceremonial: Código de Sala */}
         <div className="text-center space-y-2.5">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold/15 border border-gold/40 text-gold text-[10px] uppercase font-mono tracking-widest">
-            <KeyRound size={12} />
-            Sala de Espera del Mayordomo
-          </div>
-
-          <div className="py-3.5 px-4 bg-black/60 border border-gold/40 rounded-xl space-y-2.5 shadow-inner">
+          <div className="py-3 px-4 bg-black/70 border border-gold/40 rounded-xl space-y-2.5 shadow-inner">
             <span className="text-[10px] font-mono uppercase tracking-widest text-cream/70 block">
               Código de Sala para Convidar
             </span>
@@ -495,14 +533,12 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
           </Button>
         </div>
 
-        {/* Ambientación Inferior: Silueta del Volcán */}
-        <div className="relative w-full h-20 overflow-hidden rounded-xl opacity-30 pointer-events-none -mb-2">
-          <img 
-            src={volcanSvg} 
-            alt="Volcán" 
-            className="w-full h-full object-cover object-bottom filter drop-shadow-[0_0_15px_rgba(239,68,68,0.4)]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+        {/* Pie Ceremonial */}
+        <div className="pt-1 border-t border-gold/15 text-center">
+          <p className="text-[10px] text-cream/40 font-mono flex items-center justify-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" />
+            La Casa de las Leyendas • Sala Sincronizada en Vivo
+          </p>
         </div>
       </Card>
     </motion.div>
