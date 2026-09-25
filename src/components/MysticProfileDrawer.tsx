@@ -9,16 +9,17 @@ import {
   Music, 
   Shield, 
   Ghost, 
-  Sailboat, 
   Moon, 
   Flame, 
   BookOpen, 
-  Users, 
-  MapPin, 
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Volume2,
+  VolumeX,
+  Sliders,
+  Sparkle
 } from 'lucide-react';
-import lunaSvg from '../images/Luna.svg';
+import logoPng from '../images/logo.png';
 import { LEGEND_CHARACTERS, getCharacterById, getPlayerCeremonialRank, LegendCharacter } from '../data/characters';
 import { PlayerKeys } from '../types/game';
 import { sound } from '../lib/audio';
@@ -29,7 +30,6 @@ const ICON_COMPONENTS: Record<string, React.FC<{ size?: number; className?: stri
   Shield: ({ size = 20, className }) => <Shield size={size} className={className} />,
   Ghost: ({ size = 20, className }) => <Ghost size={size} className={className} />,
   Sparkles: ({ size = 20, className }) => <Sparkles size={size} className={className} />,
-  Sailboat: ({ size = 20, className }) => <Sailboat size={size} className={className} />,
   Moon: ({ size = 20, className }) => <Moon size={size} className={className} />,
   Flame: ({ size = 20, className }) => <Flame size={size} className={className} />
 };
@@ -48,6 +48,7 @@ interface MysticProfileDrawerProps {
   onNavigateToJoin?: () => void;
   onNavigateToTheater?: () => void;
   onLogout: () => void;
+  initialTab?: 'characters' | 'profile' | 'menu';
 }
 
 export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
@@ -63,15 +64,25 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
   onNavigateToPassport,
   onNavigateToJoin,
   onNavigateToTheater,
-  onLogout
+  onLogout,
+  initialTab = 'characters'
 }) => {
-  const [activeTab, setActiveTab] = useState<'profile' | 'characters' | 'menu'>('characters');
+  const [activeTab, setActiveTab] = useState<'profile' | 'characters' | 'menu'>(initialTab);
+  const [isMuted, setIsMuted] = useState(sound.getIsMuted());
   const activeChar = getCharacterById(currentCharacterId);
   const rank = getPlayerCeremonialRank(totalScore, totalKeys);
 
   const handleEquip = (char: LegendCharacter) => {
     sound.playClick();
     onSelectCharacter(char.id);
+  };
+
+  const handleToggleSound = () => {
+    const muted = sound.toggleMute();
+    setIsMuted(muted);
+    if (!muted) {
+      sound.playMysticChime();
+    }
   };
 
   return (
@@ -99,37 +110,37 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
             {/* Halo áureo superior para luminosidad celestial */}
             <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-80 h-64 rounded-full bg-gradient-to-b from-amber-400/25 via-gold/15 to-transparent blur-3xl pointer-events-none" />
 
-            {/* Cabecera Ceremonial con la Luna Maya (Luna.svg) */}
-            <div className="relative p-4 sm:p-5 border-b border-gold/40 bg-gradient-to-b from-[#261b0e]/95 via-[#1c140b]/95 to-[#140e08]/95 flex items-center justify-between select-none shadow-md">
-              <div className="flex items-center gap-3">
+            {/* Cabecera Ceremonial con el Logo Oficial de La Casa de las Leyendas */}
+            <div className="relative p-4 sm:p-5 border-b border-gold/40 bg-gradient-to-b from-[#281c0f]/95 via-[#1d140a]/95 to-[#140e08]/95 flex items-center justify-between select-none shadow-md">
+              <div className="flex items-center gap-3 min-w-0">
+                {/* Marco circular de oro con el logo oficial de La Casa de las Leyendas */}
                 <div 
-                  className="relative group cursor-pointer" 
+                  className="relative group cursor-pointer shrink-0" 
                   onClick={() => setActiveTab('profile')}
-                  title="Toca para ver tu perfil ceremonial"
+                  title="La Casa de las Leyendas - Toca para ver tu perfil"
                 >
-                  {/* Marco circular de oro con pedestal para la Luna */}
-                  <div className="relative w-12 h-12 sm:w-13 sm:h-13 rounded-full p-1 bg-gradient-to-b from-amber-500/30 via-black to-[#1c150c] border-2 border-gold shadow-[0_0_20px_rgba(252,207,101,0.5)] flex items-center justify-center overflow-hidden">
+                  <div className="relative w-12 h-12 sm:w-13 sm:h-13 rounded-full p-0.5 bg-gradient-to-b from-amber-500/50 via-black to-[#1c150c] border-2 border-gold shadow-[0_0_20px_rgba(252,207,101,0.5)] flex items-center justify-center overflow-hidden">
                     <img 
-                      src={lunaSvg} 
-                      alt="Luna de las Leyendas" 
-                      className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(252,207,101,0.7)] transition-transform duration-500 group-hover:rotate-12 group-hover:scale-105" 
+                      src={logoPng} 
+                      alt="La Casa de las Leyendas" 
+                      className="w-full h-full object-cover filter drop-shadow-[0_0_6px_rgba(252,207,101,0.6)] group-hover:scale-105 transition-transform duration-300" 
                     />
                   </div>
                   <div className="absolute -bottom-1 -right-1 bg-[#1a1208] border border-gold/80 rounded-full p-0.5 shadow-md">
-                    <Sparkles size={11} className="text-gold animate-spin" />
+                    <Sparkle size={10} className="text-gold fill-gold" />
                   </div>
                 </div>
 
-                <div className="text-left">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] uppercase font-mono tracking-widest text-amber-300 font-bold">
-                      Círculo de la Luna
+                <div className="text-left min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[10px] uppercase font-mono tracking-widest text-amber-300 font-extrabold truncate">
+                      LA CASA DE LAS LEYENDAS
                     </span>
-                    <span className="text-[9px] px-2 py-0.2 rounded-full bg-amber-950/80 text-amber-200 border border-gold/60 font-mono font-bold shadow-sm">
-                      Guatemala
+                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-950/80 text-amber-200 border border-gold/60 font-mono font-bold shadow-sm">
+                      GT
                     </span>
                   </div>
-                  <h2 className="text-base sm:text-lg font-display font-extrabold text-[#FFF0C8] tracking-wide drop-shadow-sm truncate max-w-[200px]">
+                  <h2 className="text-base sm:text-lg font-display font-extrabold text-[#FFF0C8] tracking-wide drop-shadow-sm truncate">
                     {userName}
                   </h2>
                 </div>
@@ -140,7 +151,7 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                 type="button"
                 onClick={onClose}
                 aria-label="Cerrar menú místico"
-                className="w-9 h-9 rounded-full bg-[#1b140b] border border-gold/60 text-amber-200 hover:text-white hover:border-gold hover:bg-gold/25 flex items-center justify-center transition-all cursor-pointer shadow-md"
+                className="w-9 h-9 rounded-full bg-[#1b140b] border border-gold/60 text-amber-200 hover:text-white hover:border-gold hover:bg-gold/25 flex items-center justify-center transition-all cursor-pointer shadow-md shrink-0 ml-2"
               >
                 <X size={18} />
               </button>
@@ -158,7 +169,7 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                 }`}
               >
                 <span>🎭</span>
-                <span>Personajes</span>
+                <span>Tzipitíos</span>
               </button>
 
               <button
@@ -183,8 +194,8 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                     : 'border-transparent text-[#F5EDE0]/60 hover:text-amber-200 hover:bg-[#1a1309]'
                 }`}
               >
-                <span>🧭</span>
-                <span>Atajos</span>
+                <span>⚙️</span>
+                <span>Ajustes</span>
               </button>
             </div>
 
@@ -453,72 +464,121 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                 </div>
               )}
 
-              {/* PESTAÑA 3: ATAJOS DE NAVEGACIÓN */}
+              {/* PESTAÑA 3: AJUSTES Y ATAJOS DE NAVEGACIÓN */}
               {activeTab === 'menu' && (
-                <div className="space-y-2.5 text-left font-mono text-xs">
-                  {onNavigateToPassport && (
-                    <button
-                      type="button"
-                      onClick={() => { onClose(); onNavigateToPassport(); }}
-                      className="w-full p-3.5 rounded-xl bg-[#161008]/90 border border-gold/35 hover:border-gold hover:bg-[#20160c] flex items-center justify-between text-[#FFF0C8] transition-all cursor-pointer shadow-sm"
-                    >
+                <div className="space-y-4 text-left font-mono text-xs">
+                  {/* SECCIÓN 1: AJUSTES DE AMBIENTE Y AUDIO */}
+                  <div className="space-y-2">
+                    <h4 className="text-xs uppercase font-mono tracking-wider text-amber-300 font-bold px-1 flex items-center gap-1.5">
+                      <Sliders size={13} className="text-gold" />
+                      <span>Configuración del Ritual</span>
+                    </h4>
+
+                    {/* Módulo de Audio y Sonido */}
+                    <div className="p-3.5 rounded-xl bg-gradient-to-r from-[#1d140a] via-[#160f07] to-[#120b05] border-2 border-gold/50 flex items-center justify-between shadow-md">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-black/60 border border-gold/40 flex items-center justify-center text-lg text-gold">
-                          📜
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${
+                          !isMuted 
+                            ? 'border-gold bg-gold/20 text-gold shadow-[0_0_12px_rgba(206,136,34,0.4)]' 
+                            : 'border-gold/30 bg-black/60 text-[#F5EDE0]/40'
+                        }`}>
+                          {!isMuted ? <Volume2 size={20} className="text-gold" /> : <VolumeX size={20} />}
                         </div>
                         <div>
-                          <span className="font-bold block text-sm font-sans text-[#FFF0C8]">Pasaporte de Leyendas</span>
-                          <span className="text-[10px] text-[#F5EDE0]/65">Explora tus sellos y misterios</span>
+                          <span className="font-bold block text-sm font-sans text-[#FFF0C8]">
+                            Efectos y Campanas Místicas
+                          </span>
+                          <span className="text-[11px] text-amber-200/70 font-serif">
+                            {!isMuted ? 'Sonido celestial activado' : 'Sonido silenciado'}
+                          </span>
                         </div>
                       </div>
-                      <ChevronRight size={17} className="text-gold" />
-                    </button>
-                  )}
 
-                  {onNavigateToJoin && (
-                    <button
-                      type="button"
-                      onClick={() => { onClose(); onNavigateToJoin(); }}
-                      className="w-full p-3.5 rounded-xl bg-[#161008]/90 border border-gold/35 hover:border-gold hover:bg-[#20160c] flex items-center justify-between text-[#FFF0C8] transition-all cursor-pointer shadow-sm"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-black/60 border border-gold/40 flex items-center justify-center text-lg text-gold">
-                          👥
-                        </div>
-                        <div>
-                          <span className="font-bold block text-sm font-sans text-[#FFF0C8]">Unirse a Sala Multijugador</span>
-                          <span className="text-[10px] text-[#F5EDE0]/65">Ingresa con código PIN o QR</span>
-                        </div>
-                      </div>
-                      <ChevronRight size={17} className="text-gold" />
-                    </button>
-                  )}
+                      <button
+                        type="button"
+                        onClick={handleToggleSound}
+                        className={`px-3 py-1.5 rounded-lg border font-mono font-bold text-xs transition-all cursor-pointer shadow-sm active:scale-95 ${
+                          !isMuted
+                            ? 'border-gold bg-gold text-[#140e08] shadow-[0_0_12px_rgba(206,136,34,0.4)]'
+                            : 'border-gold/50 bg-black/70 text-amber-300 hover:border-gold'
+                        }`}
+                      >
+                        {!isMuted ? 'ACTIVADO' : 'ACTIVAR'}
+                      </button>
+                    </div>
+                  </div>
 
-                  {onNavigateToTheater && (
-                    <button
-                      type="button"
-                      onClick={() => { onClose(); onNavigateToTheater(); }}
-                      className="w-full p-3.5 rounded-xl bg-[#161008]/90 border border-gold/35 hover:border-gold hover:bg-[#20160c] flex items-center justify-between text-[#FFF0C8] transition-all cursor-pointer shadow-sm"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-black/60 border border-gold/40 flex items-center justify-center text-lg text-gold">
-                          🎭
-                        </div>
-                        <div>
-                          <span className="font-bold block text-sm font-sans text-[#FFF0C8]">Ruta de Leyendas en Vivo</span>
-                          <span className="text-[10px] text-[#F5EDE0]/65">Teatro inmersivo y experiencias</span>
-                        </div>
-                      </div>
-                      <ChevronRight size={17} className="text-gold" />
-                    </button>
-                  )}
+                  {/* SECCIÓN 2: PORTALES Y ATAJOS */}
+                  <div className="space-y-2">
+                    <h4 className="text-xs uppercase font-mono tracking-wider text-amber-300 font-bold px-1 flex items-center gap-1.5">
+                      <Sparkles size={13} className="text-gold" />
+                      <span>Portales Rápidos</span>
+                    </h4>
 
-                  {/* Cerrar Sesión Ceremonial */}
-                  <div className="pt-4 border-t border-gold/20">
+                    {onNavigateToPassport && (
+                      <button
+                        type="button"
+                        onClick={() => { onClose(); onNavigateToPassport(); }}
+                        className="w-full p-3.5 rounded-xl bg-[#161008]/90 border border-gold/35 hover:border-gold hover:bg-[#20160c] flex items-center justify-between text-[#FFF0C8] transition-all cursor-pointer shadow-sm group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-black/60 border border-gold/40 flex items-center justify-center text-lg text-gold group-hover:scale-105 transition-transform">
+                            📜
+                          </div>
+                          <div>
+                            <span className="font-bold block text-sm font-sans text-[#FFF0C8]">Pasaporte de Leyendas</span>
+                            <span className="text-[10px] text-[#F5EDE0]/65">Explora tus sellos y misterios de Guatemala</span>
+                          </div>
+                        </div>
+                        <ChevronRight size={17} className="text-gold group-hover:translate-x-0.5 transition-transform" />
+                      </button>
+                    )}
+
+                    {onNavigateToJoin && (
+                      <button
+                        type="button"
+                        onClick={() => { onClose(); onNavigateToJoin(); }}
+                        className="w-full p-3.5 rounded-xl bg-[#161008]/90 border border-gold/35 hover:border-gold hover:bg-[#20160c] flex items-center justify-between text-[#FFF0C8] transition-all cursor-pointer shadow-sm group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-black/60 border border-gold/40 flex items-center justify-center text-lg text-gold group-hover:scale-105 transition-transform">
+                            👥
+                          </div>
+                          <div>
+                            <span className="font-bold block text-sm font-sans text-[#FFF0C8]">Unirse a Sala Multijugador</span>
+                            <span className="text-[10px] text-[#F5EDE0]/65">Ingresa con código PIN o QR de sala</span>
+                          </div>
+                        </div>
+                        <ChevronRight size={17} className="text-gold group-hover:translate-x-0.5 transition-transform" />
+                      </button>
+                    )}
+
+                    {onNavigateToTheater && (
+                      <button
+                        type="button"
+                        onClick={() => { onClose(); onNavigateToTheater(); }}
+                        className="w-full p-3.5 rounded-xl bg-[#161008]/90 border border-gold/35 hover:border-gold hover:bg-[#20160c] flex items-center justify-between text-[#FFF0C8] transition-all cursor-pointer shadow-sm group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-black/60 border border-gold/40 flex items-center justify-center text-lg text-gold group-hover:scale-105 transition-transform">
+                            🎭
+                          </div>
+                          <div>
+                            <span className="font-bold block text-sm font-sans text-[#FFF0C8]">Ruta de Leyendas en Vivo</span>
+                            <span className="text-[10px] text-[#F5EDE0]/65">Teatro inmersivo y experiencias presenciales</span>
+                          </div>
+                        </div>
+                        <ChevronRight size={17} className="text-gold group-hover:translate-x-0.5 transition-transform" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* SECCIÓN 3: CERRAR SESIÓN */}
+                  <div className="pt-3 border-t border-gold/25">
                     <button
                       type="button"
                       onClick={() => { onClose(); onLogout(); }}
-                      className="w-full p-3.5 rounded-xl bg-gradient-to-r from-rose-950/50 via-red-950/60 to-rose-950/50 border border-rose-500/60 hover:bg-rose-900/40 text-rose-200 flex items-center justify-center gap-2 transition-all cursor-pointer font-bold shadow-md"
+                      className="w-full p-3.5 rounded-xl bg-gradient-to-r from-rose-950/60 via-red-950/70 to-rose-950/60 border-2 border-rose-500/60 hover:border-rose-400 hover:bg-rose-900/50 text-rose-200 flex items-center justify-center gap-2 transition-all cursor-pointer font-bold shadow-md active:scale-[0.99]"
                     >
                       <LogOut size={16} />
                       <span>Cerrar Sesión Ceremonial</span>
