@@ -731,7 +731,7 @@ export default function App() {
       </main>
 
       {/* Anuncio Místico de Experiencia Móvil para versión web de escritorio */}
-      <DesktopMobileAdviceModal />
+      {screen !== 'login' && <DesktopMobileAdviceModal />}
     </div>
   );
 }

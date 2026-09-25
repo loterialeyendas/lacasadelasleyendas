@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { LogIn, X, Sparkles, ShieldCheck } from 'lucide-react';
+import { LogIn, X, Sparkles, ShieldCheck, Smartphone, QrCode, ArrowRight } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { auth } from '../lib/firebase';
 import { signInAnonymously, updateProfile } from 'firebase/auth';
 import { Button, Card, MysticalTitle } from './Theme';
@@ -60,12 +61,30 @@ const TALISMANS: Record<TalismanType, TalismanConfig> = {
   }
 };
 
+const checkIsDesktopBrowser = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const isLarge = window.innerWidth >= 820;
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  return isLarge && !isMobileUA;
+};
+
 interface LoginProps {
   onLogin: (user: any) => void;
   onBack?: () => void;
 }
 
-export const Login: React.FC<LoginProps> = ({ onLogin }) => {
+export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
+  // En escritorio, el ritual de entrada permanece oculto hasta que el usuario decida entrar en PC
+  const [isDesktopUser] = useState<boolean>(() => checkIsDesktopBrowser());
+  const [showDesktopLogin, setShowDesktopLogin] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    try {
+      return sessionStorage.getItem('casa_leyendas_desktop_allowed') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
   const [name, setName] = useState('');
   const [selectedTalisman, setSelectedTalisman] = useState<TalismanType>('oro');
   const [loading, setLoading] = useState(false);
@@ -73,6 +92,14 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [error, setError] = useState('');
 
   const currentTalisman = TALISMANS[selectedTalisman];
+
+  const handleContinueOnDesktop = () => {
+    sound.playClick();
+    setShowDesktopLogin(true);
+    try {
+      sessionStorage.setItem('casa_leyendas_desktop_allowed', 'true');
+    } catch {}
+  };
 
   const handleSelectTalisman = (type: TalismanType) => {
     sound.playClick();
@@ -139,6 +166,159 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
       setLoading(false);
     }
   };
+
+  // EN LA VERSIÓN WEB DE ESCRITORIO:
+  // Se oculta completamente el Ritual de Entrada y se muestra de forma protagónica
+  // el anuncio ceremonial de experiencia recomendada para móviles con Candado, Llave y Código QR.
+  if (isDesktopUser && !showDesktopLogin) {
+    const qrUrl = typeof window !== 'undefined' ? `${window.location.origin}/juego` : 'https://lacasadelasleyendas.com/juego';
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96 }}
+        transition={{ duration: 0.35 }}
+        className="w-full max-w-xl mx-auto px-4 py-6 flex flex-col justify-center select-none"
+      >
+        <Card className="border-2 border-gold/70 bg-gradient-to-b from-[#1c150c]/95 via-[#130d07]/95 to-[#0b0704]/95 p-6 sm:p-8 rounded-3xl shadow-[0_0_50px_rgba(206,136,34,0.35),0_20px_50px_rgba(0,0,0,0.85)] relative overflow-hidden backdrop-blur-xl space-y-6">
+          {/* Halo áureo superior para dar luminosidad y calidez */}
+          <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-80 h-56 rounded-full bg-gradient-to-b from-amber-400/25 via-gold/15 to-transparent blur-3xl pointer-events-none" />
+
+          {/* Encabezado: Logo y Título */}
+          <div className="relative text-center space-y-2">
+            <div className="flex items-center justify-center gap-2.5">
+              <img 
+                src={logo} 
+                alt="Logo La Casa de las Leyendas" 
+                className="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-[0_0_10px_rgba(252,207,101,0.5)]" 
+              />
+              <div className="text-left leading-none">
+                <span className="block text-[10px] text-amber-300 font-serif tracking-[0.25em] uppercase font-bold">Guatemala</span>
+                <span className="block text-sm font-display text-cream tracking-wider font-bold">Casa de las Leyendas</span>
+              </div>
+            </div>
+
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/60 border border-gold/60 text-amber-300 text-[11px] font-mono tracking-widest uppercase font-bold shadow-sm">
+              <Smartphone size={13} className="text-gold" /> Experiencia Diseñada para Móviles
+            </span>
+          </div>
+
+          {/* Escenario Central: Candado y Llave de Oro interactivos */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center my-2">
+            <div className="md:col-span-5 flex flex-col items-center justify-center text-center">
+              <div className="relative w-36 h-36 flex items-center justify-center rounded-2xl bg-gradient-to-b from-amber-950/40 via-black/60 to-transparent border border-gold/40 p-3 shadow-inner">
+                {/* Halo radiante */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.15, 1],
+                    opacity: [0.4, 0.75, 0.4]
+                  }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute w-28 h-28 rounded-full bg-amber-400/20 blur-xl pointer-events-none"
+                />
+
+                {/* Candado de Oro Sagrado */}
+                <motion.img
+                  src={candadoOroPng}
+                  alt="Candado de Oro"
+                  animate={{ y: [0, -4, 0] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+                  className="w-24 h-24 object-contain relative z-10 drop-shadow-[0_8px_20px_rgba(0,0,0,0.9)] filter"
+                />
+
+                {/* Llave de Oro Mística */}
+                <motion.img
+                  src={llaveOroPng}
+                  alt="Llave de Oro"
+                  animate={{
+                    x: [-24, -14, -24],
+                    y: [4, 0, 4],
+                    rotate: [-20, -5, -20]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  className="w-16 h-16 object-contain absolute z-20 pointer-events-none drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]"
+                />
+
+                {/* Badge de clave móvil */}
+                <div className="absolute -bottom-2.5 bg-[#1a130a] border border-gold/60 px-2.5 py-0.5 rounded-full text-[9px] font-mono text-amber-300 font-bold tracking-widest flex items-center gap-1 shadow-md">
+                  <Sparkles size={10} className="text-gold animate-spin" />
+                  <span>MODO MÓVIL</span>
+                </div>
+              </div>
+
+              <span className="text-[11px] font-mono text-amber-200/80 mt-2 font-medium">
+                Cámara QR • Pasaporte • Audio
+              </span>
+            </div>
+
+            {/* Lado Derecho: Mensaje y Código QR */}
+            <div className="md:col-span-7 flex flex-col justify-center text-left space-y-3">
+              <div>
+                <h3 className="text-xl sm:text-2xl font-display font-extrabold text-amber-200 tracking-wide leading-tight drop-shadow-sm">
+                  ¡La magia cobra vida en tu{' '}
+                  <span className="text-gold underline decoration-gold/50 decoration-2 underline-offset-4">
+                    teléfono móvil
+                  </span>!
+                </h3>
+                <p className="text-xs sm:text-[13px] text-[#F5EDE0] font-serif leading-relaxed mt-2">
+                  La Casa de las Leyendas fue concebida para jugarse con tu teléfono en mano: <strong className="text-amber-200 font-bold">escaneo de cartas físicas con tu cámara</strong>, retos sensoriales y tu pasaporte interactivo.
+                </p>
+              </div>
+
+              {/* Tarjeta de Código QR para Escaneo Instantáneo */}
+              <div className="bg-[#1b140b]/90 border border-gold/50 rounded-2xl p-3 flex items-center gap-3.5 shadow-[0_4px_15px_rgba(0,0,0,0.6)]">
+                <div className="p-1.5 bg-white rounded-xl shadow-md shrink-0 border border-gold/40">
+                  <QRCodeSVG
+                    value={qrUrl}
+                    size={82}
+                    level="M"
+                    includeMargin={false}
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold block flex items-center gap-1.5">
+                    <QrCode size={13} className="text-gold" /> Escanea con tu celular
+                  </span>
+                  <p className="text-[11px] text-[#F5EDE0]/85 font-sans leading-snug mt-0.5">
+                    Apunta tu cámara aquí para abrir la aplicación directamente en tu móvil sin escribir nada.
+                  </p>
+                  <span className="text-[9px] font-mono text-amber-300/70 truncate block mt-1">
+                    lacasadelasleyendas.com
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Botones de Acción al Pie */}
+          <div className="pt-4 border-t border-gold/20 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={handleContinueOnDesktop}
+              className="w-full sm:w-auto px-5 py-3 rounded-xl border border-gold/70 hover:border-gold bg-gold/15 hover:bg-gold/25 text-amber-200 hover:text-white transition-all text-xs font-mono font-bold uppercase tracking-wider cursor-pointer shadow-md flex items-center justify-center gap-2 active:scale-95"
+            >
+              <span>Continuar en este navegador web (PC)</span>
+              <ArrowRight size={14} />
+            </button>
+
+            {onBack && (
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playClick();
+                  onBack();
+                }}
+                className="text-xs font-mono text-cream/50 hover:text-gold transition-colors cursor-pointer py-1"
+              >
+                Volver al portal
+              </button>
+            )}
+          </div>
+        </Card>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
