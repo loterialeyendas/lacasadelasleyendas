@@ -61,6 +61,8 @@ import { PassportStampSvg } from '../components/svgs/PassportStampSvg';
 import logoPng from '../images/logo.png';
 import portadaPng from '../images/png/Portada.png';
 import fondoSvg from '../images/optimized/Fondo.svg';
+import lunaSvg from '../images/Luna.svg';
+import volcanSvg from '../images/volcan.svg';
 
 import candadoJadePng from '../images/png/Candado jade.png';
 import candadoVidaPng from '../images/png/Candado vida.png';
@@ -429,116 +431,173 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
   // PANTALLA DE ACCESO (LOGIN CON PIN)
   if (!isAuthenticated) {
     return (
-      <div className="w-full min-h-screen bg-obsidian text-cream flex items-center justify-center p-4 relative overflow-hidden selection:bg-gold selection:text-obsidian font-sans">
-        {/* Fondo Místico */}
-        <div className="fixed inset-0 pointer-events-none opacity-25">
+      <div className="w-full min-h-screen bg-gradient-to-b from-[#1c150c] via-[#140e08] to-[#0d0905] text-[#FFF0C8] flex flex-col justify-between items-center px-2 sm:px-4 py-4 sm:py-8 relative overflow-hidden selection:bg-gold selection:text-obsidian font-sans">
+        {/* Halo áureo celestial superior */}
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-64 rounded-full bg-gradient-to-b from-amber-400/25 via-gold/15 to-transparent blur-3xl pointer-events-none" />
+
+        {/* Fondo Místico Sutil */}
+        <div className="fixed inset-0 pointer-events-none opacity-15">
           <img src={fondoSvg} alt="Fondo" className="w-full h-full object-cover" />
         </div>
 
-        <Card className="w-full max-w-md p-8 border-gold/50 bg-black/90 relative z-10 shadow-[0_0_50px_rgba(190,141,44,0.3)] rounded-3xl space-y-6 text-center">
-          <div className="flex flex-col items-center space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-gold/15 border border-gold/40 flex items-center justify-center text-gold shadow-[0_0_20px_rgba(190,141,44,0.4)]">
-              <Shield size={32} />
+        {/* ESPACIO SUPERIOR / CABECERA CON LA LUNA MAYA */}
+        <div className="w-full max-w-md mx-auto text-center pt-2 sm:pt-4 relative z-10 select-none">
+          <div className="relative inline-block mb-3">
+            {/* Marco sagrado de la Luna */}
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full p-1.5 bg-gradient-to-b from-amber-500/30 via-black to-[#1c150c] border-2 border-gold shadow-[0_0_30px_rgba(252,207,101,0.5)] flex items-center justify-center mx-auto overflow-hidden">
+              <img 
+                src={lunaSvg} 
+                alt="Luna de las Leyendas" 
+                className="w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(252,207,101,0.7)] transition-transform duration-500 hover:rotate-12 hover:scale-105" 
+              />
             </div>
-            <h1 className="font-display text-2xl text-gold font-bold tracking-wider">
-              PANEL MAYORDOMO
-            </h1>
-            <p className="text-xs text-cream/70 font-serif italic">
-              Gestor de Contenidos, Estaciones Escénicas, Boletería y Personalización Gráfica
-            </p>
+            <div className="absolute -bottom-1 -right-1 bg-[#1a1208] border border-gold/80 rounded-full p-1 shadow-md">
+              <Sparkles size={13} className="text-gold animate-spin" />
+            </div>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="text-xs font-display uppercase tracking-widest text-gold/90 block mb-1.5 text-left font-semibold">
-                Clave de Mayordomo:
-              </label>
-              <div className="relative">
-                <input
-                  type="password"
-                  value={pinInput}
-                  onChange={(e) => setPinInput(e.target.value)}
-                  placeholder="••••"
-                  autoFocus
-                  className="w-full bg-black/80 border border-gold/40 focus:border-gold rounded-xl px-4 py-3 text-center text-xl tracking-widest text-gold font-mono outline-none shadow-inner"
-                />
+          <div className="flex items-center justify-center gap-1.5 mb-1">
+            <span className="text-[10px] uppercase font-mono tracking-widest text-amber-300 font-bold">
+              Círculo de la Luna
+            </span>
+            <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-950/80 text-amber-200 border border-gold/60 font-mono font-bold shadow-sm">
+              Guatemala
+            </span>
+          </div>
+          <h1 className="font-display text-2xl sm:text-3xl text-amber-200 font-extrabold tracking-wider drop-shadow-sm">
+            SALA DEL MAYORDOMO
+          </h1>
+          <p className="text-xs sm:text-sm text-amber-100/75 font-serif italic max-w-xs mx-auto">
+            Acceso sagrado para la administración del templo, estaciones escénicas y reliquias
+          </p>
+        </div>
+
+        {/* TARJETA DE ACCESO CON MARGEN HORIZONTAL MÓVIL AL MÁXIMO */}
+        <div className="w-full max-w-md mx-auto my-auto py-4 relative z-10">
+          <Card className="w-full p-4 sm:p-7 border-2 border-gold/70 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 shadow-[0_0_50px_rgba(206,136,34,0.35),0_20px_50px_rgba(0,0,0,0.85)] rounded-3xl space-y-5 text-center backdrop-blur-xl">
+            <div className="flex items-center justify-center gap-2 text-amber-300 text-xs font-mono font-bold uppercase tracking-wider pb-1 border-b border-gold/20">
+              <KeyRound size={15} className="text-gold" />
+              <span>Verificación de Identidad</span>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="text-left space-y-1.5">
+                <label className="text-[11px] font-mono uppercase tracking-widest text-amber-300/90 block font-bold px-1">
+                  Clave de Mayordomo:
+                </label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    value={pinInput}
+                    onChange={(e) => setPinInput(e.target.value)}
+                    placeholder="••••"
+                    autoFocus
+                    maxLength={8}
+                    className="w-full bg-[#140e08]/90 border border-gold/60 focus:border-gold focus:ring-2 focus:ring-gold/40 rounded-xl px-4 py-3.5 text-center text-2xl tracking-[0.35em] text-[#FFF0C8] font-mono outline-none shadow-inner transition-all placeholder:text-[#F5EDE0]/30"
+                  />
+                </div>
+                {loginError && (
+                  <p className="text-xs text-rose-300 mt-2 flex items-center gap-1.5 justify-center bg-rose-950/40 border border-rose-500/40 rounded-lg p-2 font-serif">
+                    <AlertCircle size={14} className="shrink-0 text-rose-400" /> {loginError}
+                  </p>
+                )}
               </div>
-              {loginError && (
-                <p className="text-xs text-red-400 mt-2 flex items-center gap-1 justify-center">
-                  <AlertCircle size={14} /> {loginError}
-                </p>
-              )}
+
+              <Button
+                type="submit"
+                className="w-full min-h-[48px] sm:min-h-[52px] py-3 flex items-center justify-center gap-2 font-display text-sm font-bold shadow-[0_4px_24px_rgba(190,141,44,0.4)] cursor-pointer"
+              >
+                <Lock size={16} />
+                <span>INGRESAR AL PANEL</span>
+              </Button>
+            </form>
+
+            <div className="pt-3 border-t border-gold/20 flex items-center justify-between text-xs">
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => sound.playClick()}
+                className="text-amber-200/70 hover:text-amber-200 transition-colors flex items-center gap-1.5 cursor-pointer font-serif"
+              >
+                <ArrowLeft size={14} /> Volver a la Landing
+              </a>
+              <span className="text-[11px] text-amber-300/70 font-mono font-bold">CMS Oficial v3.0</span>
             </div>
+          </Card>
+        </div>
 
-            <Button
-              type="submit"
-              className="w-full py-3.5 flex items-center justify-center gap-2 font-display text-sm font-bold shadow-lg"
-            >
-              <Lock size={16} />
-              <span>INGRESAR AL PANEL</span>
-            </Button>
-          </form>
-
-          <div className="pt-2 border-t border-gold/20 flex items-center justify-between text-xs">
-            <a
-              href="/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => sound.playClick()}
-              className="text-cream/60 hover:text-gold transition-colors flex items-center gap-1 cursor-pointer"
-            >
-              <ArrowLeft size={14} /> Volver a la Landing
-            </a>
-            <span className="text-[11px] text-gold/60 font-mono">v3.0 • CMS Oficial</span>
+        {/* PIE DE PÁGINA SAGRADO CON EL VOLCÁN MAYA (volcan.svg) */}
+        <div className="w-full relative mt-4 pt-4 overflow-hidden pointer-events-none select-none z-0">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0905] via-transparent to-transparent z-10" />
+          <img 
+            src={volcanSvg} 
+            alt="Volcanes de Guatemala" 
+            className="w-full max-w-4xl mx-auto h-28 sm:h-36 md:h-44 object-cover object-bottom opacity-50 filter drop-shadow-[0_-8px_25px_rgba(206,136,34,0.3)]" 
+          />
+          <div className="absolute bottom-1 left-0 right-0 text-center z-20">
+            <span className="text-[10px] sm:text-[11px] font-serif italic text-amber-200/50">
+              La Casa de las Leyendas • Tierra de Volcanes y Tradición Viva
+            </span>
           </div>
-        </Card>
+        </div>
       </div>
     );
   }
 
   // PANTALLA PRINCIPAL DEL PANEL MAYORDOMO
   return (
-    <div className="w-full min-h-screen bg-obsidian text-cream font-sans pb-20 relative selection:bg-gold selection:text-obsidian">
+    <div className="w-full min-h-screen bg-gradient-to-b from-[#1c150c] via-[#140e08] to-[#0d0905] text-[#FFF0C8] font-sans pb-12 relative selection:bg-gold selection:text-obsidian overflow-x-hidden">
       
-      {/* Fondo Místico */}
-      <div className="fixed inset-0 pointer-events-none opacity-20 z-0">
+      {/* Halo áureo superior para luminosidad celestial */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-48 rounded-full bg-gradient-to-b from-amber-400/20 via-gold/10 to-transparent blur-3xl pointer-events-none" />
+
+      {/* Fondo Místico Sutil */}
+      <div className="fixed inset-0 pointer-events-none opacity-15 z-0">
         <img src={fondoSvg} alt="Fondo" className="w-full h-full object-cover" />
       </div>
 
-      {/* HEADER DE ADMINISTRACIÓN STICKY */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-obsidian/95 border-b border-gold/30 px-4 py-3 shadow-xl">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap">
+      {/* HEADER DE ADMINISTRACIÓN STICKY CON LA LUNA MAYA */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#181109]/95 border-b-2 border-gold/50 px-2 sm:px-4 py-2 sm:py-2.5 shadow-[0_4px_25px_rgba(0,0,0,0.85)]">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
           
-          <div className="flex items-center gap-3">
-            <img src={logoPng} alt="Logo" className="w-9 h-9 object-contain" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Luna Maya en Cabecera (Luna.svg) */}
+            <div className="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full p-1 bg-gradient-to-b from-amber-500/30 via-black to-[#1c150c] border border-gold/70 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(252,207,101,0.4)]">
+              <img 
+                src={lunaSvg} 
+                alt="Luna Maya" 
+                className="w-full h-full object-contain filter drop-shadow-[0_0_6px_rgba(252,207,101,0.6)]" 
+              />
+            </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className="font-display text-base font-bold text-gold tracking-wide">
-                  MAYORDOMO CMS
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <h1 className="font-display text-xs sm:text-sm md:text-base font-extrabold text-amber-200 tracking-wide truncate max-w-[130px] sm:max-w-none">
+                  SALA DEL MAYORDOMO
                 </h1>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 font-mono font-semibold">
+                <span className="text-[9px] px-1.5 sm:px-2 py-0.2 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 font-mono font-bold">
                   EN LÍNEA
                 </span>
               </div>
-              <span className="text-[11px] text-cream/70 font-serif italic hidden sm:inline">
-                Estaciones Escénicas, Boletería, Fichas Circulares y Portadas
+              <span className="text-[10px] text-amber-100/70 font-serif italic hidden sm:inline">
+                Guatemala • Gestor Sagrado de Contenidos y Estaciones
               </span>
             </div>
           </div>
 
-          {/* Botones de Acción Global (Abren en ventana nueva) */}
-          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          {/* Botones de Acción Global Optimizados para Móvil */}
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
             <a
               href="/rutadeleyendas"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sound.playClick()}
-              className="py-2 px-3 text-xs font-display font-semibold flex items-center gap-1.5 text-maya-red hover:text-cream border border-maya-red/40 hover:border-maya-red rounded-xl bg-maya-red/10 transition-all cursor-pointer shadow-sm"
+              className="py-1.5 sm:py-2 px-2 sm:px-3 text-[11px] sm:text-xs font-display font-semibold flex items-center gap-1 text-rose-300 hover:text-white border border-rose-500/50 hover:border-rose-400 rounded-xl bg-rose-950/30 transition-all cursor-pointer shadow-sm"
               title="Abrir Ruta de Leyendas en nueva ventana"
             >
-              <Drama size={14} />
-              <span className="hidden xs:inline">Ver Teatro</span>
-              <ExternalLink size={12} className="opacity-70" />
+              <Drama size={13} />
+              <span className="hidden xs:inline">Teatro</span>
+              <ExternalLink size={11} className="opacity-70" />
             </a>
 
             <a
@@ -546,30 +605,32 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sound.playClick()}
-              className="py-2 px-3 text-xs font-display font-semibold flex items-center gap-1.5 text-gold hover:text-cream border border-gold/40 hover:border-gold rounded-xl bg-gold/10 transition-all cursor-pointer shadow-sm"
+              className="py-1.5 sm:py-2 px-2 sm:px-3 text-[11px] sm:text-xs font-display font-semibold flex items-center gap-1 text-amber-200 hover:text-white border border-gold/50 hover:border-gold rounded-xl bg-gold/15 transition-all cursor-pointer shadow-sm"
               title="Abrir Portal Landing en nueva ventana"
             >
-              <Eye size={14} />
-              <span className="hidden xs:inline">Ver Portal</span>
-              <ExternalLink size={12} className="opacity-70" />
+              <Eye size={13} />
+              <span className="hidden xs:inline">Portal</span>
+              <ExternalLink size={11} className="opacity-70" />
             </a>
 
             <Button
               onClick={handleSave}
               disabled={isSaving || isLoading}
               size="sm"
-              className="py-2.5 px-4 text-xs font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(190,141,44,0.5)]"
+              className="py-1.5 sm:py-2 px-2.5 sm:px-4 text-[11px] sm:text-xs font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(190,141,44,0.5)] cursor-pointer"
             >
-              {isSaving ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
-              <span>{isSaving ? 'GUARDANDO...' : 'GUARDAR Y PUBLICAR'}</span>
+              {isSaving ? <RefreshCw size={13} className="animate-spin" /> : <Save size={13} />}
+              <span className="hidden sm:inline">{isSaving ? 'GUARDANDO...' : 'GUARDAR Y PUBLICAR'}</span>
+              <span className="sm:hidden">{isSaving ? '...' : 'PUBLICAR'}</span>
             </Button>
 
             <button
               onClick={handleLogout}
-              className="p-2 text-cream/50 hover:text-maya-red rounded-lg hover:bg-white/5 transition-colors cursor-pointer text-xs"
-              title="Cerrar Sesión"
+              className="p-1.5 sm:p-2 text-rose-300 hover:text-rose-100 rounded-lg hover:bg-rose-950/40 border border-rose-500/30 transition-colors cursor-pointer text-xs"
+              title="Cerrar Sesión de Mayordomo"
+              aria-label="Cerrar Sesión"
             >
-              <Lock size={16} />
+              <Lock size={15} />
             </button>
           </div>
         </div>
@@ -582,39 +643,76 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
-            className={`fixed top-18 right-4 z-50 p-4 rounded-2xl border shadow-2xl flex items-center gap-3 max-w-md ${
+            className={`fixed top-16 right-2 sm:right-4 z-50 p-3.5 sm:p-4 rounded-2xl border-2 shadow-2xl flex items-center gap-3 max-w-sm sm:max-w-md ${
               saveStatus.type === 'success'
-                ? 'bg-emerald-950/90 border-emerald-500 text-emerald-100 shadow-emerald-900/40'
-                : 'bg-red-950/90 border-maya-red text-red-100 shadow-red-900/40'
+                ? 'bg-[#121c14]/95 border-emerald-500 text-emerald-100 shadow-emerald-950/60'
+                : 'bg-[#200e10]/95 border-rose-500 text-rose-100 shadow-rose-950/60'
             }`}
           >
             {saveStatus.type === 'success' ? (
-              <CheckCircle2 size={20} className="text-emerald-400 shrink-0" />
+              <CheckCircle2 size={18} className="text-emerald-400 shrink-0" />
             ) : (
-              <AlertCircle size={20} className="text-red-400 shrink-0" />
+              <AlertCircle size={18} className="text-rose-400 shrink-0" />
             )}
             <p className="text-xs font-medium leading-tight">{saveStatus.message}</p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* CUERPO PRINCIPAL CON PESTAÑAS */}
-      <main className="max-w-7xl mx-auto px-4 py-8 relative z-10 space-y-8">
+      {/* CUERPO PRINCIPAL CON PESTAÑAS (MÁRGENES MÓVILES AL MÁXIMO) */}
+      <main className="w-full max-w-7xl mx-auto px-1.5 sm:px-4 md:px-6 py-4 sm:py-6 relative z-10 space-y-5 sm:space-y-6">
         
-        {/* SELECTOR DE PESTAÑAS */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-gold/30">
+        {/* BANNER HERO CEREMONIAL DE LA LUNA (CABECERA PROTAGÓNICA) */}
+        <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border-2 border-gold/70 bg-gradient-to-r from-amber-950/60 via-[#22180d] to-[#120d07] shadow-[0_0_30px_rgba(206,136,34,0.25)] relative overflow-hidden flex items-center justify-between gap-3">
+          <div className="absolute top-0 right-0 w-44 h-44 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
+
+          <div className="flex items-center gap-3 sm:gap-4 relative z-10">
+            {/* Luna Sagrada Animada */}
+            <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-full p-1 bg-gradient-to-b from-amber-500/30 via-black to-[#1c150c] border-2 border-gold shadow-[0_0_15px_rgba(252,207,101,0.5)] flex items-center justify-center shrink-0">
+              <img 
+                src={lunaSvg} 
+                alt="Luna de las Leyendas" 
+                className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(252,207,101,0.7)]" 
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] uppercase font-mono tracking-widest text-amber-300 font-bold">
+                  Santuario del Mayordomo Mayor
+                </span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-gold/20 text-gold border border-gold/40 font-mono font-bold hidden sm:inline">
+                  GUATEMALA
+                </span>
+              </div>
+              <h2 className="text-base sm:text-xl font-display font-extrabold text-[#FFF0C8] tracking-wide leading-tight">
+                Círculo de la Luna • Panel de Control
+              </h2>
+              <p className="text-[11px] sm:text-xs text-amber-100/75 font-serif italic line-clamp-1 sm:line-clamp-none">
+                Configura portadas, estaciones escénicas, fichas circulares y boletería oficial
+              </p>
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center gap-2 font-mono text-[11px] text-amber-200/80 bg-black/60 px-3 py-1.5 rounded-xl border border-gold/40 shrink-0">
+            <Sparkles size={13} className="text-gold" />
+            <span>Sincronización en Vivo</span>
+          </div>
+        </div>
+
+        {/* SELECTOR DE PESTAÑAS ELEGANTE Y COMPACTO */}
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 border-b-2 border-gold/30 no-scrollbar">
           <button
             onClick={() => {
               sound.playClick();
               setActiveTab('images');
             }}
-            className={`py-2.5 px-4 rounded-xl text-xs sm:text-sm font-display font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+            className={`py-2 px-3 sm:py-2.5 sm:px-4 rounded-xl text-xs sm:text-sm font-display font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'images'
-                ? 'bg-gradient-to-r from-gold via-cream to-gold text-obsidian shadow-md'
-                : 'text-cream/70 hover:text-gold hover:bg-white/5'
+                ? 'bg-gradient-to-r from-amber-900/60 via-gold/30 to-amber-900/40 text-amber-200 border-2 border-gold shadow-[0_0_15px_rgba(206,136,34,0.3)]'
+                : 'bg-[#140e08]/90 text-[#F5EDE0]/70 border border-gold/30 hover:border-gold/60 hover:text-amber-200'
             }`}
           >
-            <ImageIcon size={16} />
+            <ImageIcon size={15} className="text-gold" />
             <span>🎨 Imágenes y Fichas</span>
           </button>
 
@@ -623,13 +721,13 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               sound.playClick();
               setActiveTab('theater');
             }}
-            className={`py-2.5 px-4 rounded-xl text-xs sm:text-sm font-display font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+            className={`py-2 px-3 sm:py-2.5 sm:px-4 rounded-xl text-xs sm:text-sm font-display font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'theater'
-                ? 'bg-gradient-to-r from-gold via-cream to-gold text-obsidian shadow-md'
-                : 'text-cream/70 hover:text-gold hover:bg-white/5'
+                ? 'bg-gradient-to-r from-amber-900/60 via-gold/30 to-amber-900/40 text-amber-200 border-2 border-gold shadow-[0_0_15px_rgba(206,136,34,0.3)]'
+                : 'bg-[#140e08]/90 text-[#F5EDE0]/70 border border-gold/30 hover:border-gold/60 hover:text-amber-200'
             }`}
           >
-            <Drama size={16} />
+            <Drama size={15} className="text-rose-400" />
             <span>🎭 Teatro & Boletería</span>
           </button>
 
@@ -638,13 +736,13 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               sound.playClick();
               setActiveTab('landing');
             }}
-            className={`py-2.5 px-4 rounded-xl text-xs sm:text-sm font-display font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+            className={`py-2 px-3 sm:py-2.5 sm:px-4 rounded-xl text-xs sm:text-sm font-display font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'landing'
-                ? 'bg-gradient-to-r from-gold via-cream to-gold text-obsidian shadow-md'
-                : 'text-cream/70 hover:text-gold hover:bg-white/5'
+                ? 'bg-gradient-to-r from-amber-900/60 via-gold/30 to-amber-900/40 text-amber-200 border-2 border-gold shadow-[0_0_15px_rgba(206,136,34,0.3)]'
+                : 'bg-[#140e08]/90 text-[#F5EDE0]/70 border border-gold/30 hover:border-gold/60 hover:text-amber-200'
             }`}
           >
-            <Layers size={16} />
+            <Layers size={15} className="text-amber-300" />
             <span>📜 Textos del Portal</span>
           </button>
 
@@ -653,13 +751,13 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               sound.playClick();
               setActiveTab('system');
             }}
-            className={`py-2.5 px-4 rounded-xl text-xs sm:text-sm font-display font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+            className={`py-2 px-3 sm:py-2.5 sm:px-4 rounded-xl text-xs sm:text-sm font-display font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap ${
               activeTab === 'system'
-                ? 'bg-gradient-to-r from-gold via-cream to-gold text-obsidian shadow-md'
-                : 'text-cream/70 hover:text-gold hover:bg-white/5'
+                ? 'bg-gradient-to-r from-amber-900/60 via-gold/30 to-amber-900/40 text-amber-200 border-2 border-gold shadow-[0_0_15px_rgba(206,136,34,0.3)]'
+                : 'bg-[#140e08]/90 text-[#F5EDE0]/70 border border-gold/30 hover:border-gold/60 hover:text-amber-200'
             }`}
           >
-            <Shield size={16} />
+            <Shield size={15} className="text-emerald-400" />
             <span>⚙️ Respaldos & Sistema</span>
           </button>
         </div>
@@ -669,7 +767,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
           <div className="space-y-8">
             
             {/* SECCIÓN 1: PORTADAS PRINCIPALES */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2.5 text-gold">
                   <ImageIcon size={22} />
@@ -819,7 +917,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             </Card>
 
             {/* SECCIÓN 2: LLAVES SAGRADAS DE BOLETERÍA (JADE, VIDA, ORO, PLATA) */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2.5 text-gold">
                   <Key size={22} />
@@ -901,7 +999,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             </Card>
 
             {/* SECCIÓN 3: FICHAS CIRCULARES DE ESTACIONES TEATRALES (INCLUYE LA VANUSHKA) */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2.5 text-gold">
                   <Drama size={22} />
@@ -980,7 +1078,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             </Card>
 
             {/* SECCIÓN 4: FICHAS CIRCULARES DE LAS 7 LEYENDAS (CATÁLOGO Y PASAPORTE) */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2.5 text-gold">
                   <Sparkles size={22} />
@@ -1061,7 +1159,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
           <div className="space-y-8">
             
             {/* SECCIÓN 1: DATOS GENERALES Y CARTEL DEL EVENTO */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
                 <Calendar size={20} />
                 <h2 className="font-display text-lg sm:text-xl font-bold">1. Datos Generales & Cartel de la Producción</h2>
@@ -1180,7 +1278,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             </Card>
 
             {/* SECCIÓN 2: MANIFIESTO TEATRAL & PROPUESTA CULTURAL */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
                 <BookOpen size={20} />
                 <h2 className="font-display text-lg sm:text-xl font-bold">2. Manifiesto Teatral & Propuesta Cultural</h2>
@@ -1226,7 +1324,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             </Card>
 
             {/* SECCIÓN 3: ESTRUCTURA, DINÁMICA DEL RECORRIDO & PERSONAJE GUÍA */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
                 <Users size={20} />
                 <h2 className="font-display text-lg sm:text-xl font-bold">3. Logística, Grupos y Personaje Guía</h2>
@@ -1340,7 +1438,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             </Card>
 
             {/* SECCIÓN 4: LAS 4 ESTACIONES ESCÉNICAS (INCLUYENDO LA VANUSHKA) */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-2.5 text-gold">
                   <Drama size={20} />
@@ -1499,7 +1597,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               const currentPlans = currentTicketing.plans || DEFAULT_TICKETING_CONTENT.plans;
 
               return (
-                <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+                <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
                   <div className="flex items-center justify-between border-b border-gold/20 pb-3 flex-wrap gap-2">
                     <div className="flex items-center gap-2.5 text-gold">
                       <Ticket size={22} />
@@ -1818,7 +1916,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
               const currentTiers = currentSponsorship.tiers || DEFAULT_SPONSORSHIP_CONTENT.tiers;
 
               return (
-                <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+                <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
                   <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
                     <Handshake size={20} />
                     <h2 className="font-display text-lg sm:text-xl font-bold">
@@ -1999,7 +2097,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             })()}
 
             {/* SECCIÓN 7: PIE DE PÁGINA DE PRODUCCIÓN EN VIVO */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
                 <Shield size={20} />
                 <h2 className="font-display text-lg sm:text-xl font-bold">7. Pie de Página de Producción en Vivo</h2>
@@ -2040,7 +2138,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
           <div className="space-y-6">
             
             {/* HERO PRINCIPAL */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
                 <Sparkles size={20} />
                 <h2 className="font-display text-lg sm:text-xl font-bold">1. Textos del Encabezado Hero</h2>
@@ -2098,7 +2196,7 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
             </Card>
 
             {/* CANDADOS ELEMENTALES */}
-            <Card className="p-6 sm:p-8 space-y-6 border-gold/40 bg-black/75 rounded-3xl">
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
               <div className="flex items-center gap-2.5 text-gold border-b border-gold/20 pb-3">
                 <KeyRound size={20} />
                 <h2 className="font-display text-lg sm:text-xl font-bold">2. Los 4 Candados Sagrados</h2>
@@ -2166,62 +2264,62 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
         {/* CONTENIDO TAB 4: SISTEMA Y RESPALDOS */}
         {activeTab === 'system' && (
           <div className="space-y-6">
-            <Card className="p-6 sm:p-8 space-y-6 border-white/20 bg-black/75 rounded-3xl">
-              <div className="flex items-center gap-2.5 text-cream border-b border-white/15 pb-3">
-                <Shield size={20} />
+            <Card className="p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 rounded-2xl sm:rounded-3xl shadow-[0_0_30px_rgba(206,136,34,0.18)]">
+              <div className="flex items-center gap-2.5 text-amber-200 border-b border-gold/20 pb-3">
+                <Shield size={20} className="text-gold" />
                 <h2 className="font-display text-lg sm:text-xl font-bold">Respaldos, Exportación y Restauración</h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                 
                 {/* Exportar JSON */}
-                <div className="p-6 rounded-2xl bg-black/60 border border-gold/30 space-y-3 text-center flex flex-col justify-between">
+                <div className="p-4 sm:p-6 rounded-2xl bg-[#161008]/90 border border-gold/40 space-y-3 text-center flex flex-col justify-between shadow-sm">
                   <div className="space-y-2">
                     <Download size={28} className="mx-auto text-gold" />
-                    <h3 className="font-display text-sm font-bold text-cream">Exportar Copia de Seguridad</h3>
-                    <p className="text-xs text-cream/70 font-serif italic">
+                    <h3 className="font-display text-sm font-bold text-[#FFF0C8]">Exportar Copia de Seguridad</h3>
+                    <p className="text-xs text-amber-100/70 font-serif italic">
                       Descarga un archivo JSON con todos los textos, imágenes y configuraciones actuales.
                     </p>
                   </div>
-                  <Button onClick={handleExportJSON} variant="outline" size="sm" className="w-full py-2.5 text-xs">
+                  <Button onClick={handleExportJSON} variant="outline" size="sm" className="w-full py-2.5 text-xs font-bold mt-2">
                     Descargar JSON
                   </Button>
                 </div>
 
                 {/* Importar JSON */}
-                <div className="p-6 rounded-2xl bg-black/60 border border-gold/30 space-y-3 text-center flex flex-col justify-between">
+                <div className="p-4 sm:p-6 rounded-2xl bg-[#161008]/90 border border-gold/40 space-y-3 text-center flex flex-col justify-between shadow-sm">
                   <div className="space-y-2">
                     <Upload size={28} className="mx-auto text-gold" />
-                    <h3 className="font-display text-sm font-bold text-cream">Restaurar desde JSON</h3>
-                    <p className="text-xs text-cream/70 font-serif italic">
+                    <h3 className="font-display text-sm font-bold text-[#FFF0C8]">Restaurar desde JSON</h3>
+                    <p className="text-xs text-amber-100/70 font-serif italic">
                       Sube un archivo de copia de seguridad previamente exportado.
                     </p>
                   </div>
-                  <label className="block">
+                  <label className="block mt-2">
                     <input
                       type="file"
                       accept=".json"
                       onChange={handleImportJSON}
                       className="hidden"
                     />
-                    <span className="w-full py-2.5 px-3 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/40 text-gold text-xs font-display font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all">
+                    <span className="w-full py-2.5 px-3 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/60 text-amber-200 text-xs font-display font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all">
                       Seleccionar Archivo JSON
                     </span>
                   </label>
                 </div>
 
                 {/* Restablecer Valores de Fábrica */}
-                <div className="p-6 rounded-2xl bg-black/60 border border-maya-red/40 space-y-3 text-center flex flex-col justify-between">
+                <div className="p-4 sm:p-6 rounded-2xl bg-[#161008]/90 border border-rose-500/40 space-y-3 text-center flex flex-col justify-between shadow-sm">
                   <div className="space-y-2">
-                    <RotateCcw size={28} className="mx-auto text-maya-red" />
-                    <h3 className="font-display text-sm font-bold text-cream">Valores de Fábrica</h3>
-                    <p className="text-xs text-cream/70 font-serif italic">
+                    <RotateCcw size={28} className="mx-auto text-rose-400" />
+                    <h3 className="font-display text-sm font-bold text-rose-200">Valores de Fábrica</h3>
+                    <p className="text-xs text-rose-100/70 font-serif italic">
                       Restablece todos los textos, boletería y las 4 estaciones escénicas (con La Vanushka) a la configuración oficial inicial.
                     </p>
                   </div>
                   <button
                     onClick={handleResetDefaults}
-                    className="w-full py-2.5 px-3 rounded-xl bg-maya-red/20 hover:bg-maya-red/30 border border-maya-red text-red-200 text-xs font-display font-bold cursor-pointer transition-all"
+                    className="w-full py-2.5 px-3 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500 text-rose-200 text-xs font-display font-bold cursor-pointer transition-all mt-2"
                   >
                     Restablecer de Fábrica
                   </button>
@@ -2233,6 +2331,41 @@ export const MayordomoView: React.FC<MayordomoViewProps> = ({
         )}
 
       </main>
+
+      {/* PIE DE PÁGINA CEREMONIAL CON EL VOLCÁN SAGRADO (volcan.svg) */}
+      <footer className="w-full relative mt-10 sm:mt-16 pt-8 pb-10 overflow-hidden border-t-2 border-gold/40 bg-gradient-to-b from-[#140e07] via-[#0d0905] to-black">
+        {/* Halo crepuscular sobre el volcán */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-36 bg-amber-500/15 blur-3xl pointer-events-none" />
+
+        {/* Arte SVG del Volcán a lo ancho del viewport */}
+        <div className="w-full relative px-0 flex justify-center items-end opacity-45 pointer-events-none select-none">
+          <img 
+            src={volcanSvg} 
+            alt="Volcanes de Guatemala" 
+            className="w-full max-w-5xl h-32 sm:h-44 md:h-52 object-cover object-bottom filter drop-shadow-[0_-8px_25px_rgba(206,136,34,0.3)]" 
+          />
+        </div>
+
+        {/* Inscripción Sagrada y Atajos Rápidos */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 -mt-8 sm:-mt-10 text-center space-y-2.5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#181109]/90 border border-gold/60 shadow-lg">
+            <img src={lunaSvg} alt="Luna" className="w-4 h-4 object-contain" />
+            <span className="text-[11px] font-mono uppercase tracking-widest text-amber-300 font-bold">
+              Círculo Sagrado del Mayordomo
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm font-serif italic text-amber-100/80">
+            La Casa de las Leyendas • Tierra de Volcanes, Misterios y Tradición Viva
+          </p>
+          <div className="flex items-center justify-center gap-4 text-xs font-mono text-amber-200/60 pt-1">
+            <a href="/" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">Portal Web</a>
+            <span>•</span>
+            <a href="/rutadeleyendas" target="_blank" rel="noopener noreferrer" className="hover:text-rose-300 transition-colors">Teatro en Vivo</a>
+            <span>•</span>
+            <span className="text-gold/80">Guatemala v3.0 CMS</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
