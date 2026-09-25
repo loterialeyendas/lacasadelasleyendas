@@ -32,22 +32,19 @@ const checkIsDismissedInitial = (): boolean => {
 };
 
 export const DesktopMobileAdviceModal: React.FC<DesktopMobileAdviceModalProps> = ({ appUrl }) => {
-  // Inicialización síncrona: se abre en el primer frame si es desktop y no ha sido descartado
+  // Inicialización síncrona: se abre en el primer frame si es desktop
+  // Cada vez que el usuario refresca el navegador vuelve a abrirse
   const [isDesktop, setIsDesktop] = useState<boolean>(() => checkIsDesktopInitial());
-  const [hasDismissed, setHasDismissed] = useState<boolean>(() => checkIsDismissedInitial());
-  const [isOpen, setIsOpen] = useState<boolean>(() => {
-    return checkIsDesktopInitial() && !checkIsDismissedInitial();
-  });
+  const [hasDismissed, setHasDismissed] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(() => checkIsDesktopInitial());
 
   // URL del juego para el código QR
   const targetUrl = appUrl || (typeof window !== 'undefined' ? `${window.location.origin}/juego` : 'https://lacasadelasleyendas.com/juego');
 
   useEffect(() => {
     const isDesk = checkIsDesktopInitial();
-    const dismissed = checkIsDismissedInitial();
     setIsDesktop(isDesk);
-    setHasDismissed(dismissed);
-    if (isDesk && !dismissed) {
+    if (isDesk) {
       setIsOpen(true);
     }
 
@@ -64,11 +61,6 @@ export const DesktopMobileAdviceModal: React.FC<DesktopMobileAdviceModalProps> =
     sound.playClick();
     setIsOpen(false);
     setHasDismissed(true);
-    try {
-      sessionStorage.setItem(STORAGE_KEY, 'true');
-    } catch {
-      // Silencioso si sessionStorage no está disponible
-    }
   };
 
   const handleOpenAgain = () => {

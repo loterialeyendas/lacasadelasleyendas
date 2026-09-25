@@ -75,15 +75,9 @@ interface LoginProps {
 
 export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
   // En escritorio, el ritual de entrada permanece oculto hasta que el usuario decida entrar en PC
+  // Se abre SIEMPRE al cargar o refrescar la página
   const [isDesktopUser] = useState<boolean>(() => checkIsDesktopBrowser());
-  const [showDesktopLogin, setShowDesktopLogin] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return true;
-    try {
-      return sessionStorage.getItem('casa_leyendas_desktop_allowed') === 'true';
-    } catch {
-      return false;
-    }
-  });
+  const [showDesktopLogin, setShowDesktopLogin] = useState<boolean>(false);
 
   const [name, setName] = useState('');
   const [selectedTalisman, setSelectedTalisman] = useState<TalismanType>('oro');
@@ -96,9 +90,6 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
   const handleContinueOnDesktop = () => {
     sound.playClick();
     setShowDesktopLogin(true);
-    try {
-      sessionStorage.setItem('casa_leyendas_desktop_allowed', 'true');
-    } catch {}
   };
 
   const handleSelectTalisman = (type: TalismanType) => {
@@ -483,14 +474,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
 
         {/* Formulario de Entrada con Espaciado Cómodo */}
         <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
-          <div className="space-y-1.5">
-            <label 
-              htmlFor="playerNameInput" 
-              className="text-gold text-[11px] sm:text-xs uppercase tracking-widest font-mono block px-1"
-            >
-              Nombre del Jugador o Apodo
-            </label>
-            
+          <div>
             <div className="relative flex items-center">
               <input
                 id="playerNameInput"
@@ -501,6 +485,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
                   if (error) setError('');
                 }}
                 placeholder="Escribe tu nombre o apodo..."
+                aria-label="Nombre o apodo del jugador"
                 maxLength={24}
                 autoFocus
                 autoComplete="nickname"
@@ -510,7 +495,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
                 inputMode="text"
                 enterKeyHint="go"
                 disabled={loading || isUnlocking}
-                className="w-full bg-black/60 border border-gold/30 rounded-xl px-4 py-3.5 sm:py-4 pr-11 text-cream text-[15px] sm:text-[16px] placeholder:text-cream/35 focus:border-gold focus:ring-1 focus:ring-gold/50 outline-none transition-all shadow-inner"
+                className="w-full bg-black/60 border border-gold/30 rounded-xl px-4 py-3.5 sm:py-4 pr-11 text-cream text-[15px] sm:text-[16px] placeholder:text-cream/40 focus:border-gold focus:ring-1 focus:ring-gold/50 outline-none transition-all shadow-inner"
               />
 
               {/* Botón rápido para limpiar texto en móvil */}
