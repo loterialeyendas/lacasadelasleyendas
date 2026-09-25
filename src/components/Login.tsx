@@ -319,11 +319,14 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
       transition={{ duration: 0.35 }}
       className="w-full max-w-md mx-auto px-4 py-4 sm:py-6 flex flex-col justify-center"
     >
-      {/* Tarjeta Principal Mística con Espaciado Vertical Amplio y Elegante */}
-      <Card className="border border-gold/40 backdrop-blur-xl bg-black/85 p-6 sm:p-8 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.85)] relative overflow-hidden space-y-6 sm:space-y-7">
+      {/* Tarjeta Principal Mística con Estilo Ceremonial y Espaciado Amplio */}
+      <Card className="border-2 border-gold/70 bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 p-6 sm:p-8 rounded-3xl shadow-[0_0_50px_rgba(206,136,34,0.3),0_20px_45px_rgba(0,0,0,0.85)] relative overflow-hidden backdrop-blur-xl space-y-6 sm:space-y-7">
+        {/* Halo áureo superior para dar luminosidad y calidez */}
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-56 rounded-full bg-gradient-to-b from-amber-400/25 via-gold/15 to-transparent blur-3xl pointer-events-none" />
+
         {/* Resplandor místico de fondo según el talismán */}
         <div 
-          className="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full pointer-events-none blur-3xl transition-colors duration-700 opacity-35"
+          className="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full pointer-events-none blur-3xl transition-colors duration-700 opacity-30"
           style={{ backgroundColor: currentTalisman.glowColor }}
         />
 
@@ -336,15 +339,15 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
               className="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-[0_0_10px_rgba(190,141,44,0.45)]" 
             />
             <div className="text-left leading-none">
-              <span className="block text-[10px] text-gold/80 font-serif tracking-[0.25em] uppercase">Guatemala</span>
+              <span className="block text-[10px] text-amber-300 font-serif tracking-[0.25em] uppercase font-bold">Guatemala</span>
               <span className="block text-sm font-display text-cream tracking-wider font-bold">Casa de las Leyendas</span>
             </div>
           </div>
 
-          <MysticalTitle className="text-2xl sm:text-3xl mb-0 font-bold tracking-wider">
+          <MysticalTitle className="text-2xl sm:text-3xl mb-0 font-bold tracking-wider text-amber-200 drop-shadow-sm">
             RITUAL DE ENTRADA
           </MysticalTitle>
-          <p className="text-cream/70 italic text-xs sm:text-sm font-serif leading-relaxed px-2">
+          <p className="text-amber-100/75 italic text-xs sm:text-sm font-serif leading-relaxed px-2">
             Forja tu identidad para que los guardianes reconozcan tu espíritu
           </p>
         </div>
@@ -387,7 +390,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
             />
 
             {/* Indicador de estado del portal */}
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/90 border border-gold/40 px-3 py-1 rounded-full text-[10px] font-mono tracking-widest text-gold shadow-md flex items-center gap-1.5">
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#140e08] border border-gold/60 px-3 py-1 rounded-full text-[10px] font-mono tracking-widest text-amber-300 shadow-md flex items-center gap-1.5">
               {isUnlocking ? (
                 <>
                   <Sparkles size={11} className="text-gold animate-spin" />
@@ -440,10 +443,10 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
         </div>
 
         {/* Selector de Llave Guardiana con Llaves Ampliadas +30% */}
-        <div className="space-y-2">
-          <label className="text-[11px] uppercase font-mono tracking-widest text-gold/80 block px-1 flex items-center justify-between">
+        <div className="space-y-2.5">
+          <label className="text-[11px] uppercase font-mono tracking-widest text-amber-300/90 block px-1 flex items-center justify-between font-bold">
             <span>Elige tu Llave Guardiana:</span>
-            <span className="text-[10px] text-cream/50 capitalize font-serif italic">{currentTalisman.name}</span>
+            <span className="text-[10px] text-amber-200/70 capitalize font-serif italic">{currentTalisman.name}</span>
           </label>
           <div className="grid grid-cols-4 gap-2 sm:gap-2.5">
             {(Object.keys(TALISMANS) as TalismanType[]).map((type) => {
@@ -456,8 +459,8 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
                   onClick={() => handleSelectTalisman(type)}
                   className={`flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer ${
                     isSelected
-                      ? item.borderActive + ' shadow-[0_0_12px_rgba(190,141,44,0.35)] scale-[1.04]'
-                      : 'border-white/10 hover:border-white/25 bg-white/5 text-cream/60 hover:text-cream'
+                      ? item.borderActive + ' shadow-[0_0_15px_rgba(206,136,34,0.45)] scale-[1.04] bg-[#22180e]'
+                      : 'border-gold/30 hover:border-gold/60 bg-[#161009]/80 text-[#F5EDE0]/70 hover:text-amber-200'
                   }`}
                 >
                   <img 
@@ -472,8 +475,8 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
           </div>
         </div>
 
-        {/* Formulario de Entrada con Espaciado Cómodo */}
-        <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
+        {/* Formulario de Entrada con Espaciado Generoso y Armónico */}
+        <form onSubmit={handleLogin} className="mt-7 sm:mt-8 pt-3 sm:pt-4 border-t border-gold/20 space-y-4 sm:space-y-5">
           <div>
             <div className="relative flex items-center">
               <input
@@ -495,7 +498,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
                 inputMode="text"
                 enterKeyHint="go"
                 disabled={loading || isUnlocking}
-                className="w-full bg-black/60 border border-gold/30 rounded-xl px-4 py-3.5 sm:py-4 pr-11 text-cream text-[15px] sm:text-[16px] placeholder:text-cream/40 focus:border-gold focus:ring-1 focus:ring-gold/50 outline-none transition-all shadow-inner"
+                className="w-full bg-[#140e08]/90 border border-gold/50 rounded-xl px-4 py-3.5 sm:py-4 pr-11 text-[#FFF0C8] text-[15px] sm:text-[16px] placeholder:text-[#F5EDE0]/40 focus:border-gold focus:ring-2 focus:ring-gold/40 outline-none transition-all shadow-inner"
               />
 
               {/* Botón rápido para limpiar texto en móvil */}

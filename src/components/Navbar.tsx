@@ -52,12 +52,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           type="button"
           onClick={handleOpenMenu}
           title="Ver perfil y personajes"
-          className="flex items-center gap-2.5 bg-black/75 hover:bg-black/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-gold/40 hover:border-gold shadow-[0_2px_12px_rgba(0,0,0,0.6)] transition-all cursor-pointer group text-left"
+          className="flex items-center gap-2.5 bg-gradient-to-r from-[#1c150c]/95 via-[#140e08]/95 to-[#0e0905]/95 backdrop-blur-md px-3 py-1.5 rounded-full border-2 border-gold/60 hover:border-gold shadow-[0_0_15px_rgba(206,136,34,0.25)] transition-all cursor-pointer group text-left"
         >
           {/* Insignia del Personaje Activo */}
           <div className="relative">
-            <div className={`w-8 h-8 rounded-full ${activeChar.colorTheme.bg} border ${activeChar.colorTheme.border} flex items-center justify-center text-gold shadow-sm group-hover:scale-105 transition-transform`}>
-              <Sparkles size={14} className={activeChar.colorTheme.text} />
+            <div className={`w-8 h-8 rounded-full ${activeChar.colorTheme.bg} border border-gold/60 flex items-center justify-center text-amber-300 shadow-sm group-hover:scale-105 transition-transform`}>
+              <Sparkles size={14} className="text-amber-300" />
             </div>
             <span className="absolute -bottom-0.5 -right-0.5 text-[10px]">
               {keys.gold && keys.jade ? '⭐' : '🗝️'}
@@ -66,14 +66,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <div className="flex flex-col text-left leading-tight">
             <div className="flex items-center gap-1.5">
-              <span className="text-cream text-xs font-display font-bold truncate max-w-[100px] sm:max-w-[130px]">
+              <span className="text-[#FFF0C8] text-xs font-display font-bold truncate max-w-[100px] sm:max-w-[130px]">
                 {userName}
               </span>
-              <span className={`text-[8px] font-mono px-1 rounded uppercase ${activeChar.colorTheme.text} bg-black/60 border border-white/10 hidden sm:inline-block`}>
+              <span className="text-[8px] font-mono px-1 rounded uppercase text-amber-300 bg-amber-950/80 border border-gold/40 hidden sm:inline-block font-bold">
                 {activeChar.code}
               </span>
             </div>
-            <span className="text-gold text-[10px] font-display flex items-center gap-1 font-semibold">
+            <span className="text-amber-300 text-[10px] font-display flex items-center gap-1 font-semibold">
               <Trophy size={11} className="text-gold" /> {totalScore} pts
             </span>
           </div>
@@ -87,10 +87,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={handleOpenMenu}
             aria-label="Abrir Menú de la Luna y Perfil"
             title="Círculo de la Luna: Perfil y Personajes"
-            className="relative flex items-center gap-2 bg-gradient-to-r from-amber-950/40 via-black to-neutral-900 border border-gold/60 hover:border-gold px-2.5 sm:px-3 py-1.5 rounded-full text-gold shadow-[0_0_15px_rgba(252,207,101,0.25)] hover:shadow-[0_0_20px_rgba(252,207,101,0.5)] transition-all cursor-pointer group active:scale-95"
+            className="relative flex items-center gap-2 bg-gradient-to-r from-amber-950/70 via-[#1f150c] to-[#0e0a05] border-2 border-gold/70 hover:border-gold px-2.5 sm:px-3 py-1.5 rounded-full text-amber-200 shadow-[0_0_20px_rgba(206,136,34,0.35)] hover:shadow-[0_0_25px_rgba(206,136,34,0.55)] transition-all cursor-pointer group active:scale-95"
           >
             {/* Icono de la Luna Maya (Luna.svg) con Halo Místico */}
-            <div className="relative w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden p-0.5 bg-black/80 flex items-center justify-center">
+            <div className="relative w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden p-0.5 bg-gradient-to-b from-amber-500/30 via-black to-[#1c150c] border border-gold/70 flex items-center justify-center">
               <img 
                 src={lunaSvg} 
                 alt="Luna de las Leyendas" 
