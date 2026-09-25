@@ -45,7 +45,7 @@ export const loadLocalPassport = (): UserPassportData => {
     const raw = localStorage.getItem(PASSPORT_KEY);
     const scoreRaw = localStorage.getItem(SCORE_KEY);
     const keysRaw = localStorage.getItem(KEYS_KEY);
-    const characterId = localStorage.getItem(CHARACTER_KEY) || 'sombreron';
+    const characterId = localStorage.getItem(CHARACTER_KEY) || 'chancho';
     
     const stamps: Stamp[] = raw ? JSON.parse(raw) : [];
     const totalScore = scoreRaw ? parseInt(scoreRaw, 10) : 0;
@@ -83,7 +83,7 @@ export const loadLocalPassport = (): UserPassportData => {
       keys: emptyKeys,
       totalKeys: 0,
       hasWon: false,
-      characterId: 'sombreron',
+      characterId: 'chancho',
       lastUpdated: Date.now()
     };
   }
@@ -191,7 +191,7 @@ export const syncRemotePassport = async (userId: string): Promise<UserPassportDa
       const remoteStamps: Stamp[] = remoteData.stamps || [];
       const remoteScore: number = remoteData.totalScore || 0;
       const remoteKeys: Partial<PlayerKeys> = remoteData.keys || {};
-      const remoteCharacterId: string = remoteData.characterId || local.characterId || 'sombreron';
+      const remoteCharacterId: string = remoteData.characterId || local.characterId || 'chancho';
 
       // Fusionar sellos locales y remotos
       const stampMap = new Map<string, Stamp>();

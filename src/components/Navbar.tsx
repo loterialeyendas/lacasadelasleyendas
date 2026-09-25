@@ -56,8 +56,16 @@ export const Navbar: React.FC<NavbarProps> = ({
         >
           {/* Insignia del Personaje Activo */}
           <div className="relative">
-            <div className={`w-8 h-8 rounded-full ${activeChar.colorTheme.bg} border border-gold/60 flex items-center justify-center text-amber-300 shadow-sm group-hover:scale-105 transition-transform`}>
-              <Sparkles size={14} className="text-amber-300" />
+            <div className={`w-8 h-8 rounded-full ${activeChar.colorTheme.bg} border-2 border-gold/70 flex items-center justify-center text-amber-300 shadow-sm group-hover:scale-105 transition-transform overflow-hidden p-0.5 bg-black/70`}>
+              {activeChar.avatarSvg ? (
+                <img 
+                  src={activeChar.avatarSvg} 
+                  alt={activeChar.name} 
+                  className="w-full h-full object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" 
+                />
+              ) : (
+                <Sparkles size={14} className="text-amber-300" />
+              )}
             </div>
             <span className="absolute -bottom-0.5 -right-0.5 text-[10px]">
               {keys.gold && keys.jade ? '⭐' : '🗝️'}

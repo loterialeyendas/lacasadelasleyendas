@@ -33,7 +33,7 @@ export const createGameRoom = async (hostId: string, hostName: string, hostChara
       {
         id: hostId,
         name: hostName || 'Mayordomo',
-        characterId: hostCharacterId || 'sombreron',
+        characterId: hostCharacterId || 'chancho',
         points: 0,
         isHost: true,
         role: 'mayordomo',
@@ -76,7 +76,7 @@ export const joinGameRoom = async (roomId: string, player: Player): Promise<{ su
 
     const guestPlayer: Player = {
       ...player,
-      characterId: player.characterId || 'sombreron',
+      characterId: player.characterId || 'chancho',
       role: 'invitado',
       customTitle: `Invitado #${guestCount + 1}`,
       isHost: false,

@@ -280,11 +280,19 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                   {mayordomo?.id === userId && (
                     <span className="text-[8px] font-mono bg-gold text-[#140e08] px-1.5 py-0.2 rounded font-bold">TÚ</span>
                   )}
-                  {mayordomo?.characterId && (
-                    <span className="text-[8px] font-mono bg-black/70 border border-gold/50 text-amber-300 px-1.5 py-0.2 rounded font-bold">
-                      🎭 {getCharacterById(mayordomo.characterId).name}
-                    </span>
-                  )}
+                  {mayordomo?.characterId && (() => {
+                    const hostChar = getCharacterById(mayordomo.characterId);
+                    return (
+                      <span className="text-[8px] font-mono bg-black/70 border border-gold/50 text-amber-300 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold">
+                        {hostChar.avatarSvg ? (
+                          <img src={hostChar.avatarSvg} alt="" className="w-3.5 h-3.5 object-contain" />
+                        ) : (
+                          <span>🎭</span>
+                        )}
+                        <span>{hostChar.name}</span>
+                      </span>
+                    );
+                  })()}
                 </div>
                 <span className="text-[9px] text-amber-200/80 font-serif italic block">
                   👑 {mayordomo?.customTitle || 'Mayordomo de la Casa (Host)'}
@@ -330,8 +338,13 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                             {isCurrentGuest && (
                               <span className="text-[8px] font-mono text-amber-300 font-bold">(TÚ)</span>
                             )}
-                            <span className={`text-[8px] font-mono bg-black/70 border border-gold/30 px-1 rounded ${guestChar.colorTheme.text}`}>
-                              🎭 {guestChar.name}
+                            <span className={`text-[8px] font-mono bg-black/70 border border-gold/30 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold ${guestChar.colorTheme.text}`}>
+                              {guestChar.avatarSvg ? (
+                                <img src={guestChar.avatarSvg} alt="" className="w-3.5 h-3.5 object-contain" />
+                              ) : (
+                                <span>🎭</span>
+                              )}
+                              <span>{guestChar.name}</span>
                             </span>
                           </div>
                           <span className="text-[9px] text-amber-100/70 font-serif italic block truncate">

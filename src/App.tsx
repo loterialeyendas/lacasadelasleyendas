@@ -349,7 +349,7 @@ export default function App() {
     setRoomError('');
 
     try {
-      const newRoomId = await createGameRoom(user.uid, user.displayName || 'Anfitrión', passport.characterId || 'sombreron');
+      const newRoomId = await createGameRoom(user.uid, user.displayName || 'Anfitrión', passport.characterId || 'chancho');
       setRoomId(newRoomId);
       navigate('lobby');
     } catch (err: any) {
@@ -370,7 +370,7 @@ export default function App() {
       const res = await joinGameRoom(code, {
         id: user.uid,
         name: user.displayName || 'Explorador',
-        characterId: passport.characterId || 'sombreron',
+        characterId: passport.characterId || 'chancho',
         points: 0,
         isHost: false,
         isReady: true,
@@ -613,7 +613,7 @@ export default function App() {
           keys={passport.keys}
           totalKeys={passport.totalKeys}
           completedStampsCount={passport.completedCount}
-          currentCharacterId={passport.characterId || 'sombreron'}
+          currentCharacterId={passport.characterId || 'chancho'}
           onSelectCharacter={handleSelectCharacter}
           onLogout={handleLogout}
           onGoHome={() => navigate('landing')}

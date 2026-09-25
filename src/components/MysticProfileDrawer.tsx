@@ -197,16 +197,25 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                   <div className="p-4 rounded-2xl bg-gradient-to-br from-[#261b0e] via-[#1c140b] to-[#120d07] border-2 border-gold/70 relative overflow-hidden shadow-[0_0_25px_rgba(206,136,34,0.3)]">
                     <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-gold/10 blur-2xl pointer-events-none" />
 
-                    <div className="flex items-center gap-3 relative z-10">
-                      <div className="w-13 h-13 rounded-2xl bg-black/70 border-2 border-gold/60 flex items-center justify-center text-amber-300 shadow-md">
-                        {ICON_COMPONENTS[activeChar.iconName] 
-                          ? React.createElement(ICON_COMPONENTS[activeChar.iconName], { size: 26, className: 'text-amber-300' }) 
-                          : <Sparkles size={26} className="text-amber-300" />}
+                    <div className="flex items-center gap-3.5 relative z-10">
+                      {/* Pedestal Ceremonial con la ilustración SVG del Tzipitío equipado */}
+                      <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-black via-[#1a1208] to-black border-2 border-gold flex items-center justify-center p-1 shadow-[0_0_20px_rgba(206,136,34,0.45)] shrink-0 overflow-hidden group">
+                        {activeChar.avatarSvg ? (
+                          <img 
+                            src={activeChar.avatarSvg} 
+                            alt={activeChar.name} 
+                            className="w-full h-full object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.85)] transition-transform duration-300 group-hover:scale-110" 
+                          />
+                        ) : (
+                          <Sparkles size={26} className="text-amber-300" />
+                        )}
+                        <div className="absolute bottom-0 inset-x-0 h-1 bg-gold/60" />
                       </div>
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-wider text-amber-300 font-bold">
                           <Check size={12} className="text-gold" />
-                          <span>Espíritu Equipado</span>
+                          <span>Tzipitío Equipado</span>
                         </div>
                         <h3 className="text-base sm:text-lg font-display font-extrabold text-[#FFF0C8] truncate">
                           {activeChar.name}
@@ -214,6 +223,14 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                         <p className="text-xs text-amber-200/80 italic font-serif truncate">
                           {activeChar.title}
                         </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded font-mono font-bold text-amber-300 bg-amber-950/80 border border-gold/40">
+                            {activeChar.code}
+                          </span>
+                          <span className="text-[10px] text-amber-100/70 font-mono">
+                            {activeChar.element}
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <p className="mt-3 text-xs text-amber-100/90 font-serif italic border-t border-gold/20 pt-2.5 leading-relaxed relative z-10">
@@ -223,41 +240,54 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
 
                   {/* Instrucción */}
                   <div className="text-left px-1">
-                    <h4 className="text-xs uppercase font-mono tracking-wider text-amber-300 flex items-center gap-1.5 font-bold">
-                      <Sparkles size={13} className="text-gold" />
-                      <span>Selecciona tu Personaje de Leyenda</span>
-                    </h4>
-                    <p className="text-[11px] text-[#F5EDE0]/70 font-serif">
-                      Tu espíritu te representará en salas multijugador y en tu pasaporte
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs uppercase font-mono tracking-wider text-amber-300 flex items-center gap-1.5 font-bold">
+                        <Sparkles size={13} className="text-gold" />
+                        <span>Los 6 Tzipitíos del Juego</span>
+                      </h4>
+                      <span className="text-[10px] font-mono text-gold font-bold px-2 py-0.5 rounded-full bg-gold/15 border border-gold/40">
+                        1 a la vez
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#F5EDE0]/70 font-serif mt-0.5">
+                      Escoge a tu personaje favorito para identificarte en salas multijugador y en tu pasaporte
                     </p>
                   </div>
 
-                  {/* Lista de Personajes de Guatemala Estilizada */}
+                  {/* Lista de los 6 Tzipitíos con sus ilustraciones SVG */}
                   <div className="grid grid-cols-1 gap-2.5">
                     {LEGEND_CHARACTERS.map((char) => {
                       const isEquipped = char.id === currentCharacterId;
-                      const IconComp = ICON_COMPONENTS[char.iconName] || Sparkles;
 
                       return (
                         <div
                           key={char.id}
-                          className={`p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
+                          className={`p-2.5 sm:p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
                             isEquipped
                               ? 'border-2 border-gold bg-gradient-to-r from-amber-950/70 via-[#23180d] to-amber-950/40 shadow-[0_0_20px_rgba(206,136,34,0.35)] ring-1 ring-gold/60'
                               : 'border-gold/30 hover:border-gold/70 bg-[#161008]/90 hover:bg-[#20160c] shadow-sm'
                           }`}
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${
+                            {/* Ilustración SVG del Tzipitío */}
+                            <div className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center p-1 shrink-0 overflow-hidden border ${
                               isEquipped 
-                                ? 'border-gold bg-black/80 shadow-md text-amber-300' 
-                                : 'border-gold/30 bg-[#120d07] text-amber-200/70'
+                                ? 'border-2 border-gold bg-black/85 shadow-[0_0_12px_rgba(206,136,34,0.5)]' 
+                                : 'border-gold/35 bg-[#120d07]'
                             }`}>
-                              <IconComp size={20} className={isEquipped ? 'text-amber-300' : 'text-amber-200/80'} />
+                              {char.avatarSvg ? (
+                                <img 
+                                  src={char.avatarSvg} 
+                                  alt={char.name} 
+                                  className="w-full h-full object-contain filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.8)]" 
+                                />
+                              ) : (
+                                <Sparkles size={20} className={isEquipped ? 'text-amber-300' : 'text-amber-200/80'} />
+                              )}
                             </div>
 
                             <div className="min-w-0 text-left">
-                              <div className="flex items-center gap-1.5">
+                              <div className="flex items-center gap-1.5 flex-wrap">
                                 <span className="font-display text-sm font-bold text-[#FFF0C8] truncate">
                                   {char.name}
                                 </span>
@@ -268,12 +298,15 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                               <p className="text-[11px] text-[#F5EDE0]/70 truncate font-serif">
                                 {char.title}
                               </p>
+                              <p className="text-[10px] text-amber-200/60 truncate font-mono">
+                                ⚡ {char.perk}
+                              </p>
                             </div>
                           </div>
 
                           {/* Botón de Selección o Estado Equipado */}
                           {isEquipped ? (
-                            <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gold/25 text-amber-200 border border-gold text-[10px] font-mono font-bold whitespace-nowrap shadow-sm">
+                            <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gold/25 text-amber-200 border border-gold text-[10px] font-mono font-bold whitespace-nowrap shadow-sm shrink-0">
                               <Check size={12} className="text-gold" />
                               <span>ACTIVO</span>
                             </span>
@@ -281,9 +314,9 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                             <button
                               type="button"
                               onClick={() => handleEquip(char)}
-                              className="px-3.5 py-1.5 rounded-lg border border-gold/70 bg-gold/15 hover:bg-gold hover:text-black font-mono font-bold text-amber-200 text-xs transition-all shadow-sm active:scale-95 cursor-pointer"
+                              className="px-3.5 py-1.5 rounded-lg border border-gold/70 bg-gold/15 hover:bg-gold hover:text-black font-mono font-bold text-amber-200 text-xs transition-all shadow-sm active:scale-95 cursor-pointer shrink-0"
                             >
-                              Equipar
+                              Escoger
                             </button>
                           )}
                         </div>
