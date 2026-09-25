@@ -552,56 +552,56 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="hidden md:flex mt-10 max-w-2xl w-full mx-auto p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 via-black to-neutral-950 border border-gold/50 shadow-[0_0_30px_rgba(252,207,101,0.15)] items-center justify-between gap-4 text-left relative overflow-hidden select-none"
+          className="hidden md:flex mt-10 max-w-2xl w-full mx-auto p-4 rounded-2xl bg-gradient-to-r from-[#1e160e] via-[#140e08] to-[#0e0a06] border-2 border-gold/70 shadow-[0_0_35px_rgba(206,136,34,0.25)] items-center justify-between gap-4 text-left relative overflow-hidden select-none"
         >
           {/* Resplandor dorado de fondo */}
-          <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gold/15 blur-2xl pointer-events-none" />
+          <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-amber-400/20 blur-2xl pointer-events-none" />
 
           {/* Candado y Llave de Oro Místicos */}
           <div className="flex items-center gap-3.5 shrink-0 pl-1">
-            <div className="relative w-14 h-14 flex items-center justify-center">
+            <div className="relative w-14 h-14 flex items-center justify-center rounded-xl bg-amber-950/30 border border-gold/40 p-2">
               <motion.img 
                 src={candadoOroPng} 
                 alt="Candado de Oro" 
                 animate={{ y: [0, -3, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="w-12 h-12 object-contain filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]" 
+                className="w-11 h-11 object-contain filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]" 
               />
               <motion.img 
                 src={llaveOroPng} 
                 alt="Llave de Oro" 
                 animate={{ rotate: [-15, 10, -15], x: [-3, 2, -3] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="w-8 h-8 object-contain absolute -bottom-1 -right-1 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" 
+                className="w-7 h-7 object-contain absolute -bottom-1 -right-1 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" 
               />
             </div>
             <div className="max-w-[340px]">
               <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-gold font-bold flex items-center gap-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold flex items-center gap-1">
                   <Smartphone size={12} /> Mejor en tu Teléfono Móvil
                 </span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-gold/20 text-gold font-mono font-semibold">
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-gold/25 text-amber-200 font-mono font-bold border border-gold/40">
                   Recomendado
                 </span>
               </div>
-              <p className="text-xs text-cream/80 font-serif italic mt-0.5 leading-snug">
+              <p className="text-xs text-[#F5EDE0] font-serif leading-snug mt-1">
                 Para escanear cartas físicas, activar retos de cámara y vivir el audio sensorial, abre la experiencia desde tu móvil.
               </p>
             </div>
           </div>
 
           {/* Mini QR para escaneo instantáneo directo desde la pantalla */}
-          <div className="flex items-center gap-2.5 shrink-0 bg-black/70 border border-gold/40 p-2 rounded-xl shadow-inner">
-            <div className="p-1 bg-white rounded-lg">
+          <div className="flex items-center gap-2.5 shrink-0 bg-[#1b140b] border border-gold/60 p-2 rounded-xl shadow-md">
+            <div className="p-1 bg-white rounded-lg border border-gold/30">
               <QRCodeSVG 
                 value={typeof window !== 'undefined' ? `${window.location.origin}/juego` : 'https://lacasadelasleyendas.com/juego'} 
                 size={54} 
                 level="M" 
               />
             </div>
-            <div className="text-[10px] font-mono text-gold leading-tight">
+            <div className="text-[10px] font-mono text-amber-300 leading-tight">
               <span className="block font-bold">ESCANEA</span>
-              <span className="text-[9px] text-cream/50 block">Con tu celular</span>
+              <span className="text-[9px] text-[#FAF6EE]/70 block font-sans">Con tu cámara</span>
             </div>
           </div>
         </motion.div>
