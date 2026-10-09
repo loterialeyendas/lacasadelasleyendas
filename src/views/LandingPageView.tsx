@@ -167,44 +167,44 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
         </div>
       </header>
 
-      {/* MENÚ DESPLEGABLE VERTICAL DE ALTO CONTRASTE */}
+      {/* MENÚ DESPLEGABLE EN COLUMNA DESDE LA IZQUIERDA */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <>
+          <div className="fixed inset-0 z-50 flex">
             {/* Telón / Backdrop oscuro con desenfoque para aislar y concentrar la lectura */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.22 }}
               onClick={() => {
                 sound.playClick();
                 setIsMobileMenuOpen(false);
               }}
-              className="fixed inset-0 top-[53px] sm:top-[61px] z-40 bg-black/80 backdrop-blur-md cursor-pointer"
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm cursor-pointer z-40"
             />
 
-            {/* Contenedor Flotante Desplegable Vertical */}
-            <div className="fixed top-[53px] sm:top-[61px] left-0 right-0 z-50 flex justify-center px-3 sm:px-4 pt-2 sm:pt-3 pointer-events-none">
-              <motion.div
-                initial={{ opacity: 0, y: -24, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -18, scale: 0.98 }}
-                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="pointer-events-auto w-full max-w-2xl max-h-[calc(88vh-60px)] overflow-y-auto rounded-2xl sm:rounded-3xl bg-[#140e08] border-2 border-gold/75 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_40px_rgba(203,161,67,0.28)] backdrop-blur-2xl p-4 sm:p-6 text-left select-none space-y-5"
-              >
-                {/* Cabecera del Menú con Alto Contraste */}
-                <div className="flex items-center justify-between border-b border-gold/30 pb-3 sm:pb-4">
+            {/* Columna Lateral Desplegable desde la Izquierda */}
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 240 }}
+              className="relative z-50 w-[310px] xs:w-[350px] sm:w-[410px] max-w-[88vw] h-full bg-[#130d07] border-r-2 border-gold/75 shadow-[25px_0_70px_rgba(0,0,0,0.98),0_0_40px_rgba(203,161,67,0.25)] backdrop-blur-2xl p-5 sm:p-6 flex flex-col justify-between overflow-y-auto [scrollbar-width:thin] [scrollbar-color:rgba(203,161,67,0.4)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gold/40 [&::-webkit-scrollbar-thumb]:rounded-full text-left select-none space-y-6"
+            >
+              <div className="space-y-6">
+                {/* Cabecera de la Columna con Alto Contraste */}
+                <div className="flex items-center justify-between border-b border-gold/30 pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gold/15 border border-gold/50 flex items-center justify-center p-1.5 shadow-[0_0_12px_rgba(203,161,67,0.25)]">
+                    <div className="w-10 h-10 rounded-xl bg-gold/15 border border-gold/50 flex items-center justify-center p-1.5 shadow-[0_0_12px_rgba(203,161,67,0.25)] shrink-0">
                       <img src={logoPng} alt="Logo" className="w-full h-full object-contain" />
                     </div>
-                    <div>
-                      <h3 className="font-display text-sm sm:text-base font-bold text-amber-300 tracking-wider">
-                        DIRECTORIO & ACCESOS RÁPIDOS
+                    <div className="min-w-0">
+                      <h3 className="font-display text-sm sm:text-base font-bold text-amber-300 tracking-wider truncate">
+                        LA CASA DE LAS LEYENDAS
                       </h3>
-                      <p className="text-xs text-stone-300 font-sans">
-                        Explora la experiencia interactiva, el juego y la obra de teatro
+                      <p className="text-xs text-stone-300 font-sans truncate">
+                        Directorio & Atajos
                       </p>
                     </div>
                   </div>
@@ -213,7 +213,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                       sound.playClick();
                       setIsMobileMenuOpen(false);
                     }}
-                    className="p-1.5 sm:p-2 rounded-xl bg-stone-900/80 hover:bg-gold/20 text-stone-300 hover:text-amber-200 border border-stone-700/60 hover:border-gold transition-colors cursor-pointer"
+                    className="p-1.5 sm:p-2 rounded-xl bg-stone-900/80 hover:bg-gold/20 text-stone-300 hover:text-amber-200 border border-stone-700/60 hover:border-gold transition-colors cursor-pointer shrink-0 ml-2"
                     title="Cerrar menú"
                     aria-label="Cerrar menú"
                   >
@@ -225,12 +225,12 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-2">
                     <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-gold/20 text-amber-200 border border-gold/40">
-                      🎮 Experiencia Digital & Juego
+                      🎮 Juego Digital & Salas
                     </span>
                     <div className="h-px bg-gold/20 flex-1" />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className="flex flex-col gap-2">
                     {/* Entrar al Juego */}
                     <button
                       onClick={() => {
@@ -292,7 +292,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     <div className="h-px bg-rose-900/30 flex-1" />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div className="flex flex-col gap-2">
                     {/* Obra Teatral */}
                     <a
                       href="/rutadeleyendas"
@@ -302,19 +302,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterLiveTheater?.();
                       }}
-                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-rose-950/40 border border-rose-900/50 hover:border-rose-400 shadow-md transition-all cursor-pointer flex flex-col justify-between"
+                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-rose-950/40 border border-rose-900/50 hover:border-rose-400 shadow-md transition-all cursor-pointer flex items-center justify-between"
                     >
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-7 h-7 rounded-lg bg-rose-900/40 border border-rose-500/40 flex items-center justify-center text-rose-300 shrink-0">
-                          <Drama size={15} />
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-rose-900/40 border border-rose-500/40 flex items-center justify-center text-rose-300 shrink-0">
+                          <Drama size={16} />
                         </div>
-                        <span className="text-xs font-display font-bold text-rose-200 group-hover:text-rose-100 truncate">
-                          Ruta de Leyendas
-                        </span>
+                        <div className="min-w-0">
+                          <span className="text-xs sm:text-sm font-display font-bold text-rose-200 group-hover:text-rose-100 block truncate">
+                            Ruta de Leyendas
+                          </span>
+                          <span className="text-[11px] sm:text-xs text-stone-300 block truncate">
+                            31 de Octubre • Teatro Municipal
+                          </span>
+                        </div>
                       </div>
-                      <span className="text-[11px] text-stone-300 leading-tight">
-                        31 de Octubre • Teatro Municipal
-                      </span>
+                      <ExternalLink size={14} className="text-rose-300/80 group-hover:text-rose-200 shrink-0 ml-1" />
                     </a>
 
                     {/* Boletería y Planes */}
@@ -326,19 +329,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterLiveTheater?.();
                       }}
-                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md transition-all cursor-pointer flex flex-col justify-between"
+                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md transition-all cursor-pointer flex items-center justify-between"
                     >
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-7 h-7 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-amber-300 shrink-0">
-                          <Ticket size={15} />
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-amber-300 shrink-0">
+                          <Ticket size={16} />
                         </div>
-                        <span className="text-xs font-display font-bold text-amber-200 group-hover:text-amber-100 truncate">
-                          Boletería & Planes
-                        </span>
+                        <div className="min-w-0">
+                          <span className="text-xs sm:text-sm font-display font-bold text-amber-200 group-hover:text-amber-100 block truncate">
+                            Boletería & Planes
+                          </span>
+                          <span className="text-[11px] sm:text-xs text-stone-300 block truncate">
+                            Jade, Vida, Oro y Plata
+                          </span>
+                        </div>
                       </div>
-                      <span className="text-[11px] text-stone-300 leading-tight">
-                        Jade, Vida, Oro y Plata
-                      </span>
+                      <ExternalLink size={14} className="text-gold/80 group-hover:text-gold shrink-0 ml-1" />
                     </a>
 
                     {/* Patrocinios */}
@@ -350,19 +356,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterLiveTheater?.();
                       }}
-                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md transition-all cursor-pointer flex flex-col justify-between"
+                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md transition-all cursor-pointer flex items-center justify-between"
                     >
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-7 h-7 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-amber-300 shrink-0">
-                          <Handshake size={15} />
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-amber-300 shrink-0">
+                          <Handshake size={16} />
                         </div>
-                        <span className="text-xs font-display font-bold text-amber-200 group-hover:text-amber-100 truncate">
-                          Patrocinios
-                        </span>
+                        <div className="min-w-0">
+                          <span className="text-xs sm:text-sm font-display font-bold text-amber-200 group-hover:text-amber-100 block truncate">
+                            Patrocinios & Marcas
+                          </span>
+                          <span className="text-[11px] sm:text-xs text-stone-300 block truncate">
+                            Alianzas y marcas en Xela
+                          </span>
+                        </div>
                       </div>
-                      <span className="text-[11px] text-stone-300 leading-tight">
-                        Alianzas y marcas en Xela
-                      </span>
+                      <ExternalLink size={14} className="text-gold/80 group-hover:text-gold shrink-0 ml-1" />
                     </a>
                   </div>
                 </div>
@@ -376,14 +385,14 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     <div className="h-px bg-stone-800 flex-1" />
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => scrollToSection('hibrido')}
                       className="p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
                     >
                       <Layers size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
                       <span className="text-xs font-display font-bold text-stone-100 block truncate">Cartón + App</span>
-                      <span className="text-[11px] text-amber-300/90 leading-tight block">Juego Híbrido</span>
+                      <span className="text-[11px] text-amber-300/90 leading-tight block truncate">Juego Híbrido</span>
                     </button>
 
                     <button
@@ -392,7 +401,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     >
                       <KeyRound size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
                       <span className="text-xs font-display font-bold text-stone-100 block truncate">4 Candados</span>
-                      <span className="text-[11px] text-stone-300 leading-tight block">Secretos</span>
+                      <span className="text-[11px] text-stone-300 leading-tight block truncate">Secretos</span>
                     </button>
 
                     <button
@@ -401,7 +410,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     >
                       <Sparkles size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
                       <span className="text-xs font-display font-bold text-stone-100 block truncate">Mecánicas</span>
-                      <span className="text-[11px] text-stone-300 leading-tight block">3 Pilares</span>
+                      <span className="text-[11px] text-stone-300 leading-tight block truncate">3 Pilares</span>
                     </button>
 
                     <button
@@ -410,7 +419,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     >
                       <BookOpen size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
                       <span className="text-xs font-display font-bold text-stone-100 block truncate">7 Leyendas</span>
-                      <span className="text-[11px] text-stone-300 leading-tight block">Catálogo</span>
+                      <span className="text-[11px] text-stone-300 leading-tight block truncate">Catálogo</span>
                     </button>
 
                     <a
@@ -421,27 +430,32 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterMayordomo?.();
                       }}
-                      className="col-span-2 sm:col-span-1 p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
+                      className="col-span-2 p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group flex items-center justify-between"
                     >
-                      <Shield size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
-                      <span className="text-xs font-display font-bold text-stone-100 block truncate">Mayordomo</span>
-                      <span className="text-[11px] text-stone-300 leading-tight block">Panel CMS</span>
+                      <div className="flex items-center gap-2">
+                        <Shield size={15} className="text-amber-400 group-hover:scale-110 transition-transform" />
+                        <div>
+                          <span className="text-xs font-display font-bold text-stone-100 block leading-tight">Mayordomo</span>
+                          <span className="text-[10px] text-stone-300 leading-tight block">Panel de Administración CMS</span>
+                        </div>
+                      </div>
+                      <ChevronRight size={14} className="text-gold/60 group-hover:text-gold" />
                     </a>
                   </div>
                 </div>
+              </div>
 
-                {/* Pie del Menú con texto de lectura clara */}
-                <div className="pt-3 border-t border-gold/25 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-300 gap-2">
-                  <span className="font-serif italic text-amber-200/90 text-center sm:text-left">
-                    La Casa de las Leyendas • Tradición y Magia de Guatemala
-                  </span>
-                  <span className="font-mono text-[11px] text-amber-400/80">
-                    lacasadelasleyendas.com
-                  </span>
-                </div>
-              </motion.div>
-            </div>
-          </>
+              {/* Pie de la Columna con texto de lectura clara */}
+              <div className="pt-4 border-t border-gold/25 text-center space-y-1 text-xs text-stone-300">
+                <p className="font-serif italic text-amber-200/90">
+                  La Casa de las Leyendas • Guatemala
+                </p>
+                <p className="font-mono text-[11px] text-amber-400/80">
+                  lacasadelasleyendas.com
+                </p>
+              </div>
+            </motion.aside>
+          </div>
         )}
       </AnimatePresence>
 
