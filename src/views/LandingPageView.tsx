@@ -224,7 +224,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 {/* GRUPO 1: EXPERIENCIA DIGITAL Y JUEGO */}
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-gold/20 text-amber-200 border border-gold/40">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-amber-200/80 text-amber-950 border border-amber-500/50">
                       🎮 Juego Digital & Salas
                     </span>
                     <div className="h-px bg-gold/20 flex-1" />
@@ -238,22 +238,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterGame();
                       }}
-                      className="group p-3 sm:p-3.5 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md hover:shadow-[0_0_15px_rgba(203,161,67,0.3)] flex items-center justify-between text-left transition-all cursor-pointer"
+                      className="group p-3 sm:p-3.5 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/60 hover:border-gold shadow-md hover:shadow-[0_0_15px_rgba(203,161,67,0.4)] flex items-center justify-between text-left transition-all cursor-pointer"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-9 h-9 rounded-lg bg-gold/25 border border-gold/50 flex items-center justify-center text-amber-300 group-hover:scale-105 transition-transform shrink-0">
-                          <Play size={18} className="fill-amber-300" />
+                        <div className="w-9 h-9 rounded-lg bg-gold/30 border border-gold/70 flex items-center justify-center text-amber-900 group-hover:scale-105 transition-transform shrink-0">
+                          <Play size={18} className="fill-amber-900" />
                         </div>
                         <div className="min-w-0">
-                          <span className="text-sm font-display font-bold text-amber-200 group-hover:text-amber-100 block truncate">
+                          <span className="text-sm font-display font-bold text-[#1f1309] block truncate">
                             Entrar al Juego / Sala
                           </span>
-                          <span className="text-xs text-stone-300 block truncate">
+                          <span className="text-xs text-[#4a3421] block truncate">
                             Partidas en vivo y anfitrión
                           </span>
                         </div>
                       </div>
-                      <ChevronRight size={18} className="text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
+                      <ChevronRight size={18} className="text-amber-800/70 group-hover:text-amber-900 group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
                     </button>
 
                     {/* Modo Explorador / Pasaporte */}
@@ -263,22 +263,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterExplorer();
                       }}
-                      className="group p-3 sm:p-3.5 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md hover:shadow-[0_0_15px_rgba(203,161,67,0.3)] flex items-center justify-between text-left transition-all cursor-pointer"
+                      className="group p-3 sm:p-3.5 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/60 hover:border-gold shadow-md hover:shadow-[0_0_15px_rgba(203,161,67,0.4)] flex items-center justify-between text-left transition-all cursor-pointer"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-9 h-9 rounded-lg bg-emerald-950/70 border border-emerald-500/50 flex items-center justify-center text-emerald-300 group-hover:scale-105 transition-transform shrink-0">
+                        <div className="w-9 h-9 rounded-lg bg-emerald-100 border border-emerald-500/60 flex items-center justify-center text-emerald-800 group-hover:scale-105 transition-transform shrink-0">
                           <Compass size={18} />
                         </div>
                         <div className="min-w-0">
-                          <span className="text-sm font-display font-bold text-amber-200 group-hover:text-amber-100 block truncate">
+                          <span className="text-sm font-display font-bold text-[#1f1309] block truncate">
                             Modo Pasaporte
                           </span>
-                          <span className="text-xs text-stone-300 block truncate">
+                          <span className="text-xs text-[#4a3421] block truncate">
                             Exploración offline y sellos
                           </span>
                         </div>
                       </div>
-                      <ChevronRight size={18} className="text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
+                      <ChevronRight size={18} className="text-amber-800/70 group-hover:text-amber-900 group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
                     </button>
                   </div>
                 </div>
@@ -286,7 +286,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 {/* GRUPO 2: PRODUCCIÓN TEATRAL EN VIVO */}
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-rose-950/70 text-rose-200 border border-rose-500/50">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-rose-200/80 text-rose-950 border border-rose-500/50">
                       🎭 Producción Teatral Xela
                     </span>
                     <div className="h-px bg-rose-900/30 flex-1" />
@@ -302,22 +302,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterLiveTheater?.();
                       }}
-                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-rose-950/40 border border-rose-900/50 hover:border-rose-400 shadow-md transition-all cursor-pointer flex items-center justify-between"
+                      className="group p-3 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-rose-900/30 hover:border-rose-500 shadow-md transition-all cursor-pointer flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-8 h-8 rounded-lg bg-rose-900/40 border border-rose-500/40 flex items-center justify-center text-rose-300 shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-rose-100 border border-rose-400 flex items-center justify-center text-rose-800 shrink-0">
                           <Drama size={16} />
                         </div>
                         <div className="min-w-0">
-                          <span className="text-xs sm:text-sm font-display font-bold text-rose-200 group-hover:text-rose-100 block truncate">
+                          <span className="text-xs sm:text-sm font-display font-bold text-[#1f1309] block truncate">
                             Ruta de Leyendas
                           </span>
-                          <span className="text-[11px] sm:text-xs text-stone-300 block truncate">
+                          <span className="text-[11px] sm:text-xs text-[#4a3421] block truncate">
                             31 de Octubre • Teatro Municipal
                           </span>
                         </div>
                       </div>
-                      <ExternalLink size={14} className="text-rose-300/80 group-hover:text-rose-200 shrink-0 ml-1" />
+                      <ExternalLink size={14} className="text-rose-800 shrink-0 ml-1" />
                     </a>
 
                     {/* Boletería y Planes */}
@@ -329,22 +329,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterLiveTheater?.();
                       }}
-                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md transition-all cursor-pointer flex items-center justify-between"
+                      className="group p-3 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/60 hover:border-gold shadow-md transition-all cursor-pointer flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-amber-300 shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-amber-100 border border-amber-400 flex items-center justify-center text-amber-800 shrink-0">
                           <Ticket size={16} />
                         </div>
                         <div className="min-w-0">
-                          <span className="text-xs sm:text-sm font-display font-bold text-amber-200 group-hover:text-amber-100 block truncate">
+                          <span className="text-xs sm:text-sm font-display font-bold text-[#1f1309] block truncate">
                             Boletería & Planes
                           </span>
-                          <span className="text-[11px] sm:text-xs text-stone-300 block truncate">
+                          <span className="text-[11px] sm:text-xs text-[#4a3421] block truncate">
                             Jade, Vida, Oro y Plata
                           </span>
                         </div>
                       </div>
-                      <ExternalLink size={14} className="text-gold/80 group-hover:text-gold shrink-0 ml-1" />
+                      <ExternalLink size={14} className="text-amber-800 shrink-0 ml-1" />
                     </a>
 
                     {/* Patrocinios */}
@@ -356,22 +356,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterLiveTheater?.();
                       }}
-                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md transition-all cursor-pointer flex items-center justify-between"
+                      className="group p-3 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/60 hover:border-gold shadow-md transition-all cursor-pointer flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-amber-300 shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-amber-100 border border-amber-400 flex items-center justify-center text-amber-800 shrink-0">
                           <Handshake size={16} />
                         </div>
                         <div className="min-w-0">
-                          <span className="text-xs sm:text-sm font-display font-bold text-amber-200 group-hover:text-amber-100 block truncate">
+                          <span className="text-xs sm:text-sm font-display font-bold text-[#1f1309] block truncate">
                             Patrocinios & Marcas
                           </span>
-                          <span className="text-[11px] sm:text-xs text-stone-300 block truncate">
+                          <span className="text-[11px] sm:text-xs text-[#4a3421] block truncate">
                             Alianzas y marcas en Xela
                           </span>
                         </div>
                       </div>
-                      <ExternalLink size={14} className="text-gold/80 group-hover:text-gold shrink-0 ml-1" />
+                      <ExternalLink size={14} className="text-amber-800 shrink-0 ml-1" />
                     </a>
                   </div>
                 </div>
@@ -379,47 +379,47 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 {/* GRUPO 3: NAVEGACIÓN EN LA LANDING */}
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-stone-900 text-stone-300 border border-stone-700">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-stone-200 text-stone-900 border border-stone-400">
                       📜 Secciones de la Página
                     </span>
-                    <div className="h-px bg-stone-800 flex-1" />
+                    <div className="h-px bg-stone-700 flex-1" />
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => scrollToSection('hibrido')}
-                      className="p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
+                      className="p-2.5 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/50 hover:border-gold transition-all text-left cursor-pointer group"
                     >
-                      <Layers size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
-                      <span className="text-xs font-display font-bold text-stone-100 block truncate">Cartón + App</span>
-                      <span className="text-[11px] text-amber-300/90 leading-tight block truncate">Juego Híbrido</span>
+                      <Layers size={15} className="text-amber-800 mb-1 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-display font-bold text-[#1f1309] block truncate">Cartón + App</span>
+                      <span className="text-[11px] text-amber-900 leading-tight block truncate">Juego Híbrido</span>
                     </button>
 
                     <button
                       onClick={() => scrollToSection('candados')}
-                      className="p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
+                      className="p-2.5 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/50 hover:border-gold transition-all text-left cursor-pointer group"
                     >
-                      <KeyRound size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
-                      <span className="text-xs font-display font-bold text-stone-100 block truncate">4 Candados</span>
-                      <span className="text-[11px] text-stone-300 leading-tight block truncate">Secretos</span>
+                      <KeyRound size={15} className="text-amber-800 mb-1 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-display font-bold text-[#1f1309] block truncate">4 Candados</span>
+                      <span className="text-[11px] text-[#4a3421] leading-tight block truncate">Secretos</span>
                     </button>
 
                     <button
                       onClick={() => scrollToSection('pilares')}
-                      className="p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
+                      className="p-2.5 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/50 hover:border-gold transition-all text-left cursor-pointer group"
                     >
-                      <Sparkles size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
-                      <span className="text-xs font-display font-bold text-stone-100 block truncate">Mecánicas</span>
-                      <span className="text-[11px] text-stone-300 leading-tight block truncate">3 Pilares</span>
+                      <Sparkles size={15} className="text-amber-800 mb-1 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-display font-bold text-[#1f1309] block truncate">Mecánicas</span>
+                      <span className="text-[11px] text-[#4a3421] leading-tight block truncate">3 Pilares</span>
                     </button>
 
                     <button
                       onClick={() => scrollToSection('catalogo')}
-                      className="p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
+                      className="p-2.5 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/50 hover:border-gold transition-all text-left cursor-pointer group"
                     >
-                      <BookOpen size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
-                      <span className="text-xs font-display font-bold text-stone-100 block truncate">7 Leyendas</span>
-                      <span className="text-[11px] text-stone-300 leading-tight block truncate">Catálogo</span>
+                      <BookOpen size={15} className="text-amber-800 mb-1 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-display font-bold text-[#1f1309] block truncate">7 Leyendas</span>
+                      <span className="text-[11px] text-[#4a3421] leading-tight block truncate">Catálogo</span>
                     </button>
 
                     <a
@@ -430,16 +430,16 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         setIsMobileMenuOpen(false);
                         onEnterMayordomo?.();
                       }}
-                      className="col-span-2 p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group flex items-center justify-between"
+                      className="col-span-2 p-2.5 rounded-xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/50 hover:border-gold transition-all text-left cursor-pointer group flex items-center justify-between"
                     >
                       <div className="flex items-center gap-2">
-                        <Shield size={15} className="text-amber-400 group-hover:scale-110 transition-transform" />
+                        <Shield size={15} className="text-amber-800 group-hover:scale-110 transition-transform" />
                         <div>
-                          <span className="text-xs font-display font-bold text-stone-100 block leading-tight">Mayordomo</span>
-                          <span className="text-[10px] text-stone-300 leading-tight block">Panel de Administración CMS</span>
+                          <span className="text-xs font-display font-bold text-[#1f1309] block leading-tight">Mayordomo</span>
+                          <span className="text-[10px] text-[#4a3421] leading-tight block">Panel de Administración CMS</span>
                         </div>
                       </div>
-                      <ChevronRight size={14} className="text-gold/60 group-hover:text-gold" />
+                      <ChevronRight size={14} className="text-amber-800 group-hover:text-amber-950" />
                     </a>
                   </div>
                 </div>
@@ -476,22 +476,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             sound.playClick();
             onEnterLiveTheater?.();
           }}
-          className="w-full max-w-xl mx-auto mb-6 p-2.5 sm:p-3.5 rounded-2xl bg-gradient-to-r from-maya-red/30 via-gold/20 to-maya-red/30 border border-gold/50 cursor-pointer shadow-[0_0_20px_rgba(190,141,44,0.25)] flex items-center gap-2.5 sm:gap-3 text-left group box-border overflow-hidden"
+          className="w-full max-w-xl mx-auto mb-6 p-2.5 sm:p-3.5 rounded-2xl bg-[#fbf7ee] border-2 border-gold/80 cursor-pointer shadow-[0_10px_25px_rgba(0,0,0,0.55)] flex items-center gap-2.5 sm:gap-3 text-left group box-border overflow-hidden hover:bg-white transition-all"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gold/20 flex items-center justify-center text-gold shrink-0 border border-gold/40">
-            <Drama size={18} className="text-gold group-hover:rotate-12 transition-transform" />
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-200/80 flex items-center justify-center text-amber-900 shrink-0 border border-gold/70 shadow-sm">
+            <Drama size={18} className="text-amber-900 group-hover:rotate-12 transition-transform" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[9px] sm:text-[11px] uppercase font-display font-bold tracking-widest text-gold bg-black/70 px-2 py-0.5 rounded border border-gold/30">
+              <span className="text-[9px] sm:text-[11px] uppercase font-display font-bold tracking-widest text-[#faf5ea] bg-earth-brown px-2 py-0.5 rounded border border-gold/50 shadow-xs">
                 {content.bannerBadge}
               </span>
             </div>
-            <p className="text-xs sm:text-sm font-display text-cream font-bold leading-tight mt-1 break-words line-clamp-2 sm:line-clamp-none">
+            <p className="text-xs sm:text-sm font-display text-[#1f1309] font-bold leading-tight mt-1 break-words line-clamp-2 sm:line-clamp-none">
               {content.bannerTitle}
             </p>
           </div>
-          <div className="hidden xs:flex items-center text-gold/70 group-hover:text-gold shrink-0 pl-1">
+          <div className="hidden xs:flex items-center text-amber-800 group-hover:text-amber-950 shrink-0 pl-1">
             <ExternalLink size={14} />
           </div>
         </motion.a>
@@ -616,56 +616,56 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="hidden md:flex mt-10 max-w-2xl w-full mx-auto p-4 rounded-2xl bg-gradient-to-r from-[#1e160e] via-[#140e08] to-[#0e0a06] border-2 border-gold/70 shadow-[0_0_35px_rgba(206,136,34,0.25)] items-center justify-between gap-4 text-left relative overflow-hidden select-none"
+          className="hidden md:flex mt-10 max-w-2xl w-full mx-auto p-4 rounded-2xl bg-[#fbf7ee] border-2 border-gold/80 shadow-[0_12px_30px_rgba(0,0,0,0.55)] items-center justify-between gap-4 text-left relative overflow-hidden select-none"
         >
           {/* Resplandor dorado de fondo */}
           <div className="absolute -left-10 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-amber-400/20 blur-2xl pointer-events-none" />
 
           {/* Candado y Llave de Oro Místicos */}
           <div className="flex items-center gap-3.5 shrink-0 pl-1">
-            <div className="relative w-14 h-14 flex items-center justify-center rounded-xl bg-amber-950/30 border border-gold/40 p-2">
+            <div className="relative w-14 h-14 flex items-center justify-center rounded-xl bg-amber-200/60 border border-gold/60 p-2 shadow-xs">
               <motion.img 
                 src={candadoOroPng} 
                 alt="Candado de Oro" 
                 animate={{ y: [0, -3, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="w-11 h-11 object-contain filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]" 
+                className="w-11 h-11 object-contain filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]" 
               />
               <motion.img 
                 src={llaveOroPng} 
                 alt="Llave de Oro" 
                 animate={{ rotate: [-15, 10, -15], x: [-3, 2, -3] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="w-7 h-7 object-contain absolute -bottom-1 -right-1 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" 
+                className="w-7 h-7 object-contain absolute -bottom-1 -right-1 filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]" 
               />
             </div>
             <div className="max-w-[340px]">
               <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold flex items-center gap-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-950 font-bold flex items-center gap-1">
                   <Smartphone size={12} /> Mejor en tu Teléfono Móvil
                 </span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-gold/25 text-amber-200 font-mono font-bold border border-gold/40">
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-earth-brown text-cream font-mono font-bold border border-gold/40">
                   Recomendado
                 </span>
               </div>
-              <p className="text-xs text-[#F5EDE0] font-serif leading-snug mt-1">
+              <p className="text-xs text-[#3b2a1a] font-serif leading-snug mt-1">
                 Para escanear cartas físicas, activar retos de cámara y vivir el audio sensorial, abre la experiencia desde tu móvil.
               </p>
             </div>
           </div>
 
           {/* Mini QR para escaneo instantáneo directo desde la pantalla */}
-          <div className="flex items-center gap-2.5 shrink-0 bg-[#1b140b] border border-gold/60 p-2 rounded-xl shadow-md">
-            <div className="p-1 bg-white rounded-lg border border-gold/30">
+          <div className="flex items-center gap-2.5 shrink-0 bg-[#f0e4ce] border border-gold/60 p-2 rounded-xl shadow-xs">
+            <div className="p-1 bg-white rounded-lg border border-gold/40 shadow-xs">
               <QRCodeSVG 
                 value={typeof window !== 'undefined' ? `${window.location.origin}/juego` : 'https://lacasadelasleyendas.com/juego'} 
                 size={54} 
                 level="M" 
               />
             </div>
-            <div className="text-[10px] font-mono text-amber-300 leading-tight">
+            <div className="text-[10px] font-mono text-amber-950 leading-tight">
               <span className="block font-bold">ESCANEA</span>
-              <span className="text-[9px] text-[#FAF6EE]/70 block font-sans">Con tu cámara</span>
+              <span className="text-[9px] text-[#523c28] block font-sans">Con tu cámara</span>
             </div>
           </div>
         </motion.div>
@@ -712,22 +712,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               </div>
 
               {/* Pie de foto descriptivo integrado en la imagen */}
-              <div className="absolute bottom-3 left-3 right-3 bg-obsidian/90 backdrop-blur-md border border-gold/40 rounded-2xl p-3 sm:p-4 text-left shadow-xl">
+              <div className="absolute bottom-3 left-3 right-3 bg-[#fbf7ee]/95 backdrop-blur-md border-2 border-gold/70 rounded-2xl p-3 sm:p-4 text-left shadow-xl">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/50 flex items-center justify-center text-gold shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-gold/30 border border-gold/70 flex items-center justify-center text-amber-900 shrink-0">
                       <Box size={16} />
                     </div>
                     <div>
-                      <span className="text-xs sm:text-sm font-display font-bold text-gold block leading-tight">
+                      <span className="text-xs sm:text-sm font-display font-bold text-[#1f1309] block leading-tight">
                         Material de Alta Calidad
                       </span>
-                      <span className="text-[10px] sm:text-[11px] text-cream/70 font-sans block">
+                      <span className="text-[10px] sm:text-[11px] text-[#4a3421] font-sans block">
                         Tablero plegable, cartas ilustradas, fichas coleccionables y dados
                       </span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono text-amber-300/80 bg-gold/10 border border-gold/30 px-2 py-0.5 rounded-md hidden xs:inline shrink-0">
+                  <span className="text-[10px] font-mono text-amber-950 bg-amber-200/80 border border-gold/50 px-2 py-0.5 rounded-md hidden xs:inline shrink-0 font-bold">
                     Edición Especial
                   </span>
                 </div>
@@ -744,23 +744,23 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             className="lg:col-span-6 space-y-4 text-left"
           >
             {/* Pilar 1: Lo Físico */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-950/40 via-black/50 to-black/30 border border-gold/40 hover:border-gold transition-colors relative overflow-hidden group">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#fbf7ee] border-2 border-amber-600/40 hover:border-gold transition-colors relative overflow-hidden group shadow-md">
               <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-gold/20 border border-gold/60 flex items-center justify-center text-gold shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-xl bg-amber-200/80 border border-amber-600/50 flex items-center justify-center text-amber-900 shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
                   <Dices size={20} />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="text-sm sm:text-base font-display font-bold text-amber-200">
+                  <h3 className="text-sm sm:text-base font-display font-bold text-[#1f1309]">
                     {content.hybridBoardTitle || '1. El Cartón Físico en Papel'}
                   </h3>
-                  <p className="text-xs sm:text-[13px] text-cream/80 font-sans leading-relaxed">
+                  <p className="text-xs sm:text-[13px] text-[#3a2717] font-sans leading-relaxed">
                     {content.hybridBoardDescription || 'La emoción de tirar los dados, tocar tus cartas ilustradas, mover tu ficha sobre el mapa colonial y compartir miradas y risas reales con quienes tienes enfrente.'}
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1">
-                    <span className="text-[10px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/30">
+                    <span className="text-[10px] font-mono font-bold text-amber-950 bg-amber-200/70 px-2 py-0.5 rounded border border-amber-500/40">
                       ✓ Sin pantallas que aíslen
                     </span>
-                    <span className="text-[10px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/30">
+                    <span className="text-[10px] font-mono font-bold text-amber-950 bg-amber-200/70 px-2 py-0.5 rounded border border-amber-500/40">
                       ✓ Conexión familiar cara a cara
                     </span>
                   </div>
@@ -769,23 +769,23 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             </div>
 
             {/* Pilar 2: Lo Digital */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-black/50 to-black/30 border border-indigo-400/40 hover:border-indigo-400 transition-colors relative overflow-hidden group">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#fbf7ee] border-2 border-indigo-400/40 hover:border-indigo-600 transition-colors relative overflow-hidden group shadow-md">
               <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-indigo-900/40 border border-indigo-400/60 flex items-center justify-center text-indigo-300 shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 border border-indigo-300 flex items-center justify-center text-indigo-900 shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
                   <Smartphone size={20} />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="text-sm sm:text-base font-display font-bold text-indigo-200">
+                  <h3 className="text-sm sm:text-base font-display font-bold text-[#151a3d]">
                     {content.hybridDigitalTitle || '2. Portal Interactivo en tu Móvil'}
                   </h3>
-                  <p className="text-xs sm:text-[13px] text-cream/80 font-sans leading-relaxed">
+                  <p className="text-xs sm:text-[13px] text-[#3a2717] font-sans leading-relaxed">
                     {content.hybridDigitalDescription || 'Apunta tu cámara a las cartas o casillas para activar pruebas contra reloj, acertijos con audio, retos de mímica y ganar llaves sagradas en tiempo real.'}
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1">
-                    <span className="text-[10px] font-mono text-indigo-300 bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-400/30">
+                    <span className="text-[10px] font-mono font-bold text-indigo-950 bg-indigo-100 px-2 py-0.5 rounded border border-indigo-300">
                       ✓ Escaneo QR instantáneo
                     </span>
-                    <span className="text-[10px] font-mono text-indigo-300 bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-400/30">
+                    <span className="text-[10px] font-mono font-bold text-indigo-950 bg-indigo-100 px-2 py-0.5 rounded border border-indigo-300">
                       ✓ Efectos y sonidos místicos
                     </span>
                   </div>
@@ -794,23 +794,23 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             </div>
 
             {/* Pilar 3: La Fusión */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-black/50 to-black/30 border border-emerald-400/40 hover:border-emerald-400 transition-colors relative overflow-hidden group">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#fbf7ee] border-2 border-emerald-500/40 hover:border-emerald-700 transition-colors relative overflow-hidden group shadow-md">
               <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-emerald-900/40 border border-emerald-400/60 flex items-center justify-center text-emerald-300 shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-xl bg-emerald-100 border border-emerald-400 flex items-center justify-center text-emerald-900 shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
                   <Sparkles size={20} />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="text-sm sm:text-base font-display font-bold text-emerald-200">
+                  <h3 className="text-sm sm:text-base font-display font-bold text-[#0c291b]">
                     {content.hybridUnionTitle || '3. Conexión Real sin Barreras'}
                   </h3>
-                  <p className="text-xs sm:text-[13px] text-cream/80 font-sans leading-relaxed">
+                  <p className="text-xs sm:text-[13px] text-[#3a2717] font-sans leading-relaxed">
                     {content.hybridUnionDescription || 'Sin descargas pesadas ni registros complejos. Un juego de mesa tradicional que cobra vida propia para crear momentos memorables en cualquier hogar.'}
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1">
-                    <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-400/30">
+                    <span className="text-[10px] font-mono font-bold text-emerald-950 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
                       ✓ Funciona en cualquier navegador
                     </span>
-                    <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-400/30">
+                    <span className="text-[10px] font-mono font-bold text-emerald-950 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
                       ✓ Para todas las edades
                     </span>
                   </div>
@@ -866,43 +866,43 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             const lockImg = LOCK_IMAGES[lock.type] || candadoOroPng;
 
             return (
-              <Card 
+              <div 
                 key={lock.id}
-                className={`p-6 space-y-4 border transition-all duration-500 relative overflow-hidden flex flex-col justify-between rounded-2xl ${
+                className={`p-6 space-y-4 border-2 transition-all duration-500 relative overflow-hidden flex flex-col justify-between rounded-2xl ${
                   isUnlocked 
-                    ? `border-gold bg-[#1a120a]/95 shadow-[0_0_30px_rgba(203,161,67,0.35)]` 
-                    : `border-gold/35 bg-[#120c06]/90 hover:border-gold/70 shadow-md`
+                    ? `border-gold bg-[#fbf7ee] shadow-[0_15px_35px_rgba(203,161,67,0.4)]` 
+                    : `border-gold/60 bg-[#faf4e6] hover:border-gold shadow-lg`
                 }`}
               >
                 <div className="space-y-3.5">
                   {/* Ilustración del Candado PNG y Badge */}
                   <div className="flex items-center justify-between">
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gold/15 blur-md rounded-full" />
+                      <div className="absolute inset-0 bg-gold/25 blur-md rounded-full" />
                       <img 
                         src={lockImg} 
                         alt={lock.name} 
                         className={`w-16 h-16 object-contain transition-transform duration-500 ${
-                          isUnlocked ? 'scale-110 drop-shadow-[0_0_15px_rgba(252,207,101,0.8)]' : 'opacity-90'
+                          isUnlocked ? 'scale-110 drop-shadow-[0_0_15px_rgba(203,161,67,0.8)]' : 'opacity-95 drop-shadow-md'
                         }`}
                       />
                     </div>
 
-                    <span className={`text-xs font-display uppercase tracking-wider px-2.5 py-1 rounded-lg border font-bold ${lock.badgeBg}`}>
+                    <span className={`text-xs font-display uppercase tracking-wider px-2.5 py-1 rounded-lg border-2 font-bold shadow-xs ${lock.badgeBg}`}>
                       {lock.name}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="font-display text-base text-cream font-bold leading-snug">
+                    <h3 className="font-display text-base sm:text-lg text-[#1f1309] font-bold leading-snug">
                       {lock.subtitle}
                     </h3>
-                    <span className="text-xs text-amber-300 font-serif italic block mt-1">
+                    <span className="text-xs text-amber-900 font-serif italic block mt-1 font-semibold">
                       Leyendas: {lock.associatedLegends.join(', ')}
                     </span>
                   </div>
 
-                  <div className="p-3.5 bg-[#25170b]/80 rounded-xl border border-gold/30 text-sm text-[#FAF5EA] font-serif italic leading-relaxed shadow-inner">
+                  <div className="p-3.5 bg-[#ede1c7] rounded-xl border border-[#d6be96] text-sm text-[#241508] font-serif italic leading-relaxed shadow-inner">
                     "{lock.question}"
                   </div>
 
@@ -913,22 +913,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="space-y-3 pt-2.5 border-t border-gold/30 text-sm font-serif"
+                        className="space-y-3 pt-2.5 border-t border-gold/40 text-sm font-serif"
                       >
                         <div className="space-y-1">
-                          <span className="text-xs font-display uppercase tracking-wider text-emerald-400 flex items-center gap-1.5 font-bold">
-                            <CheckCircle2 size={14} /> Revelación Ancestral:
+                          <span className="text-xs font-display uppercase tracking-wider text-emerald-900 flex items-center gap-1.5 font-bold">
+                            <CheckCircle2 size={14} className="text-emerald-700" /> Revelación Ancestral:
                           </span>
-                          <p className="text-[#FAF5EA] italic text-sm leading-relaxed">
+                          <p className="text-[#1f1309] italic text-sm leading-relaxed">
                             {lock.answer}
                           </p>
                         </div>
 
-                        <div className="p-3 bg-[#170e06]/95 rounded-xl border border-gold/30 space-y-1">
-                          <span className="text-xs font-display uppercase tracking-widest text-amber-300 flex items-center gap-1.5 font-bold">
-                            <Lightbulb size={13} className="text-gold" /> Contexto Histórico:
+                        <div className="p-3 bg-[#ede1c7] rounded-xl border border-[#d6be96] space-y-1 shadow-inner">
+                          <span className="text-xs font-display uppercase tracking-widest text-amber-950 flex items-center gap-1.5 font-bold">
+                            <Lightbulb size={13} className="text-amber-800" /> Contexto Histórico:
                           </span>
-                          <p className="text-[#FAF5EA]/90 text-xs sm:text-sm leading-relaxed">
+                          <p className="text-[#241508] text-xs sm:text-sm leading-relaxed">
                             {lock.culturalInsight}
                           </p>
                         </div>
@@ -942,14 +942,14 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                   onClick={() => handleUnlockLock(lock.id)}
                   className={`w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-display flex items-center justify-center gap-2 border transition-all cursor-pointer mt-4 font-bold shadow-md ${
                     isUnlocked
-                      ? 'bg-gold/25 text-amber-200 border-gold/60 hover:bg-gold/35'
-                      : 'bg-earth-brown hover:bg-gold text-[#FAF5EA] hover:text-obsidian border-gold/50'
+                      ? 'bg-gold/30 text-amber-950 border-gold/70 hover:bg-gold/45'
+                      : 'bg-earth-brown hover:bg-gold text-cream hover:text-obsidian border-gold/60'
                   }`}
                 >
                   <MysticKey isTurned={isUnlocked} size={18} />
                   <span>{isUnlocked ? 'Cerrar Secreto' : 'Girar Llave de Oro'}</span>
                 </button>
-              </Card>
+              </div>
             );
           })}
         </div>
@@ -970,35 +970,35 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="p-6 space-y-4 border-gold/35 hover:border-gold/70 transition-all hover:scale-[1.02] rounded-2xl bg-[#140e08]/90">
-            <div className="w-14 h-14 rounded-2xl bg-gold/20 border border-gold/50 flex items-center justify-center text-gold">
+          <div className="p-6 space-y-4 border-2 border-gold/60 hover:border-gold transition-all hover:scale-[1.02] rounded-2xl bg-[#fbf7ee] shadow-[0_12px_35px_rgba(0,0,0,0.6)]">
+            <div className="w-14 h-14 rounded-2xl bg-amber-200/80 border border-gold/70 flex items-center justify-center text-amber-900 shadow-sm">
               <QrCode size={28} />
             </div>
-            <h3 className="text-lg font-display text-gold font-bold">{content.pillar1Title}</h3>
-            <p className="text-sm text-[#FAF5EA]/85 font-serif italic leading-relaxed">
+            <h3 className="text-lg font-display text-[#1f1309] font-bold">{content.pillar1Title}</h3>
+            <p className="text-sm text-[#3a2717] font-serif leading-relaxed">
               {content.pillar1Description}
             </p>
-          </Card>
+          </div>
 
-          <Card className="p-6 space-y-4 border-gold/35 hover:border-gold/70 transition-all hover:scale-[1.02] rounded-2xl bg-[#140e08]/90">
-            <div className="w-14 h-14 rounded-2xl bg-maya-red/25 border border-maya-red/50 flex items-center justify-center text-red-300">
+          <div className="p-6 space-y-4 border-2 border-gold/60 hover:border-gold transition-all hover:scale-[1.02] rounded-2xl bg-[#fbf7ee] shadow-[0_12px_35px_rgba(0,0,0,0.6)]">
+            <div className="w-14 h-14 rounded-2xl bg-rose-200/80 border border-rose-400 flex items-center justify-center text-rose-900 shadow-sm">
               <Sparkles size={28} />
             </div>
-            <h3 className="text-lg font-display text-gold font-bold">{content.pillar2Title}</h3>
-            <p className="text-sm text-[#FAF5EA]/85 font-serif italic leading-relaxed">
+            <h3 className="text-lg font-display text-[#1f1309] font-bold">{content.pillar2Title}</h3>
+            <p className="text-sm text-[#3a2717] font-serif leading-relaxed">
               {content.pillar2Description}
             </p>
-          </Card>
+          </div>
 
-          <Card className="p-6 space-y-4 border-gold/35 hover:border-gold/70 transition-all hover:scale-[1.02] rounded-2xl bg-[#140e08]/90">
-            <div className="w-14 h-14 rounded-2xl bg-amber-500/25 border border-amber-500/50 flex items-center justify-center text-amber-300">
+          <div className="p-6 space-y-4 border-2 border-gold/60 hover:border-gold transition-all hover:scale-[1.02] rounded-2xl bg-[#fbf7ee] shadow-[0_12px_35px_rgba(0,0,0,0.6)]">
+            <div className="w-14 h-14 rounded-2xl bg-amber-200/80 border border-amber-400 flex items-center justify-center text-amber-900 shadow-sm">
               <Trophy size={28} />
             </div>
-            <h3 className="text-lg font-display text-gold font-bold">{content.pillar3Title}</h3>
-            <p className="text-sm text-[#FAF5EA]/85 font-serif italic leading-relaxed">
+            <h3 className="text-lg font-display text-[#1f1309] font-bold">{content.pillar3Title}</h3>
+            <p className="text-sm text-[#3a2717] font-serif leading-relaxed">
               {content.pillar3Description}
             </p>
-          </Card>
+          </div>
         </div>
       </section>
 
@@ -1025,10 +1025,10 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 sound.playClick();
                 setSelectedTeaser(selectedTeaser === legend.id ? null : legend.id);
               }}
-              className={`p-5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
+              className={`p-5 rounded-2xl border-2 transition-all cursor-pointer relative overflow-hidden ${
                 selectedTeaser === legend.id
-                  ? 'border-gold bg-[#1a1209]/95 shadow-[0_0_25px_rgba(203,161,67,0.35)]'
-                  : 'border-gold/30 bg-[#120c06]/90 hover:border-gold/60 shadow-md'
+                  ? 'border-gold bg-[#fbf7ee] shadow-[0_15px_35px_rgba(203,161,67,0.45)]'
+                  : 'border-gold/60 bg-[#faf4e6] hover:border-gold shadow-lg'
               }`}
             >
               <div className="flex items-start gap-4">
@@ -1041,21 +1041,21 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-xs font-mono text-amber-300 font-bold">{legend.code}</span>
-                    <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-gold/15 text-gold border border-gold/40 font-mono font-bold">
+                    <span className="text-xs font-mono text-amber-950 font-bold">{legend.code}</span>
+                    <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-amber-200/80 text-amber-950 border border-amber-600/40 font-mono font-bold shadow-xs">
                       {legend.difficulty}
                     </span>
                   </div>
-                  <h4 className="font-display text-base font-bold text-cream truncate mt-1">
+                  <h4 className="font-display text-base font-bold text-[#1f1309] truncate mt-1">
                     {legend.name}
                   </h4>
-                  <p className="text-xs text-amber-300 font-serif italic line-clamp-1">
+                  <p className="text-xs text-amber-900 font-serif italic line-clamp-1 font-semibold">
                     {legend.title}
                   </p>
                 </div>
               </div>
 
-              <p className="text-xs text-[#FAF5EA]/80 font-serif italic mt-3 line-clamp-2">
+              <p className="text-xs text-[#3a2717] font-serif italic mt-3 line-clamp-2 leading-relaxed">
                 "{legend.shortDescription}"
               </p>
 
@@ -1066,12 +1066,12 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="mt-3 pt-3 border-t border-gold/30 text-xs space-y-2"
+                    className="mt-3 pt-3 border-t border-gold/40 text-xs space-y-2"
                   >
-                    <p className="text-[#FAF5EA]/95 font-serif leading-relaxed text-xs sm:text-sm">
+                    <p className="text-[#241508] font-serif leading-relaxed text-xs sm:text-sm">
                       {legend.fullStory}
                     </p>
-                    <div className="p-2.5 rounded-lg bg-gold/15 border border-gold/30 text-[11px] sm:text-xs text-amber-200">
+                    <div className="p-2.5 rounded-lg bg-[#ede1c7] border border-amber-600/40 text-[11px] sm:text-xs text-amber-950 shadow-inner">
                       ✨ <strong>Dato Curioso:</strong> {legend.didYouKnow}
                     </div>
                   </motion.div>
@@ -1084,18 +1084,18 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
 
       {/* BANNER CTA INFERIOR */}
       <section className="relative z-10 py-16 px-4 max-w-4xl mx-auto text-center">
-        <Card className="p-8 sm:p-12 space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#191109] via-[#120b06] to-[#090502] relative overflow-hidden shadow-[0_0_60px_rgba(203,161,67,0.25)] rounded-3xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/15 blur-3xl rounded-full pointer-events-none" />
+        <div className="p-8 sm:p-12 space-y-6 border-2 border-gold bg-gradient-to-b from-[#fdfbf6] via-[#fbf7ee] to-[#ede1c7] relative overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.85)] rounded-3xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gold/20 blur-3xl rounded-full pointer-events-none" />
 
-          <span className="text-xs sm:text-sm font-display text-gold uppercase tracking-widest block font-bold">
+          <span className="text-xs sm:text-sm font-display text-amber-950 uppercase tracking-widest block font-bold bg-amber-200/70 inline-block px-3 py-1 rounded-full border border-amber-500/40 shadow-xs">
             {content.ctaBadge}
           </span>
 
-          <h2 className="text-2xl sm:text-4xl font-display text-cream tracking-wide">
+          <h2 className="text-2xl sm:text-4xl font-display text-[#1f1309] tracking-wide font-bold">
             {content.ctaTitle}
           </h2>
 
-          <p className="text-sm sm:text-base text-[#FAF5EA]/90 font-serif italic max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-[#3a2717] font-serif italic max-w-xl mx-auto leading-relaxed">
             {content.ctaDescription}
           </p>
 
@@ -1117,13 +1117,13 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sound.playClick()}
-              className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base inline-flex items-center justify-center gap-2 border-2 border-emerald-500 bg-emerald-950/80 text-emerald-200 hover:bg-emerald-900/80 rounded-xl font-display font-bold transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+              className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base inline-flex items-center justify-center gap-2 border-2 border-emerald-600 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-display font-bold transition-all shadow-[0_0_20px_rgba(16,185,129,0.35)]"
             >
-              <MessageCircle size={18} className="text-emerald-400" />
+              <MessageCircle size={18} className="text-white" />
               <span>CONSULTAR POR WHATSAPP</span>
             </a>
           </div>
-        </Card>
+        </div>
       </section>
 
       {/* Footer */}
