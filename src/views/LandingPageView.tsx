@@ -8,6 +8,7 @@ import {
   Sparkles, 
   KeyRound, 
   ChevronDown, 
+  ChevronRight,
   CheckCircle2,
   Lightbulb,
   Drama,
@@ -151,54 +152,60 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 sound.playClick();
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              aria-label="Abrir Menú de Navegación"
-              className="py-1.5 px-3 sm:py-2 sm:px-4 rounded-xl border border-gold/50 hover:border-gold bg-gold/15 hover:bg-gold/25 text-gold transition-all cursor-pointer shadow-[0_0_12px_rgba(190,141,44,0.25)] active:scale-95 flex items-center gap-1.5 font-display text-xs sm:text-sm font-bold"
+              aria-expanded={isMobileMenuOpen}
+              aria-label={isMobileMenuOpen ? "Cerrar Menú de Navegación" : "Abrir Menú de Navegación"}
+              className={`py-1.5 px-3.5 sm:py-2 sm:px-4 rounded-xl border transition-all cursor-pointer flex items-center gap-2 font-display text-xs sm:text-sm font-bold active:scale-95 shadow-md ${
+                isMobileMenuOpen
+                  ? 'bg-gold text-obsidian border-gold shadow-[0_0_16px_rgba(203,161,67,0.6)]'
+                  : 'bg-gold/15 hover:bg-gold/25 text-amber-300 border-gold/50 hover:border-gold shadow-[0_0_12px_rgba(190,141,44,0.25)]'
+              }`}
             >
-              {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-              <span>MENÚ</span>
+              {isMobileMenuOpen ? <X size={18} className="stroke-[2.5]" /> : <Menu size={18} />}
+              <span>{isMobileMenuOpen ? 'CERRAR' : 'MENÚ'}</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* MENÚ DESPLEGABLE MÓVIL / DRAWER DE NAVEGACIÓN Y ATAJOS */}
+      {/* MENÚ DESPLEGABLE VERTICAL DE ALTO CONTRASTE */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <div className="fixed inset-0 z-50 flex justify-end">
-            
-            {/* Backdrop con Blur */}
+          <>
+            {/* Telón / Backdrop oscuro con desenfoque para aislar y concentrar la lectura */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={() => {
                 sound.playClick();
                 setIsMobileMenuOpen(false);
               }}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
+              className="fixed inset-0 top-[53px] sm:top-[61px] z-40 bg-black/80 backdrop-blur-md cursor-pointer"
             />
 
-            {/* Drawer Lateral Desplegable */}
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative w-full max-w-sm sm:max-w-md h-full bg-gradient-to-b from-black via-obsidian to-black border-l border-gold/50 shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10"
-            >
-              <div className="space-y-6">
-                
-                {/* Encabezado del Menú */}
-                <div className="flex items-center justify-between border-b border-gold/30 pb-4">
+            {/* Contenedor Flotante Desplegable Vertical */}
+            <div className="fixed top-[53px] sm:top-[61px] left-0 right-0 z-50 flex justify-center px-3 sm:px-4 pt-2 sm:pt-3 pointer-events-none">
+              <motion.div
+                initial={{ opacity: 0, y: -24, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -18, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="pointer-events-auto w-full max-w-2xl max-h-[calc(88vh-60px)] overflow-y-auto rounded-2xl sm:rounded-3xl bg-[#140e08] border-2 border-gold/75 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_40px_rgba(203,161,67,0.28)] backdrop-blur-2xl p-4 sm:p-6 text-left select-none space-y-5"
+              >
+                {/* Cabecera del Menú con Alto Contraste */}
+                <div className="flex items-center justify-between border-b border-gold/30 pb-3 sm:pb-4">
                   <div className="flex items-center gap-3">
-                    <img src={logoPng} alt="Logo" className="w-9 h-9 object-contain drop-shadow-md" />
+                    <div className="w-10 h-10 rounded-xl bg-gold/15 border border-gold/50 flex items-center justify-center p-1.5 shadow-[0_0_12px_rgba(203,161,67,0.25)]">
+                      <img src={logoPng} alt="Logo" className="w-full h-full object-contain" />
+                    </div>
                     <div>
-                      <span className="font-display text-sm font-bold text-gold tracking-wider block">
-                        LA CASA DE LAS LEYENDAS
-                      </span>
-                      <span className="text-[10px] text-cream/70 font-mono uppercase">
-                        Menú de Navegación & Atajos
-                      </span>
+                      <h3 className="font-display text-sm sm:text-base font-bold text-amber-300 tracking-wider">
+                        DIRECTORIO & ACCESOS RÁPIDOS
+                      </h3>
+                      <p className="text-xs text-stone-300 font-sans">
+                        Explora la experiencia interactiva, el juego y la obra de teatro
+                      </p>
                     </div>
                   </div>
                   <button
@@ -206,204 +213,235 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                       sound.playClick();
                       setIsMobileMenuOpen(false);
                     }}
-                    className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-cream transition"
+                    className="p-1.5 sm:p-2 rounded-xl bg-stone-900/80 hover:bg-gold/20 text-stone-300 hover:text-amber-200 border border-stone-700/60 hover:border-gold transition-colors cursor-pointer"
+                    title="Cerrar menú"
+                    aria-label="Cerrar menú"
                   >
                     <X size={18} />
                   </button>
                 </div>
 
-                {/* GRUPO 1: EXPERIENCIA DIGITAL & JUEGO */}
-                <div className="space-y-2">
-                  <span className="text-[11px] uppercase font-display font-bold tracking-widest text-gold/80 block px-1">
-                    🎮 Juego de Mesa & App en Línea
-                  </span>
+                {/* GRUPO 1: EXPERIENCIA DIGITAL Y JUEGO */}
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-gold/20 text-amber-200 border border-gold/40">
+                      🎮 Experiencia Digital & Juego
+                    </span>
+                    <div className="h-px bg-gold/20 flex-1" />
+                  </div>
 
-                  <button
-                    onClick={() => {
-                      sound.playMysticChime();
-                      setIsMobileMenuOpen(false);
-                      onEnterGame();
-                    }}
-                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 hover:border-gold flex items-center gap-3 text-left transition text-cream cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center text-gold shrink-0">
-                      <Play size={16} className="fill-gold" />
-                    </div>
-                    <div>
-                      <span className="text-xs font-display font-bold text-gold block">Entrar al Juego / Sala</span>
-                      <span className="text-[11px] text-cream/70 font-sans">Multijugador en mesa y salas en vivo</span>
-                    </div>
-                  </button>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {/* Entrar al Juego */}
+                    <button
+                      onClick={() => {
+                        sound.playMysticChime();
+                        setIsMobileMenuOpen(false);
+                        onEnterGame();
+                      }}
+                      className="group p-3 sm:p-3.5 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md hover:shadow-[0_0_15px_rgba(203,161,67,0.3)] flex items-center justify-between text-left transition-all cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-lg bg-gold/25 border border-gold/50 flex items-center justify-center text-amber-300 group-hover:scale-105 transition-transform shrink-0">
+                          <Play size={18} className="fill-amber-300" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-sm font-display font-bold text-amber-200 group-hover:text-amber-100 block truncate">
+                            Entrar al Juego / Sala
+                          </span>
+                          <span className="text-xs text-stone-300 block truncate">
+                            Partidas en vivo y anfitrión
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight size={18} className="text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
+                    </button>
 
-                  <button
-                    onClick={() => {
-                      sound.playClick();
-                      setIsMobileMenuOpen(false);
-                      onEnterGame();
-                    }}
-                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 hover:border-gold flex items-center gap-3 text-left transition text-cream cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-emerald-950/60 flex items-center justify-center text-emerald-400 shrink-0">
-                      <Users size={16} />
-                    </div>
-                    <div>
-                      <span className="text-xs font-display font-bold text-cream block">Unirse a Sala (Invitado)</span>
-                      <span className="text-[11px] text-cream/70 font-sans">Ingresa con código de 6 caracteres</span>
-                    </div>
-                  </button>
+                    {/* Modo Explorador / Pasaporte */}
+                    <button
+                      onClick={() => {
+                        sound.playClick();
+                        setIsMobileMenuOpen(false);
+                        onEnterExplorer();
+                      }}
+                      className="group p-3 sm:p-3.5 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md hover:shadow-[0_0_15px_rgba(203,161,67,0.3)] flex items-center justify-between text-left transition-all cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-lg bg-emerald-950/70 border border-emerald-500/50 flex items-center justify-center text-emerald-300 group-hover:scale-105 transition-transform shrink-0">
+                          <Compass size={18} />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-sm font-display font-bold text-amber-200 group-hover:text-amber-100 block truncate">
+                            Modo Pasaporte
+                          </span>
+                          <span className="text-xs text-stone-300 block truncate">
+                            Exploración offline y sellos
+                          </span>
+                        </div>
+                      </div>
+                      <ChevronRight size={18} className="text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
+                    </button>
+                  </div>
                 </div>
 
-                {/* GRUPO 2: PRODUCCIÓN EN VIVO (TEATRO MUNICIPAL) */}
-                <div className="space-y-2">
-                  <span className="text-[11px] uppercase font-display font-bold tracking-widest text-maya-red/90 block px-1">
-                    🎭 Producción Teatral en Vivo
-                  </span>
+                {/* GRUPO 2: PRODUCCIÓN TEATRAL EN VIVO */}
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-rose-950/70 text-rose-200 border border-rose-500/50">
+                      🎭 Producción Teatral Xela
+                    </span>
+                    <div className="h-px bg-rose-900/30 flex-1" />
+                  </div>
 
-                  <a
-                    href="/rutadeleyendas"
-                    onClick={(e) => {
-                      if (onEnterLiveTheater) {
-                        e.preventDefault();
-                      }
-                      sound.playClick();
-                      setIsMobileMenuOpen(false);
-                      onEnterLiveTheater?.();
-                    }}
-                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-maya-red/15 border border-maya-red/40 hover:border-maya-red flex items-center justify-between text-left transition text-cream cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-maya-red/20 flex items-center justify-center text-maya-red shrink-0">
-                        <Drama size={16} />
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    {/* Obra Teatral */}
+                    <a
+                      href="/rutadeleyendas"
+                      onClick={(e) => {
+                        if (onEnterLiveTheater) e.preventDefault();
+                        sound.playClick();
+                        setIsMobileMenuOpen(false);
+                        onEnterLiveTheater?.();
+                      }}
+                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-rose-950/40 border border-rose-900/50 hover:border-rose-400 shadow-md transition-all cursor-pointer flex flex-col justify-between"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-7 h-7 rounded-lg bg-rose-900/40 border border-rose-500/40 flex items-center justify-center text-rose-300 shrink-0">
+                          <Drama size={15} />
+                        </div>
+                        <span className="text-xs font-display font-bold text-rose-200 group-hover:text-rose-100 truncate">
+                          Ruta de Leyendas
+                        </span>
                       </div>
-                      <div>
-                        <span className="text-xs font-display font-bold text-cream block">Ruta de Leyendas (Teatro)</span>
-                        <span className="text-[11px] text-cream/70 font-sans">31 de Octubre • Quetzaltenango</span>
-                      </div>
-                    </div>
-                    <ExternalLink size={14} className="text-maya-red" />
-                  </a>
+                      <span className="text-[11px] text-stone-300 leading-tight">
+                        31 de Octubre • Teatro Municipal
+                      </span>
+                    </a>
 
-                  <a
-                    href="/rutadeleyendas#boleteria"
-                    onClick={(e) => {
-                      if (onEnterLiveTheater) {
-                        e.preventDefault();
-                      }
-                      sound.playClick();
-                      setIsMobileMenuOpen(false);
-                      onEnterLiveTheater?.();
-                    }}
-                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/40 hover:border-gold flex items-center justify-between text-left transition text-cream cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center text-gold shrink-0">
-                        <Ticket size={16} />
+                    {/* Boletería y Planes */}
+                    <a
+                      href="/rutadeleyendas#boleteria"
+                      onClick={(e) => {
+                        if (onEnterLiveTheater) e.preventDefault();
+                        sound.playClick();
+                        setIsMobileMenuOpen(false);
+                        onEnterLiveTheater?.();
+                      }}
+                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md transition-all cursor-pointer flex flex-col justify-between"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-7 h-7 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-amber-300 shrink-0">
+                          <Ticket size={15} />
+                        </div>
+                        <span className="text-xs font-display font-bold text-amber-200 group-hover:text-amber-100 truncate">
+                          Boletería & Planes
+                        </span>
                       </div>
-                      <div>
-                        <span className="text-xs font-display font-bold text-gold block">Sistema de Boletería & Planes</span>
-                        <span className="text-[11px] text-cream/70 font-sans">Planes Jade, Vida, Oro y Plata</span>
-                      </div>
-                    </div>
-                    <ExternalLink size={14} className="text-gold" />
-                  </a>
+                      <span className="text-[11px] text-stone-300 leading-tight">
+                        Jade, Vida, Oro y Plata
+                      </span>
+                    </a>
 
-                  <a
-                    href="/rutadeleyendas#patrocinios"
-                    onClick={(e) => {
-                      if (onEnterLiveTheater) {
-                        e.preventDefault();
-                      }
-                      sound.playClick();
-                      setIsMobileMenuOpen(false);
-                      onEnterLiveTheater?.();
-                    }}
-                    className="w-full p-3 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/40 hover:border-gold flex items-center justify-between text-left transition text-cream cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center text-gold shrink-0">
-                        <Handshake size={16} />
+                    {/* Patrocinios */}
+                    <a
+                      href="/rutadeleyendas#patrocinios"
+                      onClick={(e) => {
+                        if (onEnterLiveTheater) e.preventDefault();
+                        sound.playClick();
+                        setIsMobileMenuOpen(false);
+                        onEnterLiveTheater?.();
+                      }}
+                      className="group p-3 rounded-xl bg-[#1c130b] hover:bg-[#281a0e] border border-gold/40 hover:border-gold shadow-md transition-all cursor-pointer flex flex-col justify-between"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-7 h-7 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-amber-300 shrink-0">
+                          <Handshake size={15} />
+                        </div>
+                        <span className="text-xs font-display font-bold text-amber-200 group-hover:text-amber-100 truncate">
+                          Patrocinios
+                        </span>
                       </div>
-                      <div>
-                        <span className="text-xs font-display font-bold text-gold block">Patrocinios & Marcas</span>
-                        <span className="text-[11px] text-cream/70 font-sans">Alianzas Corporativas en Xela</span>
-                      </div>
-                    </div>
-                    <ExternalLink size={14} className="text-gold" />
-                  </a>
+                      <span className="text-[11px] text-stone-300 leading-tight">
+                        Alianzas y marcas en Xela
+                      </span>
+                    </a>
+                  </div>
                 </div>
 
-                {/* GRUPO 3: EXPLORAR SECCIONES DE LA LANDING */}
-                <div className="space-y-2">
-                  <span className="text-[11px] uppercase font-display font-bold tracking-widest text-gold/80 block px-1">
-                    📜 Explorar el Portal
-                  </span>
+                {/* GRUPO 3: NAVEGACIÓN EN LA LANDING */}
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold font-display uppercase tracking-wider bg-stone-900 text-stone-300 border border-stone-700">
+                      📜 Secciones de la Página
+                    </span>
+                    <div className="h-px bg-stone-800 flex-1" />
+                  </div>
 
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                     <button
                       onClick={() => scrollToSection('hibrido')}
-                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/40 text-left transition cursor-pointer"
+                      className="p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
                     >
-                      <Layers size={14} className="text-gold mb-1" />
-                      <span className="text-xs font-display font-bold text-cream block">Juego Híbrido</span>
-                      <span className="text-[10px] text-amber-300/80">Cartón + App</span>
+                      <Layers size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-display font-bold text-stone-100 block truncate">Cartón + App</span>
+                      <span className="text-[11px] text-amber-300/90 leading-tight block">Juego Híbrido</span>
                     </button>
 
                     <button
                       onClick={() => scrollToSection('candados')}
-                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
+                      className="p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
                     >
-                      <KeyRound size={14} className="text-gold mb-1" />
-                      <span className="text-xs font-display font-bold text-cream block">4 Candados</span>
-                      <span className="text-[10px] text-cream/60">Secretos</span>
+                      <KeyRound size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-display font-bold text-stone-100 block truncate">4 Candados</span>
+                      <span className="text-[11px] text-stone-300 leading-tight block">Secretos</span>
                     </button>
 
                     <button
                       onClick={() => scrollToSection('pilares')}
-                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
+                      className="p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
                     >
-                      <Sparkles size={14} className="text-gold mb-1" />
-                      <span className="text-xs font-display font-bold text-cream block">Mecánicas</span>
-                      <span className="text-[10px] text-cream/60">3 Pilares</span>
+                      <Sparkles size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-display font-bold text-stone-100 block truncate">Mecánicas</span>
+                      <span className="text-[11px] text-stone-300 leading-tight block">3 Pilares</span>
                     </button>
 
                     <button
                       onClick={() => scrollToSection('catalogo')}
-                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
+                      className="p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
                     >
-                      <BookOpen size={14} className="text-gold mb-1" />
-                      <span className="text-xs font-display font-bold text-cream block">7 Leyendas</span>
-                      <span className="text-[10px] text-cream/60">Catálogo</span>
+                      <BookOpen size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-display font-bold text-stone-100 block truncate">7 Leyendas</span>
+                      <span className="text-[11px] text-stone-300 leading-tight block">Catálogo</span>
                     </button>
 
                     <a
                       href="/mayordomo"
                       onClick={(e) => {
-                        if (onEnterMayordomo) {
-                          e.preventDefault();
-                        }
+                        if (onEnterMayordomo) e.preventDefault();
                         sound.playClick();
                         setIsMobileMenuOpen(false);
                         onEnterMayordomo?.();
                       }}
-                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
+                      className="col-span-2 sm:col-span-1 p-2.5 rounded-xl bg-[#1a120a] hover:bg-[#261b0f] border border-gold/30 hover:border-gold transition-all text-left cursor-pointer group"
                     >
-                      <Shield size={14} className="text-gold mb-1" />
-                      <span className="text-xs font-display font-bold text-cream block">Mayordomo</span>
-                      <span className="text-[10px] text-cream/60">Panel CMS</span>
+                      <Shield size={15} className="text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-display font-bold text-stone-100 block truncate">Mayordomo</span>
+                      <span className="text-[11px] text-stone-300 leading-tight block">Panel CMS</span>
                     </a>
                   </div>
                 </div>
 
-              </div>
-
-              {/* Pie del Menú */}
-              <div className="pt-6 border-t border-gold/20 text-center space-y-1 text-xs text-cream/50 font-serif italic">
-                <p>La Casa de las Leyendas • Guatemala</p>
-                <p className="text-[10px] text-cream/40 font-mono">lacasadelasleyendas.com</p>
-              </div>
-
-            </motion.div>
-          </div>
+                {/* Pie del Menú con texto de lectura clara */}
+                <div className="pt-3 border-t border-gold/25 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-300 gap-2">
+                  <span className="font-serif italic text-amber-200/90 text-center sm:text-left">
+                    La Casa de las Leyendas • Tradición y Magia de Guatemala
+                  </span>
+                  <span className="font-mono text-[11px] text-amber-400/80">
+                    lacasadelasleyendas.com
+                  </span>
+                </div>
+              </motion.div>
+            </div>
+          </>
         )}
       </AnimatePresence>
 
