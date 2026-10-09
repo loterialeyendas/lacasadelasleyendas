@@ -207,16 +207,16 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                   {/* Banner del Personaje Equipado Actualmente - Ficha Beige Ancestral */}
                   <div className="p-4 sm:p-5 rounded-2xl bg-[#fbf7ee] border-2 border-gold text-[#1f1309] relative overflow-hidden shadow-[0_12px_35px_rgba(0,0,0,0.65)]">
                     <div className="flex items-center gap-3.5 relative z-10">
-                      {/* Pedestal Ceremonial con la ilustración SVG del Tzipitío equipado */}
-                      <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-[#140e08] border-2 border-gold flex items-center justify-center p-1 shadow-md shrink-0 overflow-hidden group">
+                      {/* Pedestal Ceremonial con la ilustración SVG del Tzipitío equipado en fondo blanco */}
+                      <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-white border-2 border-gold flex items-center justify-center p-1.5 shadow-md shrink-0 overflow-hidden group">
                         {activeChar.avatarSvg ? (
                           <img 
                             src={activeChar.avatarSvg} 
                             alt={activeChar.name} 
-                            className="w-full h-full object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.85)] transition-transform duration-300 group-hover:scale-110" 
+                            className="w-full h-full object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)] transition-transform duration-300 group-hover:scale-110" 
                           />
                         ) : (
-                          <Sparkles size={26} className="text-amber-300" />
+                          <Sparkles size={26} className="text-amber-600" />
                         )}
                         <div className="absolute bottom-0 inset-x-0 h-1 bg-gold" />
                       </div>
@@ -265,7 +265,7 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                     </p>
                   </div>
 
-                  {/* Lista de los 6 Tzipitíos en Fichas Beige del Juego */}
+                  {/* Lista de los 6 Tzipitíos en Fichas Beige del Juego con fondo blanco para los avatares */}
                   <div className="grid grid-cols-1 gap-2.5">
                     {LEGEND_CHARACTERS.map((char) => {
                       const isEquipped = char.id === currentCharacterId;
@@ -280,20 +280,20 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                           }`}
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            {/* Ilustración SVG del Tzipitío */}
-                            <div className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center p-1 shrink-0 overflow-hidden border-2 ${
+                            {/* Ilustración SVG del Tzipitío con Fondo Blanco de Alto Contraste */}
+                            <div className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center p-1.5 shrink-0 overflow-hidden border-2 bg-white ${
                               isEquipped 
-                                ? 'border-gold bg-[#140e08] shadow-md' 
-                                : 'border-gold/40 bg-[#1f160e]'
+                                ? 'border-gold shadow-md ring-1 ring-gold/60' 
+                                : 'border-gold/50 shadow-sm'
                             }`}>
                               {char.avatarSvg ? (
                                 <img 
                                   src={char.avatarSvg} 
                                   alt={char.name} 
-                                  className="w-full h-full object-contain filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.8)]" 
+                                  className="w-full h-full object-contain filter drop-shadow-[0_1px_3px_rgba(0,0,0,0.2)]" 
                                 />
                               ) : (
-                                <Sparkles size={20} className="text-amber-300" />
+                                <Sparkles size={20} className="text-amber-600" />
                               )}
                             </div>
 
