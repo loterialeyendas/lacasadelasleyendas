@@ -22,7 +22,9 @@ import {
   Phone,
   Handshake,
   Users,
-  Smartphone
+  Smartphone,
+  Box,
+  Dices
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Button, Card } from '../components/Theme';
@@ -40,6 +42,7 @@ import portadaPng from '../images/png/Portada.png';
 import solPng from '../images/png/Sol.png';
 import nubeIzqPng from '../images/png/Nube izquierda.png';
 import nubeDerPng from '../images/png/Nube derecha.png';
+import juegoPapel3dImg from '../images/png/juego 3d papel.jpg';
 
 import candadoOroPng from '../images/png/Candado oro.png';
 import candadoPlataPng from '../images/png/Candado plata.png';
@@ -337,6 +340,15 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
 
                   <div className="grid grid-cols-2 gap-2">
                     <button
+                      onClick={() => scrollToSection('hibrido')}
+                      className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/40 text-left transition cursor-pointer"
+                    >
+                      <Layers size={14} className="text-gold mb-1" />
+                      <span className="text-xs font-display font-bold text-cream block">Juego Híbrido</span>
+                      <span className="text-[10px] text-amber-300/80">Cartón + App</span>
+                    </button>
+
+                    <button
                       onClick={() => scrollToSection('candados')}
                       className="p-2.5 rounded-xl bg-black/60 hover:bg-gold/15 border border-gold/30 text-left transition cursor-pointer"
                     >
@@ -605,6 +617,181 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
             </div>
           </div>
         </motion.div>
+      </section>
+
+      {/* SECCIÓN NUEVA: EL JUEGO HÍBRIDO (EL CARTÓN FÍSICO EN PAPEL Y LA MAGIA DIGITAL) */}
+      <section id="hibrido" className="relative z-10 py-16 px-4 max-w-6xl mx-auto border-t border-gold/20">
+        <div className="text-center space-y-2 mb-10 sm:mb-12">
+          <span className="text-xs sm:text-sm font-display text-gold tracking-widest uppercase flex items-center justify-center gap-2 font-bold">
+            <Layers size={16} className="text-gold" /> {content.hybridSectionBadge || 'Experiencia de Mesa Híbrida'}
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-display text-cream tracking-wide">
+            {content.hybridSectionTitle || 'EL CARTÓN FÍSICO Y LA MAGIA DIGITAL'}
+          </h2>
+          <p className="text-sm sm:text-base text-cream/80 font-serif italic max-w-2xl mx-auto leading-relaxed px-2">
+            {content.hybridSectionSubtitle || 'Lo mejor de dos mundos: la calidez de reunirse en familia alrededor de un tablero tangible combinada con la emoción inmersiva de la tecnología.'}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* LADO VISUAL: FOTOGRAFÍA DEL CARTÓN FÍSICO EN PAPEL 3D */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-6 relative"
+          >
+            <div className="relative rounded-3xl overflow-hidden border-2 border-gold/60 bg-gradient-to-b from-[#1c150c] to-[#0a0704] shadow-[0_0_50px_rgba(206,136,34,0.35),0_20px_50px_rgba(0,0,0,0.85)] group">
+              {/* Resplandor áureo decorativo de fondo */}
+              <div className="absolute -top-20 -left-20 w-60 h-60 rounded-full bg-gold/15 blur-3xl pointer-events-none" />
+
+              {/* Imagen del Cartón Físico en Papel */}
+              <img
+                src={juegoPapel3dImg}
+                alt="Juego de Mesa Físico en Cartón y Papel - La Casa de las Leyendas"
+                className="w-full h-auto max-h-[460px] object-cover object-center group-hover:scale-105 transition-transform duration-700 select-none"
+              />
+
+              {/* Insignia superior flotante */}
+              <div className="absolute top-4 left-4 bg-black/85 backdrop-blur-md border border-gold/60 px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold tracking-wider text-amber-300 flex items-center gap-1.5 shadow-lg">
+                <Sparkles size={13} className="text-gold animate-spin" />
+                <span>TABLERO FÍSICO EN CARTÓN</span>
+              </div>
+
+              {/* Pie de foto descriptivo integrado en la imagen */}
+              <div className="absolute bottom-3 left-3 right-3 bg-obsidian/90 backdrop-blur-md border border-gold/40 rounded-2xl p-3 sm:p-4 text-left shadow-xl">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/50 flex items-center justify-center text-gold shrink-0">
+                      <Box size={16} />
+                    </div>
+                    <div>
+                      <span className="text-xs sm:text-sm font-display font-bold text-gold block leading-tight">
+                        Material de Alta Calidad
+                      </span>
+                      <span className="text-[10px] sm:text-[11px] text-cream/70 font-sans block">
+                        Tablero plegable, cartas ilustradas, fichas coleccionables y dados
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono text-amber-300/80 bg-gold/10 border border-gold/30 px-2 py-0.5 rounded-md hidden xs:inline shrink-0">
+                    Edición Especial
+                  </span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* LADO CONCEPTUAL: 3 PILARES DE LA EXPERIENCIA HÍBRIDA */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-6 space-y-4 text-left"
+          >
+            {/* Pilar 1: Lo Físico */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-950/40 via-black/50 to-black/30 border border-gold/40 hover:border-gold transition-colors relative overflow-hidden group">
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-gold/20 border border-gold/60 flex items-center justify-center text-gold shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                  <Dices size={20} />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-sm sm:text-base font-display font-bold text-amber-200">
+                    {content.hybridBoardTitle || '1. El Cartón Físico en Papel'}
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-cream/80 font-sans leading-relaxed">
+                    {content.hybridBoardDescription || 'La emoción de tirar los dados, tocar tus cartas ilustradas, mover tu ficha sobre el mapa colonial y compartir miradas y risas reales con quienes tienes enfrente.'}
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <span className="text-[10px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/30">
+                      ✓ Sin pantallas que aíslen
+                    </span>
+                    <span className="text-[10px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/30">
+                      ✓ Conexión familiar cara a cara
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Pilar 2: Lo Digital */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-black/50 to-black/30 border border-indigo-400/40 hover:border-indigo-400 transition-colors relative overflow-hidden group">
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-indigo-900/40 border border-indigo-400/60 flex items-center justify-center text-indigo-300 shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                  <Smartphone size={20} />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-sm sm:text-base font-display font-bold text-indigo-200">
+                    {content.hybridDigitalTitle || '2. Portal Interactivo en tu Móvil'}
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-cream/80 font-sans leading-relaxed">
+                    {content.hybridDigitalDescription || 'Apunta tu cámara a las cartas o casillas para activar pruebas contra reloj, acertijos con audio, retos de mímica y ganar llaves sagradas en tiempo real.'}
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <span className="text-[10px] font-mono text-indigo-300 bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-400/30">
+                      ✓ Escaneo QR instantáneo
+                    </span>
+                    <span className="text-[10px] font-mono text-indigo-300 bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-400/30">
+                      ✓ Efectos y sonidos místicos
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Pilar 3: La Fusión */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-black/50 to-black/30 border border-emerald-400/40 hover:border-emerald-400 transition-colors relative overflow-hidden group">
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-emerald-900/40 border border-emerald-400/60 flex items-center justify-center text-emerald-300 shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                  <Sparkles size={20} />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-sm sm:text-base font-display font-bold text-emerald-200">
+                    {content.hybridUnionTitle || '3. Conexión Real sin Barreras'}
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-cream/80 font-sans leading-relaxed">
+                    {content.hybridUnionDescription || 'Sin descargas pesadas ni registros complejos. Un juego de mesa tradicional que cobra vida propia para crear momentos memorables en cualquier hogar.'}
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-400/30">
+                      ✓ Funciona en cualquier navegador
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-400/30">
+                      ✓ Para todas las edades
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Botones de Acción de la Sección */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+              <Button
+                onClick={() => {
+                  sound.playMysticChime();
+                  onEnterGame();
+                }}
+                className="w-full sm:w-auto px-6 py-3 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 bg-gradient-to-r from-gold via-cream to-gold text-obsidian rounded-xl shadow-[0_0_20px_rgba(190,141,44,0.5)] hover:scale-105 transition-transform"
+              >
+                <Play size={15} className="fill-obsidian" />
+                <span>PROBAR APP DEL JUEGO</span>
+              </Button>
+
+              <a
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => sound.playClick()}
+                className="w-full sm:w-auto px-5 py-3 text-xs sm:text-sm font-display font-bold inline-flex items-center justify-center gap-2 border border-emerald-500/70 bg-emerald-950/60 hover:bg-emerald-900/70 text-emerald-200 rounded-xl transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+              >
+                <MessageCircle size={15} className="text-emerald-400" />
+                <span>CONSULTAR POR EL JUEGO FÍSICO</span>
+              </a>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* SECCIÓN EDUCATIVA: DESCUBRE QUÉ HAY DETRÁS DE CADA CANDADO */}

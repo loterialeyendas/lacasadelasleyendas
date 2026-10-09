@@ -43,6 +43,15 @@ export interface LandingContent {
   ctaTitle: string;
   ctaDescription: string;
   ctaButtonText: string;
+  hybridSectionBadge?: string;
+  hybridSectionTitle?: string;
+  hybridSectionSubtitle?: string;
+  hybridBoardTitle?: string;
+  hybridBoardDescription?: string;
+  hybridDigitalTitle?: string;
+  hybridDigitalDescription?: string;
+  hybridUnionTitle?: string;
+  hybridUnionDescription?: string;
   footerTitle: string;
   footerDescription: string;
 }
@@ -234,6 +243,15 @@ export const DEFAULT_LANDING_CONTENT: LandingContent = {
   ctaTitle: 'COMIENZA TU AVENTURA EN LA CASA DE LAS LEYENDAS',
   ctaDescription: 'Ingresa desde tu teléfono para jugar en mesa con tus amigos o para realizar el recorrido interactivo por nuestras instalaciones.',
   ctaButtonText: 'INICIAR EXPERIENCIA DIGITAL',
+  hybridSectionBadge: 'Experiencia de Mesa Híbrida',
+  hybridSectionTitle: 'EL CARTÓN FÍSICO Y LA MAGIA DIGITAL',
+  hybridSectionSubtitle: 'Lo mejor de dos mundos: la calidez de reunirse en familia alrededor de un tablero tangible combinada con la emoción inmersiva de la tecnología.',
+  hybridBoardTitle: 'Cartón Físico en Papel',
+  hybridBoardDescription: 'La emoción de tirar los dados, tocar tus cartas ilustradas, mover tu ficha sobre el mapa colonial y compartir miradas y risas reales con quienes tienes enfrente.',
+  hybridDigitalTitle: 'Portal Interactivo en tu Móvil',
+  hybridDigitalDescription: 'Apunta tu cámara a las cartas o casillas para activar pruebas contra reloj, acertijos con audio, retos de mímica y ganar llaves sagradas en tiempo real.',
+  hybridUnionTitle: 'Conexión Real sin Barreras',
+  hybridUnionDescription: 'Sin descargas pesadas ni registros complejos. Un juego de mesa tradicional que cobra vida propia para crear momentos memorables en cualquier hogar.',
   footerTitle: 'LA CASA DE LAS LEYENDAS • GUATEMALA',
   footerDescription: 'Preservando el patrimonio oral, la magia y las tradiciones populares de Guatemala.'
 };
