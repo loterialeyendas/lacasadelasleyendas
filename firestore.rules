@@ -11,8 +11,8 @@ service cloud.firestore {
     // Salas Multijugador en Vivo (Mayordomo e Invitados)
     match /rooms/{roomId} {
       allow read: if true;
-      allow create: if request.auth != null;
-      allow update: if request.auth != null;
+      allow create: if true;
+      allow update: if true;
       allow delete: if request.auth != null && (resource.data.hostId == request.auth.uid || resource.data.players.size() <= 1);
     }
 

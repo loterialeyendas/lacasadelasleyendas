@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { GameRoom } from '../types/game';
-import { Button, Card, MysticalTitle } from '../components/Theme';
 import { sound } from '../lib/audio';
 import { assignPlayerRole } from '../services/roomService';
 import { getCharacterById } from '../data/characters';
@@ -122,37 +121,35 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96 }}
-      className="w-full max-w-lg mx-auto px-1.5 sm:px-4 py-2 sm:py-4 space-y-4 relative select-none"
+      className="w-full max-w-lg mx-auto px-2 sm:px-4 py-3 sm:py-5 space-y-4 relative select-none"
     >
-      <Card className="border-2 border-gold/70 backdrop-blur-xl bg-gradient-to-b from-[#1c150c]/98 via-[#130d07]/98 to-[#0b0704]/98 p-3.5 sm:p-6 rounded-3xl shadow-[0_0_50px_rgba(206,136,34,0.35),0_20px_50px_rgba(0,0,0,0.85)] space-y-4 sm:space-y-5 relative z-10 overflow-hidden text-[#FFF0C8]">
+      {/* Contenedor Principal: Ficha de Cartón Beige Ancestral del Juego */}
+      <div className="p-5 sm:p-7 rounded-3xl bg-[#fbf7ee] border-2 border-gold shadow-[0_15px_45px_rgba(0,0,0,0.75)] text-[#1f1309] space-y-5 relative z-10 overflow-hidden">
         
-        {/* Halo áureo celestial superior */}
-        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-80 h-56 rounded-full bg-gradient-to-b from-amber-400/25 via-gold/15 to-transparent blur-3xl pointer-events-none" />
-
         {/* CABECERA CEREMONIAL CON LA LUNA SAGRADA (Luna.svg) */}
-        <div className="relative text-center pt-1 pb-1 sm:pb-2 space-y-2 select-none">
-          {/* Marco sagrado de la Luna Maya */}
+        <div className="relative text-center pt-1 pb-1 sm:pb-2 space-y-2.5 select-none">
+          {/* Marco sagrado de la Luna */}
           <div className="relative inline-block">
-            <div className="relative w-18 h-18 sm:w-22 sm:h-22 rounded-full p-1.5 bg-gradient-to-b from-amber-500/30 via-black to-[#1c150c] border-2 border-gold shadow-[0_0_25px_rgba(252,207,101,0.55)] flex items-center justify-center mx-auto overflow-hidden">
+            <div className="relative w-18 h-18 sm:w-22 sm:h-22 rounded-full p-1.5 bg-[#140e08] border-2 border-gold shadow-md flex items-center justify-center mx-auto overflow-hidden">
               <img 
                 src={lunaSvg} 
                 alt="Luna de las Leyendas" 
-                className="w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(252,207,101,0.7)] transition-transform duration-500 hover:rotate-12 hover:scale-105" 
+                className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(252,207,101,0.6)] transition-transform duration-500 hover:rotate-12 hover:scale-105" 
               />
             </div>
             <div className="absolute -bottom-1 -right-1 bg-[#1a1208] border border-gold/80 rounded-full p-1 shadow-md">
-              <Sparkles size={12} className="text-gold animate-spin" />
+              <Sparkles size={13} className="text-gold animate-spin" />
             </div>
           </div>
 
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-950/80 border border-gold/60 text-amber-300 text-[10px] font-mono tracking-widest uppercase font-bold shadow-sm">
-              <Crown size={12} className="text-gold" /> Sala del Mayordomo
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-200/90 border border-gold/70 text-amber-950 text-[10px] font-mono tracking-widest uppercase font-black shadow-sm">
+              <Crown size={12} className="text-amber-900" /> Sala del Mayordomo
             </div>
-            <h2 className="font-display text-lg sm:text-2xl text-amber-200 font-extrabold tracking-wider mt-1 drop-shadow-sm leading-tight">
+            <h2 className="font-display text-xl sm:text-2xl text-[#1f1309] font-black tracking-wider mt-1.5 leading-tight">
               CONVOCATORIA NOCTURNA
             </h2>
-            <p className="text-[11px] sm:text-xs text-amber-100/75 font-serif italic max-w-xs mx-auto">
+            <p className="text-xs sm:text-sm text-[#4a3421] font-serif italic max-w-xs mx-auto">
               Bajo la mirada celestial de la Luna, reúne a los 6 exploradores
             </p>
           </div>
@@ -160,24 +157,24 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
 
         {/* TARJETA CEREMONIAL: CÓDIGO DE SALA Y COMPARTIR */}
         <div className="text-center space-y-2.5">
-          <div className="py-3 px-3 sm:px-4 bg-[#140e08]/95 border-2 border-gold/60 rounded-2xl space-y-2.5 shadow-inner">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300/80 block font-bold">
+          <div className="py-4 px-3 sm:px-4 bg-[#ede1c7] border-2 border-gold rounded-2xl space-y-2.5 shadow-inner">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-amber-900 block font-black">
               Código de Sala para Convidar
             </span>
 
             <div className="flex items-center justify-center gap-2 sm:gap-3">
-              <h2 className="text-4xl sm:text-5xl font-display font-extrabold tracking-[0.2em] text-amber-200 drop-shadow-[0_0_15px_rgba(252,207,101,0.6)]">
+              <h2 className="text-4xl sm:text-5xl font-mono font-black tracking-[0.2em] text-amber-950 drop-shadow-sm">
                 {room.id}
               </h2>
 
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="p-2.5 rounded-xl bg-gold/15 hover:bg-gold/25 border border-gold/60 text-amber-200 transition-all active:scale-95 cursor-pointer shadow-sm"
+                className="p-2.5 rounded-xl bg-gold/25 hover:bg-gold/40 border border-gold/70 text-amber-950 transition-all active:scale-95 cursor-pointer shadow-sm"
                 title="Copiar código de sala"
                 aria-label="Copiar código de sala"
               >
-                {copied ? <Check size={18} className="text-emerald-400" /> : <Copy size={18} />}
+                {copied ? <Check size={18} className="text-emerald-700" /> : <Copy size={18} />}
               </button>
 
               <button
@@ -187,7 +184,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                   setShowQR(!showQR);
                 }}
                 className={`p-2.5 rounded-xl border transition-all active:scale-95 cursor-pointer shadow-sm ${
-                  showQR ? 'bg-gold text-[#140e08] border-gold font-bold' : 'bg-gold/15 hover:bg-gold/25 border-gold/60 text-amber-200'
+                  showQR ? 'bg-gold text-[#140e08] border-gold font-bold' : 'bg-gold/25 hover:bg-gold/40 border-gold/70 text-amber-950'
                 }`}
                 title="Mostrar código QR de convocatoria"
                 aria-label="Mostrar código QR"
@@ -196,21 +193,21 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
               </button>
             </div>
 
-            {/* BOTONES DESTACADOS PARA COMPARTIR EN MÓVIL AL MÁXIMO ANCHO */}
+            {/* BOTONES DESTACADOS PARA COMPARTIR */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-              <Button
+              <button
                 type="button"
                 onClick={handleShareOtherApps}
-                className="w-full py-2.5 px-3 flex items-center justify-center gap-2 text-xs font-display tracking-wider rounded-xl bg-gold text-[#140e08] hover:bg-gold/90 font-bold shadow-md cursor-pointer active:scale-95"
+                className="w-full py-2.5 px-3 flex items-center justify-center gap-2 text-xs font-display tracking-wider rounded-xl bg-earth-brown text-cream hover:bg-gold hover:text-obsidian font-bold shadow-md cursor-pointer transition-all active:scale-95 border border-gold"
               >
                 <Share2 size={16} />
                 <span>Compartir Código</span>
-              </Button>
+              </button>
 
               <button
                 type="button"
                 onClick={handleShareWhatsApp}
-                className="w-full py-2.5 px-3 flex items-center justify-center gap-2 text-xs font-display tracking-wider rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+                className="w-full py-2.5 px-3 flex items-center justify-center gap-2 text-xs font-display tracking-wider rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition-all shadow-md active:scale-95 cursor-pointer"
               >
                 <MessageCircle size={16} />
                 <span>Enviar por WhatsApp</span>
@@ -218,7 +215,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
             </div>
 
             {copiedLink && (
-              <span className="text-[10px] text-emerald-400 font-mono block">
+              <span className="text-[10px] text-emerald-800 font-mono font-bold block">
                 ✓ Enlace de invitación copiado al portapapeles
               </span>
             )}
@@ -234,12 +231,12 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div className="p-4 bg-[#140e08]/95 border-2 border-gold/50 rounded-2xl text-center space-y-2 shadow-xl">
-                <div className="p-3 bg-white rounded-xl inline-block shadow-2xl border-2 border-gold mx-auto">
+              <div className="p-4 bg-[#ede1c7] border-2 border-gold rounded-2xl text-center space-y-2 shadow-md">
+                <div className="p-3 bg-white rounded-xl inline-block shadow-md border-2 border-gold mx-auto">
                   <QRCodeSVG value={inviteUrl} size={150} />
                 </div>
-                <p className="text-[11px] text-amber-200 font-mono font-medium">
-                  Escanea para unirte a la sala en <span className="underline text-gold">lacasadelasleyendas.com/juego</span>
+                <p className="text-xs text-[#241508] font-mono font-semibold">
+                  Escanea para unirte a la sala en <span className="underline font-bold text-amber-900">lacasadelasleyendas.com/juego</span>
                 </p>
               </div>
             </motion.div>
@@ -247,43 +244,43 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
         </AnimatePresence>
 
         {/* CUADRO INDICANDO A LOS JUGADORES QUE SE ESTÁN SUMANDO (1/6 JUGADORES) */}
-        <div className="bg-[#140e08]/90 border border-gold/40 rounded-2xl p-3 sm:p-4 space-y-3 shadow-inner">
-          <div className="flex items-center justify-between border-b border-gold/20 pb-2 flex-wrap gap-1">
+        <div className="bg-[#ede1c7] border border-[#d6be96] rounded-2xl p-3 sm:p-4 space-y-3 shadow-inner">
+          <div className="flex items-center justify-between border-b border-[#d6be96] pb-2 flex-wrap gap-1">
             <div className="flex items-center gap-2">
-              <Radio size={14} className="text-emerald-400 animate-pulse shrink-0" />
-              <h3 className="font-display text-xs text-amber-200 uppercase tracking-wider font-bold">
+              <Radio size={14} className="text-emerald-700 animate-pulse shrink-0" />
+              <h3 className="font-display text-xs text-[#1f1309] uppercase tracking-wider font-black">
                 Convocatoria en Vivo ({room.players.length}/6 Jugadores)
               </h3>
             </div>
             
             {isRoomFull ? (
-              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-gold/25 text-amber-200 border border-gold font-bold animate-pulse shadow-sm">
+              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-amber-200/90 text-amber-950 border border-gold font-bold shadow-sm">
                 ¡SALA COMPLETA!
               </span>
             ) : (
-              <span className="text-[10px] font-mono text-emerald-400 font-bold">
+              <span className="text-[10px] font-mono text-emerald-800 font-bold">
                 {maxGuests - guestCount} {maxGuests - guestCount === 1 ? 'plaza restante' : 'plazas restantes'}
               </span>
             )}
           </div>
 
           {/* Tarjeta del Mayordomo */}
-          <div className="p-2.5 sm:p-3 rounded-xl border-2 border-gold bg-gradient-to-r from-amber-950/70 via-[#23180d] to-amber-950/40 flex items-center justify-between shadow-md">
+          <div className="p-3 rounded-xl border-2 border-gold bg-amber-200/90 flex items-center justify-between shadow-sm text-[#1f1309]">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-black/60 border border-gold/70 flex items-center justify-center text-amber-300 relative shadow-sm">
+              <div className="w-9 h-9 rounded-full bg-gold/30 border border-gold flex items-center justify-center text-amber-900 relative shadow-sm">
                 <Crown size={17} />
-                <img src={llaveOroPng} alt="Llave" className="w-4 h-4 absolute -bottom-1 -right-1" />
+                <img src={llaveOroPng} alt="Llave" className="w-4 h-4 absolute -bottom-1 -right-1 filter drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="font-display text-xs sm:text-sm text-[#FFF0C8] font-bold">{mayordomo?.name}</span>
+                  <span className="font-display text-xs sm:text-sm text-[#1f1309] font-black">{mayordomo?.name}</span>
                   {mayordomo?.id === userId && (
-                    <span className="text-[8px] font-mono bg-gold text-[#140e08] px-1.5 py-0.2 rounded font-bold">TÚ</span>
+                    <span className="text-[8px] font-mono bg-amber-950 text-white px-1.5 py-0.2 rounded font-bold">TÚ</span>
                   )}
                   {mayordomo?.characterId && (() => {
                     const hostChar = getCharacterById(mayordomo.characterId);
                     return (
-                      <span className="text-[8px] font-mono bg-black/70 border border-gold/50 text-amber-300 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold">
+                      <span className="text-[8px] font-mono bg-[#140e08] border border-gold/50 text-amber-300 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold">
                         {hostChar.avatarSvg ? (
                           <img src={hostChar.avatarSvg} alt="" className="w-3.5 h-3.5 object-contain" />
                         ) : (
@@ -294,12 +291,12 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                     );
                   })()}
                 </div>
-                <span className="text-[9px] text-amber-200/80 font-serif italic block">
+                <span className="text-[9px] text-amber-900 font-serif italic block">
                   👑 {mayordomo?.customTitle || 'Mayordomo de la Casa (Host)'}
                 </span>
               </div>
             </div>
-            <span className="text-[9px] font-mono text-amber-200 bg-gold/25 px-2.5 py-1 rounded-full border border-gold/50 font-bold whitespace-nowrap shadow-sm">
+            <span className="text-[9px] font-mono text-amber-950 bg-gold/35 px-2.5 py-1 rounded-full border border-gold font-bold whitespace-nowrap shadow-sm">
               Anfitrión
             </span>
           </div>
@@ -321,24 +318,24 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                     layout
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className={`p-2.5 rounded-xl border transition-all ${
+                    className={`p-2.5 rounded-xl border-2 transition-all ${
                       isCurrentGuest
-                        ? 'border-gold bg-gradient-to-r from-amber-950/50 via-[#1f150c] to-transparent shadow-sm'
-                        : 'border-gold/30 bg-[#161008]/80'
+                        ? 'border-gold bg-[#fbf7ee] text-[#1f1309] shadow-sm'
+                        : 'border-[#d6be96] bg-[#f4ebd8] text-[#241508]'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-6 h-6 rounded-full bg-emerald-950/80 border border-emerald-400/60 flex items-center justify-center text-emerald-300 font-mono text-[10px] font-bold shrink-0">
+                        <div className="w-6 h-6 rounded-full bg-emerald-200 border border-emerald-600 flex items-center justify-center text-emerald-950 font-mono text-[10px] font-bold shrink-0">
                           #{slotNumber}
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-display text-xs text-[#FFF0C8] font-bold truncate">{guest.name}</span>
+                            <span className="font-display text-xs text-[#1f1309] font-bold truncate">{guest.name}</span>
                             {isCurrentGuest && (
-                              <span className="text-[8px] font-mono text-amber-300 font-bold">(TÚ)</span>
+                              <span className="text-[8px] font-mono text-amber-900 font-black">(TÚ)</span>
                             )}
-                            <span className={`text-[8px] font-mono bg-black/70 border border-gold/30 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold ${guestChar.colorTheme.text}`}>
+                            <span className={`text-[8px] font-mono bg-[#140e08] border border-gold/30 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold text-amber-200`}>
                               {guestChar.avatarSvg ? (
                                 <img src={guestChar.avatarSvg} alt="" className="w-3.5 h-3.5 object-contain" />
                               ) : (
@@ -347,7 +344,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                               <span>{guestChar.name}</span>
                             </span>
                           </div>
-                          <span className="text-[9px] text-amber-100/70 font-serif italic block truncate">
+                          <span className="text-[9px] text-[#4a3421] font-serif italic block truncate">
                             ✨ {guest.customTitle || `Invitado #${slotNumber}`}
                           </span>
                         </div>
@@ -361,7 +358,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                               sound.playClick();
                               setEditingPlayerId(isEditing ? null : guest.id);
                             }}
-                            className="p-1 rounded border border-gold/40 hover:border-gold bg-gold/15 text-amber-200 text-[9px] font-mono flex items-center gap-1 cursor-pointer font-bold active:scale-95"
+                            className="p-1 rounded border border-gold bg-[#ede1c7] hover:bg-gold/20 text-[#1f1309] text-[9px] font-mono flex items-center gap-1 cursor-pointer font-bold active:scale-95"
                             title="Designar rol ceremonial"
                           >
                             <Edit3 size={10} />
@@ -369,8 +366,8 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                           </button>
                         )}
 
-                        <span className="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded-full flex items-center gap-1 font-bold shadow-sm">
-                          <CheckCircle2 size={10} /> Sumado
+                        <span className="text-[9px] font-mono text-emerald-950 bg-emerald-200/90 border border-emerald-600/40 px-2 py-0.5 rounded-full flex items-center gap-1 font-bold shadow-sm">
+                          <CheckCircle2 size={10} className="text-emerald-800" /> Sumado
                         </span>
                       </div>
                     </div>
@@ -380,9 +377,9 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
-                        className="mt-2 pt-2 border-t border-gold/30 space-y-2"
+                        className="mt-2 pt-2 border-t border-[#d6be96] space-y-2"
                       >
-                        <span className="text-[9px] font-mono text-amber-300 block uppercase font-bold">
+                        <span className="text-[9px] font-mono text-amber-900 block uppercase font-black">
                           Designar Rol para {guest.name}:
                         </span>
                         
@@ -392,10 +389,10 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                               key={r.title}
                               type="button"
                               onClick={() => handleAssignRole(guest.id, r.title)}
-                              className="text-left p-1.5 rounded-lg border border-gold/30 hover:border-gold bg-[#120d07] hover:bg-gold/20 transition-all text-[9px] cursor-pointer"
+                              className="text-left p-1.5 rounded-lg border border-[#d6be96] hover:border-gold bg-[#fbf7ee] hover:bg-gold/20 transition-all text-[9px] cursor-pointer"
                             >
-                              <div className="font-display font-bold text-[#FFF0C8]">{r.title}</div>
-                              <div className="text-[8px] text-amber-100/60 truncate font-serif italic">{r.desc}</div>
+                              <div className="font-display font-bold text-[#1f1309]">{r.title}</div>
+                              <div className="text-[8px] text-[#4a3421] truncate font-serif italic">{r.desc}</div>
                             </button>
                           ))}
                         </div>
@@ -407,7 +404,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                             onChange={(e) => setCustomRoleInput(e.target.value)}
                             placeholder="Escribe otro rol místico..."
                             maxLength={24}
-                            className="flex-1 bg-[#120d07] border border-gold/40 rounded-lg px-2.5 py-1 text-xs text-[#FFF0C8] outline-none focus:border-gold"
+                            className="flex-1 bg-white border border-gold/70 rounded-lg px-2.5 py-1 text-xs text-[#1f1309] outline-none focus:border-gold"
                           />
                           <button
                             type="button"
@@ -417,7 +414,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                               }
                             }}
                             disabled={!customRoleInput.trim()}
-                            className="px-3 py-1 rounded-lg bg-gold text-[#140e08] font-display text-[9px] font-bold uppercase disabled:opacity-40 cursor-pointer shadow-sm"
+                            className="px-3 py-1 rounded-lg bg-earth-brown text-cream font-display text-[9px] font-bold uppercase disabled:opacity-40 cursor-pointer shadow-sm"
                           >
                             Asignar
                           </button>
@@ -432,17 +429,17 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
               return (
                 <div
                   key={`empty-slot-${slotNumber}`}
-                  className="p-2 sm:p-2.5 rounded-xl border border-dashed border-gold/25 bg-[#120d07]/40 flex items-center justify-between text-[#F5EDE0]/40 text-[11px]"
+                  className="p-2 sm:p-2.5 rounded-xl border border-dashed border-[#d6be96] bg-[#faf4e6] flex items-center justify-between text-[#7a624a] text-[11px]"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full border border-dashed border-gold/30 flex items-center justify-center font-mono text-[10px] text-gold/50">
+                    <div className="w-6 h-6 rounded-full border border-dashed border-[#d6be96] flex items-center justify-center font-mono text-[10px] text-amber-900 font-bold">
                       #{slotNumber}
                     </div>
-                    <span className="font-serif italic text-amber-100/40 text-[11px]">
+                    <span className="font-serif italic text-[#4a3421] text-[11px]">
                       Esperando que se una el explorador #{slotNumber}...
                     </span>
                   </div>
-                  <span className="text-[9px] font-mono text-gold/60 font-bold">Libre</span>
+                  <span className="text-[9px] font-mono text-amber-900 font-bold">Libre</span>
                 </div>
               );
             })}
@@ -460,47 +457,49 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                   animate={{ scale: 1 }}
                   className="space-y-2"
                 >
-                  <div className="p-2.5 rounded-xl bg-gold/20 border-2 border-gold text-center text-xs font-display text-amber-200 font-bold shadow-md">
+                  <div className="p-2.5 rounded-xl bg-amber-200/90 border-2 border-gold text-center text-xs font-display text-amber-950 font-bold shadow-sm">
                     ✨ ¡SALA COMPLETA! Los 5 invitados se han sumado.
                   </div>
-                  <Button
+                  <button
+                    type="button"
                     onClick={() => {
                       sound.playMysticChime();
                       onStartGame();
                     }}
-                    className="w-full min-h-[54px] sm:min-h-[58px] py-4 flex items-center justify-center gap-2 text-base font-display font-extrabold tracking-wider rounded-xl shadow-[0_0_30px_rgba(252,207,101,0.6)] border-2 border-gold text-[#140e08] bg-gradient-to-r from-amber-300 via-gold to-amber-300 hover:brightness-110 cursor-pointer"
+                    className="w-full min-h-[54px] sm:min-h-[58px] py-4 flex items-center justify-center gap-2 text-sm sm:text-base font-display font-bold uppercase tracking-wider rounded-xl shadow-md border-2 border-gold text-cream hover:text-obsidian bg-earth-brown hover:bg-gold transition-all cursor-pointer active:scale-95"
                   >
                     <Play size={20} className="fill-current" />
                     <span>IR AL TABLERO DE JUEGO</span>
                     <ArrowRight size={20} />
-                  </Button>
+                  </button>
                 </motion.div>
               ) : (
                 // Aún no está completa, pero se puede iniciar si hay al menos 1 invitado
                 <div className="space-y-2">
-                  <Button
+                  <button
+                    type="button"
                     onClick={() => {
                       sound.playMysticChime();
                       onStartGame();
                     }}
-                    className="w-full min-h-[50px] sm:min-h-[54px] py-3.5 flex items-center justify-center gap-2 text-sm sm:text-base font-display font-extrabold tracking-wider rounded-xl shadow-[0_4px_24px_rgba(190,141,44,0.4)] border-2 border-gold/70 cursor-pointer"
                     disabled={!canStart}
+                    className="w-full min-h-[50px] sm:min-h-[54px] py-3.5 flex items-center justify-center gap-2 text-xs sm:text-sm font-display font-bold uppercase tracking-wider rounded-xl shadow-md border-2 border-gold text-cream hover:text-obsidian bg-earth-brown hover:bg-gold transition-all cursor-pointer active:scale-95 disabled:opacity-50"
                   >
-                    <Play size={18} className="text-gold" />
+                    <Play size={18} />
                     <span>
                       {canStart
                         ? `Ir al Tablero (${room.players.length} Jugadores)`
                         : 'Esperando al menos 1 invitado...'}
                     </span>
                     {canStart && <ArrowRight size={18} />}
-                  </Button>
+                  </button>
 
                   {!canStart ? (
-                    <p className="text-[11px] text-amber-200/80 font-serif italic text-center">
-                      Comparte el código <span className="font-mono font-bold text-[#FFF0C8]">{room.id}</span> para que se sumen los invitados.
+                    <p className="text-[11px] text-[#4a3421] font-serif italic text-center">
+                      Comparte el código <span className="font-mono font-black text-[#1f1309]">{room.id}</span> para que se sumen los invitados.
                     </p>
                   ) : (
-                    <p className="text-[10px] text-amber-100/60 font-serif italic text-center">
+                    <p className="text-[10px] text-[#4a3421] font-serif italic text-center">
                       Puedes ir al tablero ahora o esperar a que se completen los {maxGuests} invitados.
                     </p>
                   )}
@@ -508,36 +507,33 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
               )}
             </>
           ) : (
-            <div className="p-3.5 bg-[#140e08]/90 rounded-2xl border border-gold/40 text-center space-y-1.5 shadow-inner">
-              <p className="text-xs text-amber-200 font-serif italic animate-pulse flex items-center justify-center gap-2">
-                <Sparkles size={14} className="text-gold" />
+            <div className="p-3.5 bg-[#ede1c7] rounded-2xl border border-[#d6be96] text-center space-y-1.5 shadow-inner">
+              <p className="text-xs text-[#1f1309] font-serif italic animate-pulse flex items-center justify-center gap-2 font-bold">
+                <Sparkles size={14} className="text-amber-900" />
                 {isRoomFull
                   ? '¡Sala completa! El Mayordomo abrirá el tablero en un instante...'
                   : `Esperando a que el Mayordomo (${mayordomo?.name}) inicie y nos lleve al tablero...`}
               </p>
-              <p className="text-[10px] text-amber-100/60 font-mono">
+              <p className="text-[10px] text-[#4a3421] font-mono">
                 Mantente en esta pantalla. Cuando el Mayordomo presione "Ir al Tablero", entrarás automáticamente.
               </p>
             </div>
           )}
 
-          <Button
-            variant="outline"
-            size="sm"
+          <button
+            type="button"
             onClick={() => {
               sound.playClick();
               onLeaveRoom();
             }}
-            className="w-full text-xs py-2.5 border-rose-500/40 text-rose-300 hover:bg-rose-950/40 hover:text-white cursor-pointer"
+            className="w-full py-2.5 px-3 text-xs font-display font-bold uppercase tracking-wider rounded-xl border border-rose-600/50 text-rose-800 hover:bg-rose-100 transition-all cursor-pointer active:scale-95"
           >
             Abandonar Sala
-          </Button>
+          </button>
         </div>
 
         {/* PIE DE PÁGINA SAGRADO CON EL VOLCÁN (volcan.svg) */}
-        <div className="relative mt-2 -mx-3.5 sm:-mx-6 -mb-3.5 sm:-mb-6 pt-3 overflow-hidden pointer-events-none select-none border-t border-gold/30 bg-gradient-to-b from-[#140e08] to-[#090603]">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#090603] via-transparent to-transparent z-10" />
-          
+        <div className="relative mt-2 -mx-5 sm:-mx-7 -mb-5 sm:-mb-7 pt-3 overflow-hidden pointer-events-none select-none border-t border-gold/30 bg-[#ede1c7]">
           <motion.div
             animate={{ y: [0, -3, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
@@ -546,18 +542,18 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
             <img 
               src={volcanSvg} 
               alt="Volcanes Sagrados de Guatemala" 
-              className="w-full h-24 sm:h-32 object-cover object-bottom opacity-45 filter drop-shadow-[0_-6px_20px_rgba(206,136,34,0.35)]" 
+              className="w-full h-24 sm:h-28 object-cover object-bottom opacity-35 filter drop-shadow-[0_-4px_12px_rgba(206,136,34,0.3)]" 
             />
           </motion.div>
 
           <div className="relative z-20 text-center pb-2.5 -mt-3">
-            <p className="text-[10px] sm:text-[11px] font-serif italic text-amber-200/70 flex items-center justify-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <p className="text-[10px] sm:text-[11px] font-serif italic text-[#4a3421] font-semibold flex items-center justify-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
               Tierra de Volcanes • La Casa de las Leyendas en Vivo
             </p>
           </div>
         </div>
-      </Card>
+      </div>
     </motion.div>
   );
 };

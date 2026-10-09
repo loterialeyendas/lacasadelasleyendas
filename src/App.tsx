@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { AnimatePresence } from 'motion/react';
 import { auth } from './lib/firebase';
-import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth';
+import { onAuthStateChanged, signOut, signInAnonymously, updateProfile, User as FirebaseUser } from 'firebase/auth';
 
 import { Legend, Stamp } from './types/legend';
 import { GameRoom, KeyType } from './types/game';
@@ -356,12 +356,64 @@ export default function App() {
     setRoomError('');
 
     try {
-      const newRoomId = await createGameRoom(user.uid, user.displayName || 'Anfitrión', passport.characterId || 'chancho');
+      // 1. Asegurar autenticación de Firebase si el usuario es local/anónimo
+      let activeUid = user.uid;
+      let activeName = user.displayName || 'Anfitrión';
+
+      if (!auth.currentUser) {
+        try {
+          const userCredential = await signInAnonymously(auth);
+          if (activeName) {
+            await updateProfile(userCredential.user, { displayName: activeName });
+          }
+          activeUid = userCredential.user.uid;
+          setUser(userCredential.user);
+        } catch (authErr) {
+          console.warn('Advertencia en signInAnonymously:', authErr);
+        }
+      } else {
+        activeUid = auth.currentUser.uid;
+      }
+
+      // 2. Crear la sala en Firestore
+      const newRoomId = await createGameRoom(
+        activeUid,
+        activeName,
+        passport.characterId || 'chancho'
+      );
+
+      // 3. Crear el estado preliminar de la sala de inmediato para evitar cualquier bloqueo o parpadeo
+      const preliminaryRoom: GameRoom = {
+        id: newRoomId,
+        hostId: activeUid,
+        hostName: activeName,
+        createdAt: Date.now(),
+        expiresAt: Date.now() + 24 * 60 * 60 * 1000,
+        status: 'waiting',
+        currentRound: 1,
+        maxRounds: 8,
+        maxGuests: 5,
+        players: [
+          {
+            id: activeUid,
+            name: activeName,
+            characterId: passport.characterId || 'chancho',
+            points: 0,
+            isHost: true,
+            role: 'mayordomo',
+            customTitle: 'Mayordomo de la Casa',
+            isReady: true,
+            lastActive: Date.now()
+          }
+        ]
+      };
+
+      setCurrentRoom(preliminaryRoom);
       setRoomId(newRoomId);
       navigate('lobby');
     } catch (err: any) {
-      console.error(err);
-      setRoomError('No se pudo crear la sala');
+      console.error('Error al crear sala:', err);
+      setRoomError('No se pudo crear la sala: ' + (err.message || 'Verifica tu conexión'));
     } finally {
       setIsRoomLoading(false);
     }
@@ -650,6 +702,8 @@ export default function App() {
               <WelcomeView
                 onCreateRoom={handleCreateRoom}
                 onJoinRoom={() => navigate('join')}
+                isLoading={isRoomLoading}
+                error={roomError}
               />
             </Suspense>
           )}
@@ -689,15 +743,19 @@ export default function App() {
             </Suspense>
           )}
 
-          {screen === 'lobby' && currentRoom && user && (
+          {screen === 'lobby' && user && (
             <Suspense fallback={<MysticLoader />}>
-              <LobbyView
-                room={currentRoom}
-                userId={user.uid}
-                isHost={currentRoom.hostId === user.uid}
-                onStartGame={handleStartGame}
-                onLeaveRoom={handleLeaveRoom}
-              />
+              {currentRoom ? (
+                <LobbyView
+                  room={currentRoom}
+                  userId={user.uid}
+                  isHost={currentRoom.hostId === user.uid}
+                  onStartGame={handleStartGame}
+                  onLeaveRoom={handleLeaveRoom}
+                />
+              ) : (
+                <MysticLoader />
+              )}
             </Suspense>
           )}
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Users, Sparkles, AlertCircle, QrCode, Camera } from 'lucide-react';
-import { Button, Card, MysticalTitle } from '../components/Theme';
+import { ArrowLeft, Users, Sparkles, AlertCircle, QrCode } from 'lucide-react';
 import { Scanner } from '../components/Scanner';
 import { sound } from '../lib/audio';
 
@@ -65,19 +64,18 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
-      className="w-full max-w-md mx-auto px-2 space-y-4"
+      className="w-full max-w-md mx-auto px-2 space-y-4 select-none pb-6"
     >
       <div className="flex items-center gap-2">
-        <Button 
-          variant="outline" 
-          size="sm" 
+        <button 
+          type="button"
           onClick={isScanning ? () => setIsScanning(false) : onBack} 
           aria-label="Volver" 
-          className="p-2 h-auto text-xs"
+          className="p-2 h-auto text-xs rounded-xl border border-gold/60 bg-black/60 text-amber-300 hover:bg-gold/20 transition-all cursor-pointer shadow-sm active:scale-95"
         >
           <ArrowLeft size={16} />
-        </Button>
-        <h2 className="text-xs font-display text-gold tracking-widest uppercase">
+        </button>
+        <h2 className="text-xs font-display text-amber-300 tracking-widest uppercase font-bold">
           {isScanning ? 'Escanear QR de Sala' : 'Unirse a Sala'}
         </h2>
       </div>
@@ -91,24 +89,24 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
             exit={{ opacity: 0, scale: 0.95 }}
             className="space-y-4"
           >
-            <Card className="border border-gold/40 p-4 space-y-3 bg-black/85 backdrop-blur-md">
+            <div className="border-2 border-gold p-5 space-y-3 bg-[#fbf7ee] rounded-2xl shadow-[0_15px_45px_rgba(0,0,0,0.75)] text-[#1f1309]">
               <Scanner
                 onScan={handleScanRoom}
                 onCancel={() => setIsScanning(false)}
               />
               <div className="text-center space-y-1 pt-1">
-                <p className="text-xs text-gold font-display uppercase tracking-wider">
+                <p className="text-xs text-[#1f1309] font-display font-black uppercase tracking-wider">
                   Apunta a la pantalla del Mayordomo
                 </p>
-                <p className="text-[11px] text-cream/70 font-serif italic leading-tight">
+                <p className="text-xs text-[#4a3421] font-serif italic leading-tight">
                   Lee el código QR de convocatoria para entrar a la partida en un instante.
                 </p>
               </div>
-            </Card>
+            </div>
 
             {scanError && (
-              <div className="p-3 bg-maya-red/20 border border-maya-red/40 rounded-xl flex items-center gap-2 text-xs text-red-200">
-                <AlertCircle size={16} className="text-maya-red shrink-0" />
+              <div className="p-3 bg-rose-100 border-2 border-rose-500/70 text-rose-900 rounded-xl flex items-center gap-2 text-xs font-mono font-bold shadow-sm">
+                <AlertCircle size={16} className="text-rose-700 shrink-0" />
                 <span>{scanError}</span>
               </div>
             )}
@@ -120,13 +118,18 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
           >
-            <Card className="space-y-6">
+            <div className="p-5 sm:p-7 rounded-3xl bg-[#fbf7ee] border-2 border-gold shadow-[0_15px_45px_rgba(0,0,0,0.75)] text-[#1f1309] space-y-5">
               <div className="text-center space-y-2">
-                <MysticalTitle className="text-2xl mb-1">CÓDIGO DE SALA</MysticalTitle>
-                <p className="text-xs text-cream/70 font-serif italic">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-200/90 border border-gold/70 text-amber-950 text-[10px] font-mono tracking-widest uppercase font-black shadow-sm">
+                  <Users size={12} className="text-amber-900" /> Sala de Juego
+                </div>
+                <h1 className="font-display text-2xl font-black text-[#1f1309] tracking-wider mt-1 mb-0">
+                  CÓDIGO DE SALA
+                </h1>
+                <p className="text-xs text-[#4a3421] font-serif italic">
                   Ingresa el código de 6 caracteres compartido por el Mayordomo o escanea su pantalla.
                 </p>
-                <span className="text-[10px] font-mono text-gold/70 block">
+                <span className="text-[10px] font-mono text-amber-950 font-bold block bg-amber-200/60 py-0.5 rounded-lg border border-gold/40">
                   (Hasta 5 invitados por sala convocada)
                 </span>
               </div>
@@ -139,18 +142,18 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
                   setScanError('');
                   setIsScanning(true);
                 }}
-                className="w-full py-3.5 px-4 rounded-xl border border-gold/40 hover:border-gold bg-gold/15 hover:bg-gold/25 text-gold flex items-center justify-center gap-2.5 font-display text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+                className="w-full py-3.5 px-4 rounded-xl border-2 border-gold hover:border-gold bg-[#ede1c7] hover:bg-gold/25 text-[#1f1309] flex items-center justify-center gap-2.5 font-display text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
               >
-                <QrCode size={18} />
+                <QrCode size={18} className="text-amber-900" />
                 <span>Escanear Código QR con Cámara</span>
               </button>
 
               <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-gold/20" />
-                <span className="text-[10px] font-mono uppercase tracking-widest text-cream/40">
+                <div className="flex-1 h-px bg-gold/40" />
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#7a624a] font-bold">
                   O escribe el código
                 </span>
-                <div className="flex-1 h-px bg-gold/20" />
+                <div className="flex-1 h-px bg-gold/40" />
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -159,33 +162,33 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
                   placeholder="CÓDIGO"
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  className="w-full bg-black/50 border border-gold/30 rounded-xl p-4 text-center text-3xl tracking-[0.35em] text-gold font-display outline-none focus:border-gold shadow-inner"
+                  className="w-full bg-[#ede1c7] border-2 border-gold rounded-xl p-3.5 text-center text-3xl tracking-[0.35em] text-amber-950 font-mono font-black outline-none focus:bg-white shadow-inner"
                   maxLength={6}
                   autoFocus
                 />
 
                 {error && (
-                  <div className="p-3 bg-maya-red/20 border border-maya-red/40 rounded-lg flex items-center gap-2 text-xs text-red-200">
-                    <AlertCircle size={16} className="text-maya-red shrink-0" />
+                  <div className="p-3 bg-rose-100 border-2 border-rose-500/70 text-rose-900 rounded-xl flex items-center gap-2 text-xs font-mono font-bold shadow-sm">
+                    <AlertCircle size={16} className="text-rose-700 shrink-0" />
                     <span>{error}</span>
                   </div>
                 )}
 
-                <Button
+                <button
                   type="submit"
                   disabled={isLoading || code.length < 6}
-                  className="w-full py-4 flex items-center justify-center gap-2 text-xs"
+                  className="w-full py-3.5 bg-earth-brown hover:bg-gold text-cream hover:text-obsidian font-display font-bold text-xs uppercase tracking-wider rounded-xl border-2 border-gold shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95 disabled:opacity-50"
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-obsidian border-t-transparent rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-cream border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <>
                       <Sparkles size={16} /> Entrar como Invitado
                     </>
                   )}
-                </Button>
+                </button>
               </form>
-            </Card>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
