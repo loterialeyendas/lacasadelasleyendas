@@ -204,47 +204,58 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
               {/* PESTAÑA 1: SELECTOR DE PERSONAJES */}
               {activeTab === 'characters' && (
                 <div className="space-y-4">
-                  {/* Banner del Personaje Equipado Actualmente - Ficha Beige Ancestral */}
+                  {/* Banner del Personaje Equipado Actualmente - Ficha Beige Ancestral de Gran Formato */}
                   <div className="p-4 sm:p-5 rounded-2xl bg-[#fbf7ee] border-2 border-gold text-[#1f1309] relative overflow-hidden shadow-[0_12px_35px_rgba(0,0,0,0.65)]">
-                    <div className="flex items-center gap-3.5 relative z-10">
-                      {/* Pedestal Ceremonial con la ilustración SVG del Tzipitío equipado en fondo blanco */}
-                      <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-white border-2 border-gold flex items-center justify-center p-1.5 shadow-md shrink-0 overflow-hidden group">
+                    <div className="flex flex-col xs:flex-row items-center xs:items-start gap-4 relative z-10">
+                      {/* Pedestal Ceremonial en fondo blanco con la ilustración SVG del Tzipitío equipado - EL DOBLE DE GRANDE */}
+                      <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-2xl bg-white border-2 border-gold flex items-center justify-center p-2.5 shadow-md shrink-0 overflow-hidden group">
                         {activeChar.avatarSvg ? (
-                          <img 
+                          <motion.img 
+                            key={activeChar.id}
+                            initial={{ scale: 0.82, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: 'spring', damping: 16, stiffness: 220 }}
                             src={activeChar.avatarSvg} 
                             alt={activeChar.name} 
-                            className="w-full h-full object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)] transition-transform duration-300 group-hover:scale-110" 
+                            className="w-full h-full object-contain filter drop-shadow-[0_2px_6px_rgba(0,0,0,0.2)] transition-transform duration-300 group-hover:scale-105" 
                           />
                         ) : (
-                          <Sparkles size={26} className="text-amber-600" />
+                          <Sparkles size={36} className="text-amber-600" />
                         )}
-                        <div className="absolute bottom-0 inset-x-0 h-1 bg-gold" />
+                        <div className="absolute bottom-0 inset-x-0 h-1.5 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
                       </div>
 
-                      <div className="flex-1 min-w-0">
-                        <div className="inline-flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-wider text-amber-950 font-black px-2 py-0.5 rounded-full bg-amber-200/90 border border-gold/60 mb-1">
+                      {/* Información Detallada del Tzipitío Equipado */}
+                      <div className="flex-1 min-w-0 text-center xs:text-left">
+                        <div className="inline-flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-wider text-amber-950 font-black px-2.5 py-0.5 rounded-full bg-amber-200/90 border border-gold/70 mb-1.5 shadow-sm">
                           <Check size={12} className="text-amber-900" />
                           <span>Tzipitío Equipado</span>
                         </div>
-                        <h3 className="text-base sm:text-lg font-display font-black text-[#1f1309] truncate">
+                        <h3 className="text-xl sm:text-2xl font-display font-black text-[#1f1309] leading-tight">
                           {activeChar.name}
                         </h3>
-                        <p className="text-xs text-amber-900 italic font-serif truncate">
+                        <p className="text-xs text-amber-900 italic font-serif mt-0.5">
                           {activeChar.title}
                         </p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded font-mono font-bold text-amber-950 bg-amber-200/80 border border-gold/60">
+                        
+                        <div className="flex items-center justify-center xs:justify-start gap-2 mt-2 flex-wrap">
+                          <span className="text-[9px] uppercase px-2 py-0.5 rounded font-mono font-bold text-amber-950 bg-amber-200/80 border border-gold/60 shadow-sm">
                             {activeChar.code}
                           </span>
                           <span className="text-[10px] text-[#4a3421] font-mono font-semibold">
                             {activeChar.element}
                           </span>
                         </div>
+
+                        {/* Rasgo / Perk Místico */}
+                        <div className="mt-2 text-[11px] font-mono text-amber-950 font-bold bg-[#ede1c7] px-2.5 py-1 rounded-lg border border-[#d6be96] inline-block xs:block shadow-inner">
+                          ⚡ {activeChar.perk}
+                        </div>
                       </div>
                     </div>
 
                     {/* Cita en pergamino interior */}
-                    <div className="mt-3 p-3 bg-[#ede1c7] rounded-xl border border-[#d6be96] text-[#241508] font-serif italic text-xs leading-relaxed shadow-inner">
+                    <div className="mt-3.5 p-3 bg-[#ede1c7] rounded-xl border border-[#d6be96] text-[#241508] font-serif italic text-xs leading-relaxed shadow-inner">
                       "{activeChar.quote}"
                     </div>
                   </div>
