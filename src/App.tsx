@@ -98,10 +98,16 @@ export default function App() {
   useEffect(() => { roomIdRef.current = roomId; }, [roomId]);
   useEffect(() => { userRef.current = user; }, [user]);
 
+  // Asegurar que al cambiar de pantalla siempre se inicie en la parte superior del viewport
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
+  }, [screen]);
+
   // Navegación integrada con el historial del navegador y URLs limpias (/juego, /rutadeleyendas, /mayordomo, /)
   const navigate = (to: Screen, legend?: Legend) => {
     setActiveLegend(to === 'module' && legend ? legend : null);
     setScreen(to);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
     const state: HistoryState = {
       screen: to,
       legendId: to === 'module' ? legend?.id : undefined
@@ -258,6 +264,7 @@ export default function App() {
         setActiveLegend(null);
       }
       setScreen(target);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
     };
 
     window.addEventListener('popstate', onPopState);

@@ -77,7 +77,14 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
   // En escritorio, el ritual de entrada permanece oculto hasta que el usuario decida entrar en PC
   // Se abre SIEMPRE al cargar o refrescar la página
   const [isDesktopUser] = useState<boolean>(() => checkIsDesktopBrowser());
-  const [showDesktopLogin, setShowDesktopLogin] = useState<boolean>(false);
+  const [showDesktopLogin, setShowDesktopLogin] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return sessionStorage.getItem('casa_leyendas_mobile_advice_dismissed') === 'true';
+    } catch {
+      return false;
+    }
+  });
 
   const [name, setName] = useState('');
   const [selectedTalisman, setSelectedTalisman] = useState<TalismanType>('oro');
@@ -90,6 +97,9 @@ export const Login: React.FC<LoginProps> = ({ onLogin, onBack }) => {
   const handleContinueOnDesktop = () => {
     sound.playClick();
     setShowDesktopLogin(true);
+    try {
+      sessionStorage.setItem('casa_leyendas_mobile_advice_dismissed', 'true');
+    } catch {}
   };
 
   const handleSelectTalisman = (type: TalismanType) => {

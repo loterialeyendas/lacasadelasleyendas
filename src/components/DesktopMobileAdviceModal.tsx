@@ -61,6 +61,11 @@ export const DesktopMobileAdviceModal: React.FC<DesktopMobileAdviceModalProps> =
     sound.playClick();
     setIsOpen(false);
     setHasDismissed(true);
+    try {
+      sessionStorage.setItem(STORAGE_KEY, 'true');
+    } catch {
+      // Ignore sessionStorage exceptions
+    }
   };
 
   const handleOpenAgain = () => {

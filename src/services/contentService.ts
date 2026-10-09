@@ -634,8 +634,16 @@ export async function saveSiteContent(content: SiteContent): Promise<{ success: 
     }
   }
 
-  // Guardar en Firestore
+  // Guardar en Firestore con validación de límite de documento (1MB)
   try {
+    const estimatedBytes = new Blob([JSON.stringify(payload)]).size;
+    if (estimatedBytes > 950 * 1024) {
+      return {
+        success: false,
+        error: `El contenido editorial (${(estimatedBytes / 1024).toFixed(0)} KB) supera el límite seguro de documento en Firestore (1 MB). Te recomendamos optimizar o quitar alguna imagen antes de guardar.`
+      };
+    }
+
     const docRef = doc(db, 'site_content', FIRESTORE_DOC_ID);
     await setDoc(docRef, payload, { merge: true });
     return { success: true };

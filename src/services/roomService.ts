@@ -20,11 +20,13 @@ export const createGameRoom = async (hostId: string, hostName: string, hostChara
     roomId += chars.charAt(Math.floor(Math.random() * chars.length));
   }
 
+  const now = Date.now();
   const roomData: GameRoom = {
     id: roomId,
     hostId,
     hostName: hostName || 'Mayordomo',
-    createdAt: Date.now(),
+    createdAt: now,
+    expiresAt: now + 24 * 60 * 60 * 1000, // TTL de 24 horas para prevenir salas huérfanas
     status: 'waiting',
     currentRound: 1,
     maxRounds: 8,
@@ -39,7 +41,7 @@ export const createGameRoom = async (hostId: string, hostName: string, hostChara
         role: 'mayordomo',
         customTitle: 'Mayordomo de la Casa',
         isReady: true,
-        lastActive: Date.now()
+        lastActive: now
       }
     ]
   };
@@ -50,46 +52,67 @@ export const createGameRoom = async (hostId: string, hostName: string, hostChara
 
 export const joinGameRoom = async (roomId: string, player: Player): Promise<{ success: boolean; error?: string }> => {
   const cleanId = roomId.trim().toUpperCase();
+  if (!cleanId) return { success: false, error: 'Código de sala inválido' };
   const roomRef = doc(db, 'rooms', cleanId);
-  const snap = await getDoc(roomRef);
 
-  if (!snap.exists()) {
-    return { success: false, error: 'Código de sala no encontrado' };
-  }
+  try {
+    const result = await runTransaction(db, async (tx) => {
+      const snap = await tx.get(roomRef);
 
-  const data = snap.data() as GameRoom;
-  if (data.status !== 'waiting') {
-    return { success: false, error: 'El ritual ya comenzó o finalizó' };
-  }
+      if (!snap.exists()) {
+        return { success: false, error: 'Código de sala no encontrado' };
+      }
 
-  // Evitar duplicados si reconecta
-  const alreadyIn = data.players.some((p) => p.id === player.id);
-  if (!alreadyIn) {
-    // Validar límite estricto de hasta 5 invitados (1 mayordomo + 5 invitados = 6 máx)
-    const guestCount = data.players.filter((p) => !p.isHost && p.role !== 'mayordomo').length;
-    if (guestCount >= 5 || data.players.length >= 6) {
-      return { 
-        success: false, 
-        error: 'La sala del Mayordomo ya alcanzó el cupo máximo de 5 invitados convocados.' 
-      };
-    }
+      const data = snap.data() as GameRoom;
 
-    const guestPlayer: Player = {
-      ...player,
-      characterId: player.characterId || 'chancho',
-      role: 'invitado',
-      customTitle: `Invitado #${guestCount + 1}`,
-      isHost: false,
-      isReady: true,
-      lastActive: Date.now()
-    };
+      // Validar si la sala expiró (más de 24 horas)
+      const isExpired = 
+        (data.expiresAt && Date.now() > data.expiresAt) ||
+        (data.createdAt && Date.now() - data.createdAt > 24 * 60 * 60 * 1000);
 
-    await updateDoc(roomRef, {
-      players: arrayUnion(guestPlayer)
+      if (isExpired) {
+        return { success: false, error: 'Esta sala ha expirado por antigüedad (máximo 24 horas).' };
+      }
+
+      if (data.status !== 'waiting') {
+        return { success: false, error: 'El ritual ya comenzó o finalizó' };
+      }
+
+      // Evitar duplicados si reconecta
+      const alreadyIn = data.players.some((p) => p.id === player.id);
+      if (!alreadyIn) {
+        // Validar límite estricto de hasta 5 invitados (1 mayordomo + 5 invitados = 6 máx)
+        const guestCount = data.players.filter((p) => !p.isHost && p.role !== 'mayordomo').length;
+        if (guestCount >= 5 || data.players.length >= 6) {
+          return { 
+            success: false, 
+            error: 'La sala del Mayordomo ya alcanzó el cupo máximo de 5 invitados convocados.' 
+          };
+        }
+
+        const guestPlayer: Player = {
+          ...player,
+          characterId: player.characterId || 'chancho',
+          role: 'invitado',
+          customTitle: `Invitado #${guestCount + 1}`,
+          isHost: false,
+          isReady: true,
+          lastActive: Date.now()
+        };
+
+        tx.update(roomRef, {
+          players: [...data.players, guestPlayer]
+        });
+      }
+
+      return { success: true };
     });
-  }
 
-  return { success: true };
+    return result;
+  } catch (err: any) {
+    console.error('Error al unirse a la sala:', err);
+    return { success: false, error: 'Error al unirse a la sala. Intenta de nuevo.' };
+  }
 };
 
 export const updatePlayerCharacter = async (
@@ -133,7 +156,16 @@ export const subscribeToRoom = (
     roomRef,
     (snap) => {
       if (snap.exists()) {
-        onUpdate(snap.data() as GameRoom);
+        const room = snap.data() as GameRoom;
+        const isExpired = 
+          (room.expiresAt && Date.now() > room.expiresAt) ||
+          (room.createdAt && Date.now() - room.createdAt > 24 * 60 * 60 * 1000);
+
+        if (isExpired) {
+          onUpdate(null);
+        } else {
+          onUpdate(room);
+        }
       } else {
         onUpdate(null);
       }

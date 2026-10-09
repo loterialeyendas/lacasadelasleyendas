@@ -4,12 +4,16 @@ service cloud.firestore {
     
     // Perfiles de Usuario y Pasaportes (Soporte offline-first y multijugador)
     match /users/{userId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if request.auth != null && (request.auth.uid == userId || !exists(/databases/$(database)/documents/users/$(userId)));
     }
 
     // Salas Multijugador en Vivo (Mayordomo e Invitados)
     match /rooms/{roomId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null && (resource.data.hostId == request.auth.uid || resource.data.players.size() <= 1);
     }
 
     // Colección de Leyendas y Recursos Educativos (Solo lectura para clientes)
@@ -21,7 +25,7 @@ service cloud.firestore {
     // Contenido Editorial y CMS del Sitio (Landing, Estaciones, Portadas e Imágenes)
     match /site_content/{contentId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if request.auth != null;
     }
   }
 }

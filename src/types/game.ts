@@ -43,5 +43,6 @@ export interface GameRoom {
   activeModule?: GameModule;
   roundExpiresAt?: number;
   winnerPlayerId?: string;
+  expiresAt?: number;
 }
 
