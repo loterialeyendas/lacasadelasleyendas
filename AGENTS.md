@@ -29,6 +29,7 @@ Este repositorio contiene la aplicación web y PWA para **La Casa de las Leyenda
 3. **Normas de Producción y Git:**
    - Todo cambio debe compilar con `npm run lint` y `npm run build` sin errores de tipo.
    - Enfoque Offline-First: El modo explorador guarda progreso en `localStorage` y sincroniza en la nube al detectar conexión.
-   - Mantener la estética visual mística guatemalteca (Obsidian, Gold, Cream, Maya Red, Earth Brown).
+   - **Estándar Visual Obligatorio:** Seguir estrictamente [DESIGN_STANDARD.md](file:///home/lluviadeideas/Im%C3%A1genes/La%20casa%20de%20las%20leyendas/Casa%20de%20las%20Leyendas%20app/DESIGN_STANDARD.md): fondo negro obsidiana general (`#0b0907`), y fichas/contenedores en beige ancestral del juego (`#fbf7ee` / `#faf4e6`) con bordes dorados de 2px y tipografía interna en tonos oscuros de alta legibilidad (`text-[#1f1309]`, `text-[#3a2717]`).
    - Para desplegar a producción: `npm run build && npx firebase deploy --project casa-de-las-leyendas-gt`
    - Para subir cambios a GitHub: `git push origin main`
+

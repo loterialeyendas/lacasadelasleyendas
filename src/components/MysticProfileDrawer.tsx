@@ -204,13 +204,11 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
               {/* PESTAÑA 1: SELECTOR DE PERSONAJES */}
               {activeTab === 'characters' && (
                 <div className="space-y-4">
-                  {/* Banner del Personaje Equipado Actualmente - Estilo Ceremonial */}
-                  <div className="p-4 rounded-2xl bg-gradient-to-br from-[#261b0e] via-[#1c140b] to-[#120d07] border-2 border-gold/70 relative overflow-hidden shadow-[0_0_25px_rgba(206,136,34,0.3)]">
-                    <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-gold/10 blur-2xl pointer-events-none" />
-
+                  {/* Banner del Personaje Equipado Actualmente - Ficha Beige Ancestral */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-[#fbf7ee] border-2 border-gold text-[#1f1309] relative overflow-hidden shadow-[0_12px_35px_rgba(0,0,0,0.65)]">
                     <div className="flex items-center gap-3.5 relative z-10">
                       {/* Pedestal Ceremonial con la ilustración SVG del Tzipitío equipado */}
-                      <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-black via-[#1a1208] to-black border-2 border-gold flex items-center justify-center p-1 shadow-[0_0_20px_rgba(206,136,34,0.45)] shrink-0 overflow-hidden group">
+                      <div className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-[#140e08] border-2 border-gold flex items-center justify-center p-1 shadow-md shrink-0 overflow-hidden group">
                         {activeChar.avatarSvg ? (
                           <img 
                             src={activeChar.avatarSvg} 
@@ -220,36 +218,38 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                         ) : (
                           <Sparkles size={26} className="text-amber-300" />
                         )}
-                        <div className="absolute bottom-0 inset-x-0 h-1 bg-gold/60" />
+                        <div className="absolute bottom-0 inset-x-0 h-1 bg-gold" />
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-wider text-amber-300 font-bold">
-                          <Check size={12} className="text-gold" />
+                        <div className="inline-flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-wider text-amber-950 font-black px-2 py-0.5 rounded-full bg-amber-200/90 border border-gold/60 mb-1">
+                          <Check size={12} className="text-amber-900" />
                           <span>Tzipitío Equipado</span>
                         </div>
-                        <h3 className="text-base sm:text-lg font-display font-extrabold text-[#FFF0C8] truncate">
+                        <h3 className="text-base sm:text-lg font-display font-black text-[#1f1309] truncate">
                           {activeChar.name}
                         </h3>
-                        <p className="text-xs text-amber-200/80 italic font-serif truncate">
+                        <p className="text-xs text-amber-900 italic font-serif truncate">
                           {activeChar.title}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded font-mono font-bold text-amber-300 bg-amber-950/80 border border-gold/40">
+                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded font-mono font-bold text-amber-950 bg-amber-200/80 border border-gold/60">
                             {activeChar.code}
                           </span>
-                          <span className="text-[10px] text-amber-100/70 font-mono">
+                          <span className="text-[10px] text-[#4a3421] font-mono font-semibold">
                             {activeChar.element}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <p className="mt-3 text-xs text-amber-100/90 font-serif italic border-t border-gold/20 pt-2.5 leading-relaxed relative z-10">
+
+                    {/* Cita en pergamino interior */}
+                    <div className="mt-3 p-3 bg-[#ede1c7] rounded-xl border border-[#d6be96] text-[#241508] font-serif italic text-xs leading-relaxed shadow-inner">
                       "{activeChar.quote}"
-                    </p>
+                    </div>
                   </div>
 
-                  {/* Instrucción */}
+                  {/* Encabezado de la lista */}
                   <div className="text-left px-1">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs uppercase font-mono tracking-wider text-amber-300 flex items-center gap-1.5 font-bold">
@@ -261,11 +261,11 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                       </span>
                     </div>
                     <p className="text-[11px] text-[#F5EDE0]/70 font-serif mt-0.5">
-                      Escoge a tu personaje favorito para identificarte en salas multijugador y en tu pasaporte
+                      Escoge a tu personaje para identificarte en salas multijugador y en tu pasaporte
                     </p>
                   </div>
 
-                  {/* Lista de los 6 Tzipitíos con sus ilustraciones SVG */}
+                  {/* Lista de los 6 Tzipitíos en Fichas Beige del Juego */}
                   <div className="grid grid-cols-1 gap-2.5">
                     {LEGEND_CHARACTERS.map((char) => {
                       const isEquipped = char.id === currentCharacterId;
@@ -273,18 +273,18 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                       return (
                         <div
                           key={char.id}
-                          className={`p-2.5 sm:p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
+                          className={`p-3 rounded-2xl border-2 transition-all flex items-center justify-between gap-3 text-[#1f1309] ${
                             isEquipped
-                              ? 'border-2 border-gold bg-gradient-to-r from-amber-950/70 via-[#23180d] to-amber-950/40 shadow-[0_0_20px_rgba(206,136,34,0.35)] ring-1 ring-gold/60'
-                              : 'border-gold/30 hover:border-gold/70 bg-[#161008]/90 hover:bg-[#20160c] shadow-sm'
+                              ? 'border-gold bg-[#fbf7ee] shadow-[0_8px_20px_rgba(0,0,0,0.4)] ring-2 ring-gold/70'
+                              : 'border-gold/50 hover:border-gold bg-[#faf4e6] hover:bg-white shadow-sm'
                           }`}
                         >
                           <div className="flex items-center gap-3 min-w-0">
                             {/* Ilustración SVG del Tzipitío */}
-                            <div className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center p-1 shrink-0 overflow-hidden border ${
+                            <div className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center p-1 shrink-0 overflow-hidden border-2 ${
                               isEquipped 
-                                ? 'border-2 border-gold bg-black/85 shadow-[0_0_12px_rgba(206,136,34,0.5)]' 
-                                : 'border-gold/35 bg-[#120d07]'
+                                ? 'border-gold bg-[#140e08] shadow-md' 
+                                : 'border-gold/40 bg-[#1f160e]'
                             }`}>
                               {char.avatarSvg ? (
                                 <img 
@@ -293,23 +293,23 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                                   className="w-full h-full object-contain filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.8)]" 
                                 />
                               ) : (
-                                <Sparkles size={20} className={isEquipped ? 'text-amber-300' : 'text-amber-200/80'} />
+                                <Sparkles size={20} className="text-amber-300" />
                               )}
                             </div>
 
                             <div className="min-w-0 text-left">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="font-display text-sm font-bold text-[#FFF0C8] truncate">
+                                <span className="font-display text-sm font-bold text-[#1f1309] truncate">
                                   {char.name}
                                 </span>
-                                <span className="text-[9px] uppercase px-1.5 py-0.2 rounded font-mono font-bold text-amber-300 bg-amber-950/80 border border-gold/40">
+                                <span className="text-[9px] uppercase px-1.5 py-0.2 rounded font-mono font-bold text-amber-950 bg-amber-200/90 border border-gold/60">
                                   {char.code}
                                 </span>
                               </div>
-                              <p className="text-[11px] text-[#F5EDE0]/70 truncate font-serif">
+                              <p className="text-[11px] text-[#4a3421] truncate font-serif">
                                 {char.title}
                               </p>
-                              <p className="text-[10px] text-amber-200/60 truncate font-mono">
+                              <p className="text-[10px] text-amber-900 font-mono font-semibold truncate">
                                 ⚡ {char.perk}
                               </p>
                             </div>
@@ -317,15 +317,15 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
 
                           {/* Botón de Selección o Estado Equipado */}
                           {isEquipped ? (
-                            <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gold/25 text-amber-200 border border-gold text-[10px] font-mono font-bold whitespace-nowrap shadow-sm shrink-0">
-                              <Check size={12} className="text-gold" />
+                            <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gold text-amber-950 border border-gold-light text-[10px] font-mono font-black whitespace-nowrap shadow-sm shrink-0">
+                              <Check size={12} className="text-amber-950" />
                               <span>ACTIVO</span>
                             </span>
                           ) : (
                             <button
                               type="button"
                               onClick={() => handleEquip(char)}
-                              className="px-3.5 py-1.5 rounded-lg border border-gold/70 bg-gold/15 hover:bg-gold hover:text-black font-mono font-bold text-amber-200 text-xs transition-all shadow-sm active:scale-95 cursor-pointer shrink-0"
+                              className="px-3.5 py-1.5 rounded-lg border-2 border-gold bg-earth-brown hover:bg-gold text-cream hover:text-obsidian font-mono font-bold text-xs transition-all shadow-sm active:scale-95 cursor-pointer shrink-0"
                             >
                               Escoger
                             </button>
@@ -340,106 +340,112 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
               {/* PESTAÑA 2: MI PERFIL Y RANGO */}
               {activeTab === 'profile' && (
                 <div className="space-y-4 text-left">
-                  {/* Tarjeta de Rango Ceremonial */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#251a0d] via-[#1a1209] to-[#0f0a05] border-2 border-gold/70 space-y-3.5 shadow-[0_0_30px_rgba(206,136,34,0.3)] relative overflow-hidden">
-                    <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-amber-400/15 blur-2xl pointer-events-none" />
-
-                    <div className="flex items-center justify-between relative z-10">
+                  {/* Tarjeta de Rango Ceremonial - Ficha Beige */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-[#fbf7ee] border-2 border-gold shadow-[0_12px_35px_rgba(0,0,0,0.65)] text-[#1f1309] space-y-3.5">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
-                        <span className="text-3xl filter drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">{rank.badge}</span>
+                        <span className="text-3xl filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">{rank.badge}</span>
                         <div>
-                          <span className="text-[10px] font-mono uppercase text-amber-300 tracking-widest block leading-none font-bold">
+                          <span className="text-[10px] font-mono uppercase text-amber-900 tracking-widest block leading-none font-black">
                             Rango Ceremonial
                           </span>
-                          <h3 className="text-base sm:text-lg font-display font-extrabold text-amber-200 drop-shadow-sm">
+                          <h3 className="text-base sm:text-lg font-display font-black text-[#1f1309]">
                             {rank.title}
                           </h3>
                         </div>
                       </div>
-                      <span className="text-xs px-2.5 py-0.5 rounded-full bg-gold/20 text-amber-200 border border-gold/50 font-mono font-bold shadow-sm">
+                      <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-200/90 text-amber-950 border border-gold/60 font-mono font-bold shadow-sm">
                         Nivel {rank.level}
                       </span>
                     </div>
 
-                    <p className="text-xs text-amber-100/80 font-serif leading-relaxed relative z-10">
+                    <p className="text-xs text-[#3a2717] font-serif leading-relaxed">
                       {rank.desc}
                     </p>
 
-                    {/* Estadísticas Clave en Pedestales de Obsidiana */}
-                    <div className="grid grid-cols-3 gap-2 pt-2.5 border-t border-gold/30 text-center font-mono relative z-10">
-                      <div className="bg-[#130d07] p-2.5 rounded-xl border border-gold/40 shadow-inner">
-                        <span className="text-[10px] text-amber-300/80 block font-bold">PUNTOS</span>
-                        <span className="text-sm font-bold text-amber-200 flex items-center justify-center gap-1 mt-0.5">
-                          <Trophy size={13} className="text-gold" /> {totalScore}
+                    {/* Estadísticas Clave en Cajas Pergamino Internas */}
+                    <div className="grid grid-cols-3 gap-2 pt-1 text-center font-mono">
+                      <div className="bg-[#ede1c7] p-2.5 rounded-xl border border-[#d6be96] shadow-inner">
+                        <span className="text-[10px] text-amber-900 block font-bold">PUNTOS</span>
+                        <span className="text-sm font-black text-[#1f1309] flex items-center justify-center gap-1 mt-0.5">
+                          <Trophy size={13} className="text-amber-900" /> {totalScore}
                         </span>
                       </div>
-                      <div className="bg-[#130d07] p-2.5 rounded-xl border border-gold/40 shadow-inner">
-                        <span className="text-[10px] text-amber-300/80 block font-bold">LLAVES</span>
-                        <span className="text-sm font-bold text-emerald-400 flex items-center justify-center gap-1 mt-0.5">
-                          <Key size={13} className="text-emerald-400" /> {totalKeys}/4
+                      <div className="bg-[#ede1c7] p-2.5 rounded-xl border border-[#d6be96] shadow-inner">
+                        <span className="text-[10px] text-emerald-900 block font-bold">LLAVES</span>
+                        <span className="text-sm font-black text-emerald-800 flex items-center justify-center gap-1 mt-0.5">
+                          <Key size={13} className="text-emerald-700" /> {totalKeys}/4
                         </span>
                       </div>
-                      <div className="bg-[#130d07] p-2.5 rounded-xl border border-gold/40 shadow-inner">
-                        <span className="text-[10px] text-amber-300/80 block font-bold">SELLOS</span>
-                        <span className="text-sm font-bold text-[#FFF0C8] flex items-center justify-center gap-1 mt-0.5">
+                      <div className="bg-[#ede1c7] p-2.5 rounded-xl border border-[#d6be96] shadow-inner">
+                        <span className="text-[10px] text-[#4a3421] block font-bold">SELLOS</span>
+                        <span className="text-sm font-black text-[#1f1309] flex items-center justify-center gap-1 mt-0.5">
                           📜 {completedStampsCount}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Estado de las 4 Llaves Sagradas */}
+                  {/* Estado de las 4 Llaves Sagradas - Fichas Beige */}
                   <div className="space-y-2">
                     <h4 className="text-xs uppercase font-mono tracking-wider text-amber-300 font-bold px-1 flex items-center gap-1.5">
                       <Key size={13} className="text-gold" />
                       <span>Las 4 Llaves Sagradas</span>
                     </h4>
                     <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                      <div className={`p-2.5 rounded-xl border flex items-center gap-2.5 ${
+                      <div className={`p-2.5 rounded-xl border-2 flex items-center gap-2.5 ${
                         keys.gold 
-                          ? 'border-gold bg-gradient-to-b from-amber-950/60 to-[#191108] text-amber-200 shadow-[0_0_12px_rgba(206,136,34,0.3)]' 
-                          : 'border-gold/20 bg-[#120d07]/70 text-[#F5EDE0]/30'
+                          ? 'border-gold bg-[#fbf7ee] text-[#1f1309] shadow-sm' 
+                          : 'border-[#d6be96] bg-[#ede1c7]/80 text-[#7a624a]'
                       }`}>
                         <span className="text-xl">🗝️</span>
                         <div>
-                          <span className="font-bold block leading-none">Llave de Oro</span>
-                          <span className="text-[9px] uppercase font-bold text-amber-300/90">{keys.gold ? 'Forjada' : 'Bloqueada'}</span>
+                          <span className="font-bold block leading-none font-display text-xs text-[#1f1309]">Llave de Oro</span>
+                          <span className={`text-[9px] uppercase font-bold ${keys.gold ? 'text-amber-900' : 'text-[#7a624a]'}`}>
+                            {keys.gold ? 'Forjada' : 'Bloqueada'}
+                          </span>
                         </div>
                       </div>
 
-                      <div className={`p-2.5 rounded-xl border flex items-center gap-2.5 ${
+                      <div className={`p-2.5 rounded-xl border-2 flex items-center gap-2.5 ${
                         keys.jade 
-                          ? 'border-emerald-500/70 bg-gradient-to-b from-emerald-950/60 to-[#0e1610] text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.25)]' 
-                          : 'border-gold/20 bg-[#120d07]/70 text-[#F5EDE0]/30'
+                          ? 'border-emerald-600 bg-[#fbf7ee] text-[#1f1309] shadow-sm' 
+                          : 'border-[#d6be96] bg-[#ede1c7]/80 text-[#7a624a]'
                       }`}>
                         <span className="text-xl">🗝️</span>
                         <div>
-                          <span className="font-bold block leading-none">Llave de Jade</span>
-                          <span className="text-[9px] uppercase font-bold text-emerald-400">{keys.jade ? 'Forjada' : 'Bloqueada'}</span>
+                          <span className="font-bold block leading-none font-display text-xs text-[#1f1309]">Llave de Jade</span>
+                          <span className={`text-[9px] uppercase font-bold ${keys.jade ? 'text-emerald-800' : 'text-[#7a624a]'}`}>
+                            {keys.jade ? 'Forjada' : 'Bloqueada'}
+                          </span>
                         </div>
                       </div>
 
-                      <div className={`p-2.5 rounded-xl border flex items-center gap-2.5 ${
+                      <div className={`p-2.5 rounded-xl border-2 flex items-center gap-2.5 ${
                         keys.silver 
-                          ? 'border-slate-300/70 bg-gradient-to-b from-slate-900/60 to-[#10141a] text-slate-200 shadow-[0_0_12px_rgba(203,213,225,0.25)]' 
-                          : 'border-gold/20 bg-[#120d07]/70 text-[#F5EDE0]/30'
+                          ? 'border-slate-400 bg-[#fbf7ee] text-[#1f1309] shadow-sm' 
+                          : 'border-[#d6be96] bg-[#ede1c7]/80 text-[#7a624a]'
                       }`}>
                         <span className="text-xl">🗝️</span>
                         <div>
-                          <span className="font-bold block leading-none">Llave de Plata</span>
-                          <span className="text-[9px] uppercase font-bold text-slate-300">{keys.silver ? 'Forjada' : 'Bloqueada'}</span>
+                          <span className="font-bold block leading-none font-display text-xs text-[#1f1309]">Llave de Plata</span>
+                          <span className={`text-[9px] uppercase font-bold ${keys.silver ? 'text-slate-800' : 'text-[#7a624a]'}`}>
+                            {keys.silver ? 'Forjada' : 'Bloqueada'}
+                          </span>
                         </div>
                       </div>
 
-                      <div className={`p-2.5 rounded-xl border flex items-center gap-2.5 ${
+                      <div className={`p-2.5 rounded-xl border-2 flex items-center gap-2.5 ${
                         keys.obsidian 
-                          ? 'border-rose-500/70 bg-gradient-to-b from-rose-950/60 to-[#190e10] text-rose-300 shadow-[0_0_12px_rgba(244,63,94,0.25)]' 
-                          : 'border-gold/20 bg-[#120d07]/70 text-[#F5EDE0]/30'
+                          ? 'border-rose-600 bg-[#fbf7ee] text-[#1f1309] shadow-sm' 
+                          : 'border-[#d6be96] bg-[#ede1c7]/80 text-[#7a624a]'
                       }`}>
                         <span className="text-xl">🗝️</span>
                         <div>
-                          <span className="font-bold block leading-none">Obsidiana</span>
-                          <span className="text-[9px] uppercase font-bold text-rose-400">{keys.obsidian ? 'Forjada' : 'Bloqueada'}</span>
+                          <span className="font-bold block leading-none font-display text-xs text-[#1f1309]">Obsidiana</span>
+                          <span className={`text-[9px] uppercase font-bold ${keys.obsidian ? 'text-rose-900' : 'text-[#7a624a]'}`}>
+                            {keys.obsidian ? 'Forjada' : 'Bloqueada'}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -453,12 +459,12 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                         onClose();
                         onNavigateToPassport();
                       }}
-                      className="w-full p-3.5 rounded-xl bg-gradient-to-r from-gold/20 via-amber-800/30 to-gold/20 border-2 border-gold/80 text-amber-200 hover:bg-gold/30 hover:text-white font-mono text-xs flex items-center justify-between transition-all cursor-pointer shadow-[0_0_20px_rgba(206,136,34,0.3)] active:scale-[0.99]"
+                      className="w-full p-3.5 rounded-xl bg-earth-brown hover:bg-gold text-cream hover:text-obsidian border-2 border-gold font-display font-bold text-xs uppercase tracking-wider flex items-center justify-between transition-all cursor-pointer shadow-md active:scale-[0.99]"
                     >
                       <span className="flex items-center gap-2 font-bold tracking-wide">
-                        <BookOpen size={17} className="text-gold" /> Ver Pasaporte Completo
+                        <BookOpen size={17} /> Ver Pasaporte Completo
                       </span>
-                      <ChevronRight size={17} className="text-gold" />
+                      <ChevronRight size={17} />
                     </button>
                   )}
                 </div>
@@ -474,21 +480,21 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                       <span>Configuración del Ritual</span>
                     </h4>
 
-                    {/* Módulo de Audio y Sonido */}
-                    <div className="p-3.5 rounded-xl bg-gradient-to-r from-[#1d140a] via-[#160f07] to-[#120b05] border-2 border-gold/50 flex items-center justify-between shadow-md">
+                    {/* Módulo de Audio y Sonido en Ficha Beige */}
+                    <div className="p-3.5 rounded-2xl bg-[#fbf7ee] border-2 border-gold/70 text-[#1f1309] flex items-center justify-between shadow-md">
                       <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border-2 transition-all ${
                           !isMuted 
-                            ? 'border-gold bg-gold/20 text-gold shadow-[0_0_12px_rgba(206,136,34,0.4)]' 
-                            : 'border-gold/30 bg-black/60 text-[#F5EDE0]/40'
+                            ? 'border-gold bg-gold/25 text-amber-900 shadow-sm' 
+                            : 'border-[#d6be96] bg-[#ede1c7] text-[#7a624a]'
                         }`}>
-                          {!isMuted ? <Volume2 size={20} className="text-gold" /> : <VolumeX size={20} />}
+                          {!isMuted ? <Volume2 size={20} className="text-amber-900" /> : <VolumeX size={20} />}
                         </div>
                         <div>
-                          <span className="font-bold block text-sm font-sans text-[#FFF0C8]">
+                          <span className="font-bold block text-sm font-sans text-[#1f1309]">
                             Efectos y Campanas Místicas
                           </span>
-                          <span className="text-[11px] text-amber-200/70 font-serif">
+                          <span className="text-[11px] text-[#4a3421] font-serif italic">
                             {!isMuted ? 'Sonido celestial activado' : 'Sonido silenciado'}
                           </span>
                         </div>
@@ -497,10 +503,10 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                       <button
                         type="button"
                         onClick={handleToggleSound}
-                        className={`px-3 py-1.5 rounded-lg border font-mono font-bold text-xs transition-all cursor-pointer shadow-sm active:scale-95 ${
+                        className={`px-3 py-1.5 rounded-lg border-2 font-mono font-bold text-xs transition-all cursor-pointer shadow-sm active:scale-95 ${
                           !isMuted
-                            ? 'border-gold bg-gold text-[#140e08] shadow-[0_0_12px_rgba(206,136,34,0.4)]'
-                            : 'border-gold/50 bg-black/70 text-amber-300 hover:border-gold'
+                            ? 'border-gold bg-gold text-[#140e08] shadow-sm'
+                            : 'border-[#d6be96] bg-[#ede1c7] text-[#1f1309] hover:border-gold'
                         }`}
                       >
                         {!isMuted ? 'ACTIVADO' : 'ACTIVAR'}
@@ -508,7 +514,7 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                     </div>
                   </div>
 
-                  {/* SECCIÓN 2: PORTALES Y ATAJOS */}
+                  {/* SECCIÓN 2: PORTALES Y ATAJOS EN FICHAS BEIGE */}
                   <div className="space-y-2">
                     <h4 className="text-xs uppercase font-mono tracking-wider text-amber-300 font-bold px-1 flex items-center gap-1.5">
                       <Sparkles size={13} className="text-gold" />
@@ -519,18 +525,18 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                       <button
                         type="button"
                         onClick={() => { onClose(); onNavigateToPassport(); }}
-                        className="w-full p-3.5 rounded-xl bg-[#161008]/90 border border-gold/35 hover:border-gold hover:bg-[#20160c] flex items-center justify-between text-[#FFF0C8] transition-all cursor-pointer shadow-sm group"
+                        className="w-full p-3.5 rounded-2xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/60 hover:border-gold flex items-center justify-between text-[#1f1309] transition-all cursor-pointer shadow-sm group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-black/60 border border-gold/40 flex items-center justify-center text-lg text-gold group-hover:scale-105 transition-transform">
+                          <div className="w-10 h-10 rounded-xl bg-[#ede1c7] border border-[#d6be96] flex items-center justify-center text-lg text-amber-900 group-hover:scale-105 transition-transform shrink-0 shadow-sm">
                             📜
                           </div>
-                          <div>
-                            <span className="font-bold block text-sm font-sans text-[#FFF0C8]">Pasaporte de Leyendas</span>
-                            <span className="text-[10px] text-[#F5EDE0]/65">Explora tus sellos y misterios de Guatemala</span>
+                          <div className="text-left">
+                            <span className="font-bold block text-sm font-sans text-[#1f1309]">Pasaporte de Leyendas</span>
+                            <span className="text-[11px] text-[#4a3421] font-serif">Explora tus sellos y misterios de Guatemala</span>
                           </div>
                         </div>
-                        <ChevronRight size={17} className="text-gold group-hover:translate-x-0.5 transition-transform" />
+                        <ChevronRight size={18} className="text-amber-900 group-hover:translate-x-0.5 transition-transform shrink-0" />
                       </button>
                     )}
 
@@ -538,18 +544,18 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                       <button
                         type="button"
                         onClick={() => { onClose(); onNavigateToJoin(); }}
-                        className="w-full p-3.5 rounded-xl bg-[#161008]/90 border border-gold/35 hover:border-gold hover:bg-[#20160c] flex items-center justify-between text-[#FFF0C8] transition-all cursor-pointer shadow-sm group"
+                        className="w-full p-3.5 rounded-2xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/60 hover:border-gold flex items-center justify-between text-[#1f1309] transition-all cursor-pointer shadow-sm group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-black/60 border border-gold/40 flex items-center justify-center text-lg text-gold group-hover:scale-105 transition-transform">
+                          <div className="w-10 h-10 rounded-xl bg-[#ede1c7] border border-[#d6be96] flex items-center justify-center text-lg text-amber-900 group-hover:scale-105 transition-transform shrink-0 shadow-sm">
                             👥
                           </div>
-                          <div>
-                            <span className="font-bold block text-sm font-sans text-[#FFF0C8]">Unirse a Sala Multijugador</span>
-                            <span className="text-[10px] text-[#F5EDE0]/65">Ingresa con código PIN o QR de sala</span>
+                          <div className="text-left">
+                            <span className="font-bold block text-sm font-sans text-[#1f1309]">Unirse a Sala Multijugador</span>
+                            <span className="text-[11px] text-[#4a3421] font-serif">Ingresa con código PIN o QR de sala</span>
                           </div>
                         </div>
-                        <ChevronRight size={17} className="text-gold group-hover:translate-x-0.5 transition-transform" />
+                        <ChevronRight size={18} className="text-amber-900 group-hover:translate-x-0.5 transition-transform shrink-0" />
                       </button>
                     )}
 
@@ -557,28 +563,28 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                       <button
                         type="button"
                         onClick={() => { onClose(); onNavigateToTheater(); }}
-                        className="w-full p-3.5 rounded-xl bg-[#161008]/90 border border-gold/35 hover:border-gold hover:bg-[#20160c] flex items-center justify-between text-[#FFF0C8] transition-all cursor-pointer shadow-sm group"
+                        className="w-full p-3.5 rounded-2xl bg-[#fbf7ee] hover:bg-white border-2 border-gold/60 hover:border-gold flex items-center justify-between text-[#1f1309] transition-all cursor-pointer shadow-sm group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-black/60 border border-gold/40 flex items-center justify-center text-lg text-gold group-hover:scale-105 transition-transform">
+                          <div className="w-10 h-10 rounded-xl bg-[#ede1c7] border border-[#d6be96] flex items-center justify-center text-lg text-amber-900 group-hover:scale-105 transition-transform shrink-0 shadow-sm">
                             🎭
                           </div>
-                          <div>
-                            <span className="font-bold block text-sm font-sans text-[#FFF0C8]">Ruta de Leyendas en Vivo</span>
-                            <span className="text-[10px] text-[#F5EDE0]/65">Teatro inmersivo y experiencias presenciales</span>
+                          <div className="text-left">
+                            <span className="font-bold block text-sm font-sans text-[#1f1309]">Ruta de Leyendas en Vivo</span>
+                            <span className="text-[11px] text-[#4a3421] font-serif">Teatro inmersivo y experiencias presenciales</span>
                           </div>
                         </div>
-                        <ChevronRight size={17} className="text-gold group-hover:translate-x-0.5 transition-transform" />
+                        <ChevronRight size={18} className="text-amber-900 group-hover:translate-x-0.5 transition-transform shrink-0" />
                       </button>
                     )}
                   </div>
 
                   {/* SECCIÓN 3: CERRAR SESIÓN */}
-                  <div className="pt-3 border-t border-gold/25">
+                  <div className="pt-2">
                     <button
                       type="button"
                       onClick={() => { onClose(); onLogout(); }}
-                      className="w-full p-3.5 rounded-xl bg-gradient-to-r from-rose-950/60 via-red-950/70 to-rose-950/60 border-2 border-rose-500/60 hover:border-rose-400 hover:bg-rose-900/50 text-rose-200 flex items-center justify-center gap-2 transition-all cursor-pointer font-bold shadow-md active:scale-[0.99]"
+                      className="w-full p-3.5 rounded-xl bg-maya-red hover:bg-red-800 text-candle font-display font-bold text-xs uppercase tracking-wider rounded-xl border border-red-900 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md active:scale-[0.99]"
                     >
                       <LogOut size={16} />
                       <span>Cerrar Sesión Ceremonial</span>
