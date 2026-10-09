@@ -52,13 +52,15 @@ export interface CardProps {
 
 export const Card: React.FC<CardProps> = ({ className, children, onClick }) => (
   <motion.div 
-    initial={{ opacity: 0, scale: 0.95 }}
-    animate={{ opacity: 1, scale: 1 }}
+    initial={{ opacity: 0, y: 12 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.4 }}
     onClick={onClick}
-    className={cn('mystical-card border-none bg-black/60 p-6 relative group', className)}
+    className={cn('mystical-card border border-gold/40 p-6 relative group', className)}
   >
-    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(252,207,101,0.04),transparent_70%)] pointer-events-none" />
-    <div className="absolute -inset-0.5 bg-gradient-to-r from-gold/0 via-gold/10 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-xl" />
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(203,161,67,0.08),transparent_70%)] pointer-events-none" />
+    <div className="absolute -inset-0.5 bg-gradient-to-r from-gold/0 via-gold/15 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-xl" />
     <div className="relative z-10">{children}</div>
   </motion.div>
 );

@@ -818,15 +818,15 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 key={lock.id}
                 className={`p-6 space-y-4 border transition-all duration-500 relative overflow-hidden flex flex-col justify-between rounded-2xl ${
                   isUnlocked 
-                    ? `border-gold bg-black/90 shadow-[0_0_25px_rgba(190,141,44,0.35)]` 
-                    : `border-gold/30 bg-black/60 hover:border-gold/60`
+                    ? `border-gold bg-[#1a120a]/95 shadow-[0_0_30px_rgba(203,161,67,0.35)]` 
+                    : `border-gold/35 bg-[#120c06]/90 hover:border-gold/70 shadow-md`
                 }`}
               >
                 <div className="space-y-3.5">
                   {/* Ilustración del Candado PNG y Badge */}
                   <div className="flex items-center justify-between">
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gold/10 blur-md rounded-full" />
+                      <div className="absolute inset-0 bg-gold/15 blur-md rounded-full" />
                       <img 
                         src={lockImg} 
                         alt={lock.name} 
@@ -836,7 +836,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                       />
                     </div>
 
-                    <span className={`text-xs font-display uppercase tracking-wider px-2.5 py-1 rounded-lg border ${lock.badgeBg}`}>
+                    <span className={`text-xs font-display uppercase tracking-wider px-2.5 py-1 rounded-lg border font-bold ${lock.badgeBg}`}>
                       {lock.name}
                     </span>
                   </div>
@@ -845,12 +845,12 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     <h3 className="font-display text-base text-cream font-bold leading-snug">
                       {lock.subtitle}
                     </h3>
-                    <span className="text-xs text-gold font-serif italic block mt-1">
+                    <span className="text-xs text-amber-300 font-serif italic block mt-1">
                       Leyendas: {lock.associatedLegends.join(', ')}
                     </span>
                   </div>
 
-                  <div className="p-3.5 bg-earth-brown/25 rounded-xl border border-gold/20 text-sm text-cream font-serif italic leading-relaxed">
+                  <div className="p-3.5 bg-[#25170b]/80 rounded-xl border border-gold/30 text-sm text-[#FAF5EA] font-serif italic leading-relaxed shadow-inner">
                     "{lock.question}"
                   </div>
 
@@ -861,22 +861,22 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="space-y-3 pt-2.5 border-t border-gold/20 text-sm font-serif"
+                        className="space-y-3 pt-2.5 border-t border-gold/30 text-sm font-serif"
                       >
                         <div className="space-y-1">
                           <span className="text-xs font-display uppercase tracking-wider text-emerald-400 flex items-center gap-1.5 font-bold">
                             <CheckCircle2 size={14} /> Revelación Ancestral:
                           </span>
-                          <p className="text-cream/95 italic text-sm leading-relaxed">
+                          <p className="text-[#FAF5EA] italic text-sm leading-relaxed">
                             {lock.answer}
                           </p>
                         </div>
 
-                        <div className="p-3 bg-black/70 rounded-xl border border-gold/25 space-y-1">
-                          <span className="text-xs font-display uppercase tracking-widest text-gold flex items-center gap-1.5 font-bold">
-                            <Lightbulb size={13} /> Contexto Histórico:
+                        <div className="p-3 bg-[#170e06]/95 rounded-xl border border-gold/30 space-y-1">
+                          <span className="text-xs font-display uppercase tracking-widest text-amber-300 flex items-center gap-1.5 font-bold">
+                            <Lightbulb size={13} className="text-gold" /> Contexto Histórico:
                           </span>
-                          <p className="text-cream/85 text-xs sm:text-sm leading-relaxed">
+                          <p className="text-[#FAF5EA]/90 text-xs sm:text-sm leading-relaxed">
                             {lock.culturalInsight}
                           </p>
                         </div>
@@ -888,10 +888,10 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 {/* Botón de Giro de Llave */}
                 <button
                   onClick={() => handleUnlockLock(lock.id)}
-                  className={`w-full py-3.5 px-4 rounded-xl text-xs sm:text-sm font-display flex items-center justify-center gap-2 border transition-all cursor-pointer mt-4 font-bold shadow-md ${
+                  className={`w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-display flex items-center justify-center gap-2 border transition-all cursor-pointer mt-4 font-bold shadow-md ${
                     isUnlocked
-                      ? 'bg-gold/20 text-gold border-gold/50 hover:bg-gold/30'
-                      : 'bg-earth-brown hover:bg-gold text-cream hover:text-obsidian border-gold/50'
+                      ? 'bg-gold/25 text-amber-200 border-gold/60 hover:bg-gold/35'
+                      : 'bg-earth-brown hover:bg-gold text-[#FAF5EA] hover:text-obsidian border-gold/50'
                   }`}
                 >
                   <MysticKey isTurned={isUnlocked} size={18} />
@@ -918,32 +918,32 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="p-6 space-y-4 border-gold/30 hover:border-gold/60 transition-all hover:scale-[1.02] rounded-2xl">
-            <div className="w-14 h-14 rounded-2xl bg-gold/15 border border-gold/40 flex items-center justify-center text-gold">
+          <Card className="p-6 space-y-4 border-gold/35 hover:border-gold/70 transition-all hover:scale-[1.02] rounded-2xl bg-[#140e08]/90">
+            <div className="w-14 h-14 rounded-2xl bg-gold/20 border border-gold/50 flex items-center justify-center text-gold">
               <QrCode size={28} />
             </div>
             <h3 className="text-lg font-display text-gold font-bold">{content.pillar1Title}</h3>
-            <p className="text-sm text-cream/85 font-serif italic leading-relaxed">
+            <p className="text-sm text-[#FAF5EA]/85 font-serif italic leading-relaxed">
               {content.pillar1Description}
             </p>
           </Card>
 
-          <Card className="p-6 space-y-4 border-gold/30 hover:border-gold/60 transition-all hover:scale-[1.02] rounded-2xl">
-            <div className="w-14 h-14 rounded-2xl bg-maya-red/20 border border-maya-red/40 flex items-center justify-center text-maya-red">
+          <Card className="p-6 space-y-4 border-gold/35 hover:border-gold/70 transition-all hover:scale-[1.02] rounded-2xl bg-[#140e08]/90">
+            <div className="w-14 h-14 rounded-2xl bg-maya-red/25 border border-maya-red/50 flex items-center justify-center text-red-300">
               <Sparkles size={28} />
             </div>
             <h3 className="text-lg font-display text-gold font-bold">{content.pillar2Title}</h3>
-            <p className="text-sm text-cream/85 font-serif italic leading-relaxed">
+            <p className="text-sm text-[#FAF5EA]/85 font-serif italic leading-relaxed">
               {content.pillar2Description}
             </p>
           </Card>
 
-          <Card className="p-6 space-y-4 border-gold/30 hover:border-gold/60 transition-all hover:scale-[1.02] rounded-2xl">
-            <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
+          <Card className="p-6 space-y-4 border-gold/35 hover:border-gold/70 transition-all hover:scale-[1.02] rounded-2xl bg-[#140e08]/90">
+            <div className="w-14 h-14 rounded-2xl bg-amber-500/25 border border-amber-500/50 flex items-center justify-center text-amber-300">
               <Trophy size={28} />
             </div>
             <h3 className="text-lg font-display text-gold font-bold">{content.pillar3Title}</h3>
-            <p className="text-sm text-cream/85 font-serif italic leading-relaxed">
+            <p className="text-sm text-[#FAF5EA]/85 font-serif italic leading-relaxed">
               {content.pillar3Description}
             </p>
           </Card>
@@ -959,7 +959,7 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
           <h2 className="text-2xl sm:text-4xl font-display text-cream">
             LAS 7 LEYENDAS ANCESTRALES
           </h2>
-          <p className="text-sm sm:text-base text-cream/70 font-serif italic">
+          <p className="text-sm sm:text-base text-cream/75 font-serif italic">
             Toca cualquiera de las estaciones para descubrir su historia:
           </p>
         </div>
@@ -975,8 +975,8 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
               }}
               className={`p-5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
                 selectedTeaser === legend.id
-                  ? 'border-gold bg-black/80 shadow-[0_0_20px_rgba(190,141,44,0.3)]'
-                  : 'border-gold/25 bg-black/40 hover:border-gold/50'
+                  ? 'border-gold bg-[#1a1209]/95 shadow-[0_0_25px_rgba(203,161,67,0.35)]'
+                  : 'border-gold/30 bg-[#120c06]/90 hover:border-gold/60 shadow-md'
               }`}
             >
               <div className="flex items-start gap-4">
@@ -989,21 +989,21 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-xs font-mono text-gold/80 font-bold">{legend.code}</span>
-                    <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-gold/10 text-gold border border-gold/30">
+                    <span className="text-xs font-mono text-amber-300 font-bold">{legend.code}</span>
+                    <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-gold/15 text-gold border border-gold/40 font-mono font-bold">
                       {legend.difficulty}
                     </span>
                   </div>
                   <h4 className="font-display text-base font-bold text-cream truncate mt-1">
                     {legend.name}
                   </h4>
-                  <p className="text-xs text-gold font-serif italic line-clamp-1">
+                  <p className="text-xs text-amber-300 font-serif italic line-clamp-1">
                     {legend.title}
                   </p>
                 </div>
               </div>
 
-              <p className="text-xs text-cream/75 font-serif italic mt-3 line-clamp-2">
+              <p className="text-xs text-[#FAF5EA]/80 font-serif italic mt-3 line-clamp-2">
                 "{legend.shortDescription}"
               </p>
 
@@ -1014,12 +1014,12 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="mt-3 pt-3 border-t border-gold/20 text-xs space-y-2"
+                    className="mt-3 pt-3 border-t border-gold/30 text-xs space-y-2"
                   >
-                    <p className="text-cream/90 font-serif leading-relaxed">
+                    <p className="text-[#FAF5EA]/95 font-serif leading-relaxed text-xs sm:text-sm">
                       {legend.fullStory}
                     </p>
-                    <div className="p-2 rounded-lg bg-gold/10 border border-gold/20 text-[11px] text-gold">
+                    <div className="p-2.5 rounded-lg bg-gold/15 border border-gold/30 text-[11px] sm:text-xs text-amber-200">
                       ✨ <strong>Dato Curioso:</strong> {legend.didYouKnow}
                     </div>
                   </motion.div>
@@ -1032,18 +1032,18 @@ export const LandingPageView: React.FC<LandingPageViewProps> = ({
 
       {/* BANNER CTA INFERIOR */}
       <section className="relative z-10 py-16 px-4 max-w-4xl mx-auto text-center">
-        <Card className="p-8 sm:p-12 space-y-6 border-gold/50 bg-gradient-to-b from-black/90 to-earth-brown/40 relative overflow-hidden shadow-[0_0_50px_rgba(122,49,8,0.5)] rounded-3xl">
+        <Card className="p-8 sm:p-12 space-y-6 border-2 border-gold/60 bg-gradient-to-b from-[#191109] via-[#120b06] to-[#090502] relative overflow-hidden shadow-[0_0_60px_rgba(203,161,67,0.25)] rounded-3xl">
           <div className="absolute top-0 right-0 w-64 h-64 bg-gold/15 blur-3xl rounded-full pointer-events-none" />
 
           <span className="text-xs sm:text-sm font-display text-gold uppercase tracking-widest block font-bold">
             {content.ctaBadge}
           </span>
 
-          <h2 className="text-2xl sm:text-4xl font-display text-cream">
+          <h2 className="text-2xl sm:text-4xl font-display text-cream tracking-wide">
             {content.ctaTitle}
           </h2>
 
-          <p className="text-sm sm:text-base text-cream/90 font-serif italic max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-[#FAF5EA]/90 font-serif italic max-w-xl mx-auto leading-relaxed">
             {content.ctaDescription}
           </p>
 
