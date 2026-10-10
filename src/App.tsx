@@ -663,7 +663,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start py-4 px-2 bg-obsidian text-cream select-none overflow-x-hidden">
+    <div className={`min-h-screen flex flex-col items-center justify-start ${screen === 'welcome' ? 'pt-1.5 pb-3' : 'py-4'} px-2 bg-obsidian text-cream select-none overflow-x-hidden`}>
       {/* Barra de Navegación Superior con Menú de la Luna y Perfil de Personajes */}
       {user && screen !== 'login' && (
         <Navbar
@@ -683,7 +683,7 @@ export default function App() {
       )}
 
       {/* Contenedor Principal de Pantallas con Transición Fluida */}
-      <main className="w-full flex-1 flex flex-col items-center justify-center my-auto">
+      <main className={`w-full flex-1 flex flex-col items-center ${screen === 'welcome' ? 'justify-start pt-1 sm:pt-2' : 'justify-center my-auto'}`}>
         <AnimatePresence mode="wait">
           {screen === 'login' && (
             <Suspense key="login" fallback={<MysticLoader />}>
