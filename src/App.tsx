@@ -319,6 +319,17 @@ export default function App() {
     }
   }, [currentRoom?.status, screen]);
 
+  // Mapa de personajes ocupados por otros exploradores en la sala activa
+  const occupiedCharactersMap = useMemo(() => {
+    if (!currentRoom || !user) return {};
+    return currentRoom.players.reduce((acc, p) => {
+      if (p.id !== user.uid && p.characterId) {
+        acc[p.characterId] = p.name;
+      }
+      return acc;
+    }, {} as Record<string, string>);
+  }, [currentRoom, user]);
+
   // Manejo de Inicio desde la Landing
   const handleEnterFromLanding = () => {
     if (user) {
@@ -675,16 +686,6 @@ export default function App() {
     );
   }
 
-  // Mapa de personajes ocupados por otros exploradores en la sala activa
-  const occupiedCharactersMap = useMemo(() => {
-    if (!currentRoom || !user) return {};
-    return currentRoom.players.reduce((acc, p) => {
-      if (p.id !== user.uid && p.characterId) {
-        acc[p.characterId] = p.name;
-      }
-      return acc;
-    }, {} as Record<string, string>);
-  }, [currentRoom, user]);
 
   return (
     <div className={`min-h-screen flex flex-col items-center justify-start ${screen === 'welcome' ? 'pt-1.5 pb-3' : 'py-4'} px-2 bg-obsidian text-cream select-none overflow-x-hidden`}>
