@@ -166,7 +166,7 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
             <img 
               src={volcanSvg} 
               alt="Volcanes Sagrados de Guatemala" 
-              className="h-10 sm:h-13 w-auto max-w-[280px] sm:max-w-[340px] object-contain filter drop-shadow-[0_2px_8px_rgba(180,83,9,0.3)] transition-transform hover:scale-105" 
+              className="h-16 sm:h-20 w-auto max-w-[380px] sm:max-w-[450px] object-contain filter drop-shadow-[0_2px_10px_rgba(180,83,9,0.35)] transition-transform hover:scale-105" 
             />
           </motion.div>
 
