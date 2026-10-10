@@ -15,13 +15,14 @@ import {
   MessageCircle,
   Radio,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Lock
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { GameRoom } from '../types/game';
 import { sound } from '../lib/audio';
 import { assignPlayerRole } from '../services/roomService';
-import { getCharacterById } from '../data/characters';
+import { LEGEND_CHARACTERS, getCharacterById } from '../data/characters';
 
 import lunaSvg from '../images/Luna.svg';
 import volcanSvg from '../images/volcan.svg';
@@ -33,6 +34,7 @@ interface LobbyViewProps {
   isHost: boolean;
   onStartGame: () => void;
   onLeaveRoom: () => void;
+  onSelectCharacter?: (characterId: string) => void;
 }
 
 const CEREMONIAL_ROLES = [
@@ -49,7 +51,8 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
   userId,
   isHost,
   onStartGame,
-  onLeaveRoom
+  onLeaveRoom,
+  onSelectCharacter
 }) => {
   const [copied, setCopied] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -444,6 +447,88 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
               );
             })}
           </div>
+        </div>
+
+        {/* SELECTOR EXCLUSIVO DE TZIPITÍOS EN VIVO EN LA SALA */}
+        <div className="bg-[#ede1c7] border-2 border-gold/70 rounded-2xl p-3 space-y-2 text-[#1f1309] shadow-sm">
+          <div className="flex items-center justify-between px-0.5">
+            <span className="text-[10px] font-mono uppercase font-black text-amber-950 flex items-center gap-1.5">
+              <Sparkles size={12} className="text-amber-800" />
+              <span>Tu Tzipitío para la Convocatoria:</span>
+            </span>
+            <span className="text-[9px] font-mono font-bold text-amber-900 bg-amber-200/90 border border-gold/60 px-2 py-0.5 rounded-full">
+              1 único por jugador
+            </span>
+          </div>
+
+          <div className="grid grid-cols-6 gap-1.5">
+            {LEGEND_CHARACTERS.map((char) => {
+              const occupant = room.players.find((p) => p.characterId === char.id);
+              const isMine = occupant?.id === userId;
+              const isOccupiedByOther = occupant && occupant.id !== userId;
+
+              return (
+                <button
+                  key={char.id}
+                  type="button"
+                  disabled={Boolean(isOccupiedByOther)}
+                  onClick={() => {
+                    if (isOccupiedByOther || isMine) return;
+                    sound.playClick();
+                    onSelectCharacter?.(char.id);
+                  }}
+                  title={
+                    isMine
+                      ? `¡Tú eres ${char.name}!`
+                      : isOccupiedByOther
+                      ? `Ocupado por ${occupant.name}`
+                      : `Elegir a ${char.name}`
+                  }
+                  className={`flex flex-col items-center justify-center p-1 rounded-xl transition-all relative ${
+                    isMine
+                      ? 'bg-amber-100/95 border-2 border-amber-600 shadow-sm scale-[1.04]'
+                      : isOccupiedByOther
+                      ? 'bg-stone-200/80 border border-stone-400 opacity-45 cursor-not-allowed'
+                      : 'bg-white/85 border border-[#d6be96] hover:border-gold hover:bg-white cursor-pointer active:scale-95'
+                  }`}
+                >
+                  <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border flex items-center justify-center p-0.5 overflow-hidden shadow-xs ${
+                    isMine ? 'border-amber-600 ring-1 ring-gold' : isOccupiedByOther ? 'border-stone-400 grayscale' : 'border-gold/70'
+                  }`}>
+                    {char.avatarSvg ? (
+                      <img src={char.avatarSvg} alt={char.name} className="w-full h-full object-contain" />
+                    ) : (
+                      <Sparkles size={12} className="text-amber-600" />
+                    )}
+                  </div>
+                  <span className={`text-[8px] sm:text-[9px] font-mono mt-0.5 leading-none truncate max-w-full ${
+                    isMine ? 'text-amber-950 font-black' : isOccupiedByOther ? 'text-stone-600 font-semibold' : 'text-[#3a2717] font-bold'
+                  }`}>
+                    {char.name}
+                  </span>
+
+                  {/* Badges */}
+                  {isMine && (
+                    <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-600 text-white flex items-center justify-center shadow-xs">
+                      <Check size={9} strokeWidth={3} />
+                    </span>
+                  )}
+                  {isOccupiedByOther && (
+                    <span 
+                      className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-stone-700 text-white flex items-center justify-center shadow-xs" 
+                      title={`Ocupado por ${occupant.name}`}
+                    >
+                      <Lock size={8} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <p className="text-[10px] text-center font-serif italic text-[#4a3421]">
+            Si un personaje ya tiene candado, fue tomado por otro explorador en esta sala.
+          </p>
         </div>
 
         {/* BOTÓN PARA IR AL TABLERO AL ESTAR COMPLETA LA SALA */}

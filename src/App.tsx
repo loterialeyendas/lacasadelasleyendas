@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useRef, useMemo, Suspense, lazy } from 'react';
 import { AnimatePresence } from 'motion/react';
 import { auth } from './lib/firebase';
 import { onAuthStateChanged, signOut, signInAnonymously, updateProfile, User as FirebaseUser } from 'firebase/auth';
@@ -339,11 +339,16 @@ export default function App() {
   // Manejo de Selección y Cambio de Personaje de Leyenda
   const handleSelectCharacter = async (charId: string) => {
     try {
+      if (currentRoom && user) {
+        const res = await updatePlayerCharacter(currentRoom.id, user.uid, charId);
+        if (!res.success) {
+          sound.playError();
+          alert(res.error || 'Ese personaje ya está ocupado en esta sala.');
+          return;
+        }
+      }
       const updated = await saveUserCharacter(user?.uid || null, charId);
       setPassport(updated);
-      if (currentRoom && user) {
-        await updatePlayerCharacter(currentRoom.id, user.uid, charId);
-      }
     } catch (err) {
       console.error('Error al equipar personaje:', err);
     }
@@ -375,14 +380,15 @@ export default function App() {
         activeUid = auth.currentUser.uid;
       }
 
-      // 2. Crear la sala en Firestore
+      // 2. Crear la sala en Firestore con el personaje seleccionado por el Mayordomo
+      const selectedHostChar = passport.characterId || 'chancho';
       const newRoomId = await createGameRoom(
         activeUid,
         activeName,
-        passport.characterId || 'chancho'
+        selectedHostChar
       );
 
-      // 3. Crear el estado preliminar de la sala de inmediato para evitar cualquier bloqueo o parpadeo
+      // 3. Crear el estado preliminar de la sala de inmediato para evitar parpadeos
       const preliminaryRoom: GameRoom = {
         id: newRoomId,
         hostId: activeUid,
@@ -397,7 +403,7 @@ export default function App() {
           {
             id: activeUid,
             name: activeName,
-            characterId: passport.characterId || 'chancho',
+            characterId: selectedHostChar,
             points: 0,
             isHost: true,
             role: 'mayordomo',
@@ -426,10 +432,11 @@ export default function App() {
     setRoomError('');
 
     try {
+      const preferredChar = passport.characterId || 'chancho';
       const res = await joinGameRoom(code, {
         id: user.uid,
         name: user.displayName || 'Explorador',
-        characterId: passport.characterId || 'chancho',
+        characterId: preferredChar,
         points: 0,
         isHost: false,
         isReady: true,
@@ -441,6 +448,12 @@ export default function App() {
         setPrefillJoinCode(code);
         navigate('join');
         return;
+      }
+
+      // Si el personaje fue reasignado porque ya estaba tomado, sincronizar en el pasaporte local
+      if (res.assignedCharacterId && res.assignedCharacterId !== preferredChar) {
+        const updated = await saveUserCharacter(user.uid, res.assignedCharacterId);
+        setPassport(updated);
       }
 
       setPrefillJoinCode('');
@@ -662,6 +675,17 @@ export default function App() {
     );
   }
 
+  // Mapa de personajes ocupados por otros exploradores en la sala activa
+  const occupiedCharactersMap = useMemo(() => {
+    if (!currentRoom || !user) return {};
+    return currentRoom.players.reduce((acc, p) => {
+      if (p.id !== user.uid && p.characterId) {
+        acc[p.characterId] = p.name;
+      }
+      return acc;
+    }, {} as Record<string, string>);
+  }, [currentRoom, user]);
+
   return (
     <div className={`min-h-screen flex flex-col items-center justify-start ${screen === 'welcome' ? 'pt-1.5 pb-3' : 'py-4'} px-2 bg-obsidian text-cream select-none overflow-x-hidden`}>
       {/* Barra de Navegación Superior con Menú de la Luna y Perfil de Personajes */}
@@ -679,6 +703,7 @@ export default function App() {
           onNavigateToPassport={() => navigate('explorer')}
           onNavigateToJoin={() => navigate('join')}
           onNavigateToTheater={() => navigate('theater')}
+          occupiedByOthers={occupiedCharactersMap}
         />
       )}
 
@@ -704,6 +729,8 @@ export default function App() {
                 onJoinRoom={() => navigate('join')}
                 isLoading={isRoomLoading}
                 error={roomError}
+                selectedCharacterId={passport.characterId || 'chancho'}
+                onSelectCharacter={handleSelectCharacter}
               />
             </Suspense>
           )}
@@ -739,6 +766,8 @@ export default function App() {
                 onBack={() => navigate('welcome')}
                 isLoading={isRoomLoading}
                 error={roomError}
+                selectedCharacterId={passport.characterId || 'chancho'}
+                onSelectCharacter={handleSelectCharacter}
               />
             </Suspense>
           )}
@@ -752,6 +781,7 @@ export default function App() {
                   isHost={currentRoom.hostId === user.uid}
                   onStartGame={handleStartGame}
                   onLeaveRoom={handleLeaveRoom}
+                  onSelectCharacter={handleSelectCharacter}
                 />
               ) : (
                 <MysticLoader />

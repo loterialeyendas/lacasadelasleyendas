@@ -50,7 +50,10 @@ export const createGameRoom = async (hostId: string, hostName: string, hostChara
   return roomId;
 };
 
-export const joinGameRoom = async (roomId: string, player: Player): Promise<{ success: boolean; error?: string }> => {
+export const joinGameRoom = async (
+  roomId: string, 
+  player: Player
+): Promise<{ success: boolean; error?: string; assignedCharacterId?: string }> => {
   const cleanId = roomId.trim().toUpperCase();
   if (!cleanId) return { success: false, error: 'Código de sala inválido' };
   const roomRef = doc(db, 'rooms', cleanId);
@@ -78,9 +81,36 @@ export const joinGameRoom = async (roomId: string, player: Player): Promise<{ su
         return { success: false, error: 'El ritual ya comenzó o finalizó' };
       }
 
+      const allTzipitioIds = ['chancho', 'chispuda', 'chinche', 'chilera', 'chela', 'chongo'];
+      const otherPlayers = data.players.filter((p) => p.id !== player.id);
+      const occupiedCharIds = new Set(otherPlayers.map((p) => p.characterId).filter(Boolean));
+
+      let characterToUse = player.characterId || 'chancho';
+
+      // Si el personaje ya está ocupado por otro explorador en la sala, reasignar al primer libre disponible
+      if (occupiedCharIds.has(characterToUse)) {
+        const freeCharId = allTzipitioIds.find((id) => !occupiedCharIds.has(id));
+        if (!freeCharId) {
+          return {
+            success: false,
+            error: 'La sala está completa y no quedan personajes disponibles.'
+          };
+        }
+        characterToUse = freeCharId;
+      }
+
       // Evitar duplicados si reconecta
-      const alreadyIn = data.players.some((p) => p.id === player.id);
-      if (!alreadyIn) {
+      const existingPlayerIndex = data.players.findIndex((p) => p.id === player.id);
+      if (existingPlayerIndex >= 0) {
+        const updatedPlayers = [...data.players];
+        updatedPlayers[existingPlayerIndex] = {
+          ...updatedPlayers[existingPlayerIndex],
+          name: player.name || updatedPlayers[existingPlayerIndex].name,
+          characterId: characterToUse,
+          lastActive: Date.now()
+        };
+        tx.update(roomRef, { players: updatedPlayers });
+      } else {
         // Validar límite estricto de hasta 5 invitados (1 mayordomo + 5 invitados = 6 máx)
         const guestCount = data.players.filter((p) => !p.isHost && p.role !== 'mayordomo').length;
         if (guestCount >= 5 || data.players.length >= 6) {
@@ -92,7 +122,7 @@ export const joinGameRoom = async (roomId: string, player: Player): Promise<{ su
 
         const guestPlayer: Player = {
           ...player,
-          characterId: player.characterId || 'chancho',
+          characterId: characterToUse,
           role: 'invitado',
           customTitle: `Invitado #${guestCount + 1}`,
           isHost: false,
@@ -105,7 +135,7 @@ export const joinGameRoom = async (roomId: string, player: Player): Promise<{ su
         });
       }
 
-      return { success: true };
+      return { success: true, assignedCharacterId: characterToUse };
     });
 
     return result;
@@ -119,31 +149,49 @@ export const updatePlayerCharacter = async (
   roomId: string,
   playerId: string,
   characterId: string
-): Promise<void> => {
+): Promise<{ success: boolean; error?: string }> => {
   const cleanId = roomId.trim().toUpperCase();
-  if (!cleanId || !playerId) return;
+  if (!cleanId || !playerId) return { success: false, error: 'Datos no válidos' };
   const roomRef = doc(db, 'rooms', cleanId);
 
-  await runTransaction(db, async (tx) => {
-    const snap = await tx.get(roomRef);
-    if (!snap.exists()) return;
+  try {
+    return await runTransaction(db, async (tx) => {
+      const snap = await tx.get(roomRef);
+      if (!snap.exists()) return { success: false, error: 'Sala no encontrada' };
 
-    const data = snap.data() as GameRoom;
-    const updatedPlayers = data.players.map((p) => {
-      if (p.id === playerId) {
-        return {
-          ...p,
-          characterId,
-          lastActive: Date.now()
+      const data = snap.data() as GameRoom;
+      
+      // Validar si otro jugador de la sala ya tiene ese personaje
+      const isTaken = data.players.some((p) => p.id !== playerId && p.characterId === characterId);
+      if (isTaken) {
+        const occupant = data.players.find((p) => p.id !== playerId && p.characterId === characterId);
+        return { 
+          success: false, 
+          error: `Ese personaje ya fue elegido por ${occupant?.name || 'otro jugador'} en esta sala.` 
         };
       }
-      return p;
-    });
 
-    tx.update(roomRef, {
-      players: updatedPlayers
+      const updatedPlayers = data.players.map((p) => {
+        if (p.id === playerId) {
+          return {
+            ...p,
+            characterId,
+            lastActive: Date.now()
+          };
+        }
+        return p;
+      });
+
+      tx.update(roomRef, {
+        players: updatedPlayers
+      });
+
+      return { success: true };
     });
-  });
+  } catch (err: any) {
+    console.error('Error al cambiar de personaje:', err);
+    return { success: false, error: err.message || 'Error al cambiar personaje' };
+  }
 };
 
 export const subscribeToRoom = (

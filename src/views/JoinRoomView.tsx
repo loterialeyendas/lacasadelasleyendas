@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Users, Sparkles, AlertCircle, QrCode } from 'lucide-react';
+import { ArrowLeft, Users, Sparkles, AlertCircle, QrCode, Check } from 'lucide-react';
 import { Scanner } from '../components/Scanner';
 import { sound } from '../lib/audio';
+import { LEGEND_CHARACTERS, getCharacterById } from '../data/characters';
 
 interface JoinRoomViewProps {
   onJoin: (roomCode: string) => void;
@@ -10,6 +11,8 @@ interface JoinRoomViewProps {
   isLoading?: boolean;
   error?: string;
   initialCode?: string;
+  selectedCharacterId?: string;
+  onSelectCharacter?: (characterId: string) => void;
 }
 
 export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
@@ -17,11 +20,14 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
   onBack,
   isLoading = false,
   error = '',
-  initialCode = ''
+  initialCode = '',
+  selectedCharacterId = 'chancho',
+  onSelectCharacter
 }) => {
   const [code, setCode] = useState(initialCode);
   const [isScanning, setIsScanning] = useState(false);
   const [scanError, setScanError] = useState('');
+  const activeChar = getCharacterById(selectedCharacterId);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,6 +138,61 @@ export const JoinRoomView: React.FC<JoinRoomViewProps> = ({
                 <span className="text-[10px] font-mono text-amber-950 font-bold block bg-amber-200/60 py-0.5 rounded-lg border border-gold/40">
                   (Hasta 5 invitados por sala convocada)
                 </span>
+              </div>
+
+              {/* Selector de Personaje para Invitado */}
+              <div className="bg-[#ede1c7] border-2 border-gold/70 rounded-2xl p-2.5 space-y-1.5 shadow-sm">
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-[10px] font-mono uppercase font-black text-amber-950 flex items-center gap-1">
+                    <Sparkles size={11} className="text-amber-800" />
+                    <span>Tu Tzipitío Invitado:</span>
+                  </span>
+                  <span className="text-[10px] font-display font-black text-amber-950 bg-amber-200/90 border border-gold/70 px-2 py-0.2 rounded-full shadow-xs">
+                    {activeChar.name}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-6 gap-1">
+                  {LEGEND_CHARACTERS.map((char) => {
+                    const isSelected = char.id === selectedCharacterId;
+                    return (
+                      <button
+                        key={char.id}
+                        type="button"
+                        onClick={() => {
+                          sound.playClick();
+                          onSelectCharacter?.(char.id);
+                        }}
+                        title={`${char.name} - ${char.title}`}
+                        className={`flex flex-col items-center justify-center p-1 rounded-xl transition-all cursor-pointer relative ${
+                          isSelected
+                            ? 'bg-amber-100/95 border-2 border-amber-600 shadow-sm scale-[1.05]'
+                            : 'bg-white/80 border border-[#d6be96] hover:border-gold hover:bg-white opacity-85 hover:opacity-100'
+                        }`}
+                      >
+                        <div className={`w-8 h-8 rounded-full bg-white border flex items-center justify-center p-0.5 overflow-hidden shadow-xs ${
+                          isSelected ? 'border-amber-600 ring-1 ring-gold' : 'border-gold/70'
+                        }`}>
+                          {char.avatarSvg ? (
+                            <img src={char.avatarSvg} alt={char.name} className="w-full h-full object-contain" />
+                          ) : (
+                            <Sparkles size={12} className="text-amber-600" />
+                          )}
+                        </div>
+                        <span className={`text-[8px] font-mono mt-0.5 leading-none truncate max-w-full ${
+                          isSelected ? 'text-amber-950 font-black' : 'text-[#3a2717] font-bold'
+                        }`}>
+                          {char.name}
+                        </span>
+                        {isSelected && (
+                          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-600 text-white flex items-center justify-center shadow-xs">
+                            <Check size={9} strokeWidth={3} />
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Botón para activar el escáner de sala */}

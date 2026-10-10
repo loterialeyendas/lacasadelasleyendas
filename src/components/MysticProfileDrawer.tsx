@@ -17,7 +17,8 @@ import {
   Volume2,
   VolumeX,
   Sliders,
-  Sparkle
+  Sparkle,
+  Lock
 } from 'lucide-react';
 import logoPng from '../images/logo.png';
 import { LEGEND_CHARACTERS, getCharacterById, getPlayerCeremonialRank, LegendCharacter } from '../data/characters';
@@ -49,6 +50,7 @@ interface MysticProfileDrawerProps {
   onNavigateToTheater?: () => void;
   onLogout: () => void;
   initialTab?: 'characters' | 'profile' | 'menu';
+  occupiedByOthers?: Record<string, string>;
 }
 
 export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
@@ -65,7 +67,8 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
   onNavigateToJoin,
   onNavigateToTheater,
   onLogout,
-  initialTab = 'characters'
+  initialTab = 'characters',
+  occupiedByOthers = {}
 }) => {
   const [activeTab, setActiveTab] = useState<'profile' | 'characters' | 'menu'>(initialTab);
   const [isMuted, setIsMuted] = useState(sound.getIsMuted());
@@ -73,6 +76,10 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
   const rank = getPlayerCeremonialRank(totalScore, totalKeys);
 
   const handleEquip = (char: LegendCharacter) => {
+    if (occupiedByOthers[char.id]) {
+      sound.playError();
+      return;
+    }
     sound.playClick();
     onSelectCharacter(char.id);
   };
@@ -280,6 +287,8 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                   <div className="grid grid-cols-1 gap-2.5">
                     {LEGEND_CHARACTERS.map((char) => {
                       const isEquipped = char.id === currentCharacterId;
+                      const occupantName = occupiedByOthers[char.id];
+                      const isOccupiedByOther = Boolean(occupantName);
 
                       return (
                         <div
@@ -287,6 +296,8 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                           className={`p-3 rounded-2xl border-2 transition-all flex items-center justify-between gap-3 text-[#1f1309] ${
                             isEquipped
                               ? 'border-gold bg-[#fbf7ee] shadow-[0_8px_20px_rgba(0,0,0,0.4)] ring-2 ring-gold/70'
+                              : isOccupiedByOther
+                              ? 'border-stone-400 bg-stone-200/80 opacity-55 shadow-xs'
                               : 'border-gold/50 hover:border-gold bg-[#faf4e6] hover:bg-white shadow-sm'
                           }`}
                         >
@@ -295,6 +306,8 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                             <div className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center p-1.5 shrink-0 overflow-hidden border-2 bg-white ${
                               isEquipped 
                                 ? 'border-gold shadow-md ring-1 ring-gold/60' 
+                                : isOccupiedByOther
+                                ? 'border-stone-400 grayscale shadow-none'
                                 : 'border-gold/50 shadow-sm'
                             }`}>
                               {char.avatarSvg ? (
@@ -310,7 +323,9 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
 
                             <div className="min-w-0 text-left">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="font-display text-sm font-bold text-[#1f1309] truncate">
+                                <span className={`font-display text-sm font-bold truncate ${
+                                  isOccupiedByOther ? 'text-stone-700' : 'text-[#1f1309]'
+                                }`}>
                                   {char.name}
                                 </span>
                                 <span className="text-[9px] uppercase px-1.5 py-0.2 rounded font-mono font-bold text-amber-950 bg-amber-200/90 border border-gold/60">
@@ -331,6 +346,14 @@ export const MysticProfileDrawer: React.FC<MysticProfileDrawerProps> = ({
                             <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gold text-amber-950 border border-gold-light text-[10px] font-mono font-black whitespace-nowrap shadow-sm shrink-0">
                               <Check size={12} className="text-amber-950" />
                               <span>ACTIVO</span>
+                            </span>
+                          ) : isOccupiedByOther ? (
+                            <span 
+                              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-stone-300 border border-stone-400 text-stone-800 text-[10px] font-mono font-bold whitespace-nowrap shadow-xs shrink-0 cursor-not-allowed"
+                              title={`Ocupado por ${occupantName}`}
+                            >
+                              <Lock size={11} className="text-stone-700" />
+                              <span className="max-w-[80px] truncate">{occupantName}</span>
                             </span>
                           ) : (
                             <button

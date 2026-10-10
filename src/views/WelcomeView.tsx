@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Users, Crown, KeyRound, Sparkles } from 'lucide-react';
+import { Users, Crown, KeyRound, Sparkles, Check } from 'lucide-react';
 import { sound } from '../lib/audio';
+import { LEGEND_CHARACTERS, getCharacterById } from '../data/characters';
 import lunaSvg from '../images/Luna.svg';
 import volcanSvg from '../images/volcan.svg';
 import llaveOroPng from '../images/png/Llave oro.png';
@@ -14,14 +15,20 @@ interface WelcomeViewProps {
   totalLegends?: number;
   isLoading?: boolean;
   error?: string;
+  selectedCharacterId?: string;
+  onSelectCharacter?: (characterId: string) => void;
 }
 
 export const WelcomeView: React.FC<WelcomeViewProps> = ({
   onCreateRoom,
   onJoinRoom,
   isLoading = false,
-  error = ''
+  error = '',
+  selectedCharacterId = 'chancho',
+  onSelectCharacter
 }) => {
+  const activeChar = getCharacterById(selectedCharacterId);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -30,13 +37,13 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
       className="w-full max-w-lg mx-auto px-2 sm:px-4 py-1 sm:py-3 relative select-none"
     >
       {/* Contenedor Principal: Ficha de Cartón Beige Ancestral del Juego */}
-      <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-[#fbf7ee] border-2 border-gold shadow-[0_15px_45px_rgba(0,0,0,0.75)] text-[#1f1309] space-y-2.5 sm:space-y-3.5 relative z-10 overflow-hidden">
+      <div className="p-3 sm:p-4.5 rounded-2xl sm:rounded-3xl bg-[#fbf7ee] border-2 border-gold shadow-[0_15px_45px_rgba(0,0,0,0.75)] text-[#1f1309] space-y-2 sm:space-y-3 relative z-10 overflow-hidden">
         
         {/* ENCABEZADO CON LA LUNA SAGRADA (Luna.svg) */}
-        <div className="relative text-center pt-0.5 space-y-1 sm:space-y-1.5 select-none">
+        <div className="relative text-center pt-0.5 space-y-1 select-none">
           {/* Marco sagrado de la Luna */}
           <div className="relative inline-block">
-            <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-full p-1 bg-[#140e08] border-2 border-gold shadow-md flex items-center justify-center mx-auto overflow-hidden">
+            <div className="relative w-11 h-11 sm:w-14 sm:h-14 rounded-full p-1 bg-[#140e08] border-2 border-gold shadow-md flex items-center justify-center mx-auto overflow-hidden">
               <img 
                 src={lunaSvg} 
                 alt="Luna de las Leyendas" 
@@ -44,19 +51,83 @@ export const WelcomeView: React.FC<WelcomeViewProps> = ({
               />
             </div>
             <div className="absolute -bottom-0.5 -right-0.5 bg-[#1a1208] border border-gold/80 rounded-full p-0.5 shadow-md">
-              <Sparkles size={10} className="text-gold animate-spin" />
+              <Sparkles size={9} className="text-gold animate-spin" />
             </div>
           </div>
 
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-200/90 border border-gold/70 text-amber-950 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase font-black shadow-sm">
-              <Crown size={11} className="text-amber-900" /> Círculo de las Leyendas
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.2 rounded-full bg-amber-200/90 border border-gold/70 text-amber-950 text-[9px] font-mono tracking-widest uppercase font-black shadow-sm">
+              <Crown size={10} className="text-amber-900" /> Círculo de las Leyendas
             </div>
-            <h1 className="font-display text-xl sm:text-2xl text-[#1f1309] font-black tracking-wider mt-0.5 leading-tight">
+            <h1 className="font-display text-lg sm:text-xl text-[#1f1309] font-black tracking-wider mt-0.5 leading-tight">
               SALA DE JUEGO
             </h1>
-            <p className="text-[11px] sm:text-xs text-[#4a3421] font-serif italic max-w-xs mx-auto">
-              Bajo la mirada mística de la Luna, elige tu sendero sagrado
+          </div>
+        </div>
+
+        {/* SELECTOR DE LOS 6 TZIPITÍOS OFICIALES ANTES DE ENTRAR */}
+        <div className="bg-[#ede1c7] border-2 border-gold/80 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 shadow-sm space-y-1.5">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-[9px] sm:text-[10px] font-mono uppercase font-black text-amber-950 flex items-center gap-1">
+              <Sparkles size={11} className="text-amber-800" />
+              <span>Escoge a tu Tzipitío:</span>
+            </span>
+            <span className="text-[9px] sm:text-[10px] font-display font-black text-amber-950 bg-amber-200/90 border border-gold/70 px-2 py-0.2 rounded-full shadow-xs">
+              {activeChar.name}
+            </span>
+          </div>
+
+          {/* Fila compacta de los 6 Tzipitíos en pedestal blanco */}
+          <div className="grid grid-cols-6 gap-1 sm:gap-1.5">
+            {LEGEND_CHARACTERS.map((char) => {
+              const isSelected = char.id === selectedCharacterId;
+              return (
+                <button
+                  key={char.id}
+                  type="button"
+                  onClick={() => {
+                    sound.playClick();
+                    onSelectCharacter?.(char.id);
+                  }}
+                  title={`${char.name} - ${char.title}`}
+                  className={`flex flex-col items-center justify-center p-1 rounded-lg sm:rounded-xl transition-all cursor-pointer relative ${
+                    isSelected
+                      ? 'bg-amber-100/95 border-2 border-amber-600 shadow-sm scale-[1.05]'
+                      : 'bg-white/80 border border-[#d6be96] hover:border-gold hover:bg-white opacity-85 hover:opacity-100'
+                  }`}
+                >
+                  <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border flex items-center justify-center p-0.5 overflow-hidden shadow-xs ${
+                    isSelected ? 'border-amber-600 ring-1 ring-gold' : 'border-gold/70'
+                  }`}>
+                    {char.avatarSvg ? (
+                      <img 
+                        src={char.avatarSvg} 
+                        alt={char.name} 
+                        className="w-full h-full object-contain filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]" 
+                      />
+                    ) : (
+                      <Sparkles size={14} className="text-amber-600" />
+                    )}
+                  </div>
+                  <span className={`text-[8px] sm:text-[9px] font-mono mt-0.5 leading-none truncate max-w-full ${
+                    isSelected ? 'text-amber-950 font-black' : 'text-[#3a2717] font-bold'
+                  }`}>
+                    {char.name}
+                  </span>
+                  {isSelected && (
+                    <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-600 text-white flex items-center justify-center shadow-xs">
+                      <Check size={9} strokeWidth={3} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Rasgo del personaje seleccionado */}
+          <div className="px-1 text-center">
+            <p className="text-[10px] text-amber-950 font-mono font-bold truncate">
+              ⚡ {activeChar.perk}
             </p>
           </div>
         </div>

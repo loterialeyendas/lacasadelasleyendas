@@ -14,10 +14,10 @@ interface NavbarProps {
   currentCharacterId: string;
   onSelectCharacter: (characterId: string) => void;
   onLogout: () => void;
-  onGoHome?: () => void;
   onNavigateToPassport?: () => void;
   onNavigateToJoin?: () => void;
   onNavigateToTheater?: () => void;
+  occupiedByOthers?: Record<string, string>;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -31,7 +31,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onLogout,
   onNavigateToPassport,
   onNavigateToJoin,
-  onNavigateToTheater
+  onNavigateToTheater,
+  occupiedByOthers = {}
 }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerInitialTab, setDrawerInitialTab] = useState<'characters' | 'profile' | 'menu'>('characters');
@@ -117,6 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         onNavigateToTheater={onNavigateToTheater}
         onLogout={onLogout}
         initialTab={drawerInitialTab}
+        occupiedByOthers={occupiedByOthers}
       />
     </>
   );
